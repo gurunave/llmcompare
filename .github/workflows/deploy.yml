@@ -40,7 +40,11 @@ jobs:
       # Jekyll would otherwise drop Next's _next/ asset directory.
       - run: touch out/.nojekyll
 
+      # enablement turns Pages on for the repo the first time this runs, so the
+      # deploy does not depend on the setting having been flipped by hand.
       - uses: actions/configure-pages@v5
+        with:
+          enablement: true
 
       - uses: actions/upload-pages-artifact@v3
         with:
