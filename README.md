@@ -1,7 +1,8 @@
 # LLM Compare
 
 A visual side-by-side comparison of large language models — capability, price,
-speed and context, for 50 models across 14 providers.
+speed and context, for 85 models across 24 providers — 59 of them open-weights,
+from cluster-scale MoEs down to models that fit on a laptop.
 
 Everything is driven by one bundled file — `data/models.json` — so there are no API
 keys, no backend and no network calls at runtime.
@@ -12,7 +13,7 @@ keys, no backend and no network calls at runtime.
 |---|---|
 | `/` | Browse: cost-vs-capability scatter over the whole catalog, plus a sortable, filterable table. Selection happens here. |
 | `/compare` | The selection side by side: capability radar, benchmark bars with a leaderboard mode, and a spec table marking the best value per row. |
-| `/models/[id]` | One page per model — headline stats, its own radar and benchmark bars, full specs, and the closest alternatives by price and capability. 50 statically generated pages. |
+| `/models/[id]` | One page per model — headline stats, its own radar and benchmark bars, full specs, and the closest alternatives by price and capability. 85 statically generated pages. |
 | `/recommend` | Four questions about task, budget, deployment target and context; hard constraints filter, cost and speed preferences rank. |
 | `/methodology` | Where the numbers come from, how blended price and the mean score are computed, what each radar axis means. |
 
