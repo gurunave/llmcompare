@@ -25,10 +25,29 @@ npm run typecheck                # tsc --noEmit
 
 ## Deploying
 
+### GitHub Pages (wired up)
+
+`.github/workflows/deploy.yml` typechecks, builds a static export and publishes it
+on every push to `main`.
+
+**One-time setup:** open **Settings → Pages** and set *Source* to **GitHub Actions**.
+The workflow's token cannot turn Pages on by itself — creating a Pages site needs
+repository admin rights that `GITHUB_TOKEN` does not carry — so until that is set,
+the `configure-pages` step fails with `Get Pages site failed` / `Resource not
+accessible by integration`. Once it is set, re-run the latest workflow (or push
+anything to `main`) and the site publishes to
+`https://<owner>.github.io/<repo>/`.
+
+The `GITHUB_PAGES=true` build applies the `/<repo>` base path that project pages
+are served under; `REPO_NAME` comes from the workflow, so a rename needs no edit.
+
+### Vercel
+
 The app is a fully static Next.js App Router page, so `vercel` (or `vercel --prod`)
 with the defaults is enough — framework detection, build command and output
-directory all resolve on their own. Any host that can run `next build` / `next start`
-works equally well.
+directory all resolve on their own. Leave `GITHUB_PAGES` unset there: without it
+the config is a plain Next app with no base path. Any host that can run
+`next build` / `next start` works equally well.
 
 ## Editing the data
 
