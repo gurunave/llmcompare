@@ -1,0 +1,116 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Design tokens follow the validated data-viz palette.
+ * Dark values are declared under BOTH the media query (OS setting) and the
+ * [data-theme] scope (in-app toggle) so the toggle wins in either direction.
+ */
+:root {
+  color-scheme: dark;
+
+  --surface-1: #1a1a19;
+  --plane: #0d0d0d;
+  --text-primary: #ffffff;
+  --text-secondary: #c3c2b7;
+  --text-muted: #898781;
+  --gridline: #2c2c2a;
+  --baseline: #383835;
+  --border: rgba(255, 255, 255, 0.1);
+  --border-strong: rgba(255, 255, 255, 0.18);
+  --wash: rgba(255, 255, 255, 0.06);
+
+  --series-1: #3987e5;
+  --series-2: #d95926;
+  --series-3: #199e70;
+  --series-4: #c98500;
+
+  --status-good: #0ca30c;
+  --status-warning: #fab219;
+  --status-critical: #d03b3b;
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+
+  --surface-1: #fcfcfb;
+  --plane: #f9f9f7;
+  --text-primary: #0b0b0b;
+  --text-secondary: #52514e;
+  --text-muted: #898781;
+  --gridline: #e1e0d9;
+  --baseline: #c3c2b7;
+  --border: rgba(11, 11, 11, 0.1);
+  --border-strong: rgba(11, 11, 11, 0.18);
+  --wash: rgba(11, 11, 11, 0.05);
+
+  --series-1: #2a78d6;
+  --series-2: #eb6834;
+  --series-3: #1baf7a;
+  --series-4: #eda100;
+}
+
+html,
+body {
+  background: var(--plane);
+  color: var(--text-primary);
+}
+
+body {
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Wide content scrolls inside its own container; the page never scrolls sideways. */
+body {
+  overflow-x: hidden;
+}
+
+@layer components {
+  .card {
+    @apply rounded-xl border border-hairline bg-surface;
+  }
+
+  .chip {
+    @apply inline-flex items-center gap-1.5 rounded-full border border-hairline px-2.5 py-1 text-xs font-medium text-ink-secondary transition-colors;
+  }
+
+  .chip-active {
+    @apply border-transparent bg-ink text-surface;
+  }
+
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-hairline px-3 py-2 text-sm font-medium text-ink transition-colors hover:bg-[var(--wash)] disabled:cursor-not-allowed disabled:opacity-40;
+  }
+
+  .btn-primary {
+    @apply border-transparent bg-ink text-surface hover:opacity-90;
+  }
+
+  .field {
+    @apply w-full rounded-lg border border-hairline bg-plane px-3 py-2 text-sm text-ink outline-none placeholder:text-ink-muted focus:border-[var(--border-strong)];
+  }
+
+  .num {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* Recharts chrome recedes; it never competes with the data. */
+.recharts-cartesian-axis-tick text,
+.recharts-polar-angle-axis-tick text,
+.recharts-label {
+  fill: var(--text-muted);
+  font-size: 12px;
+}
+
+.recharts-cartesian-grid line,
+.recharts-polar-grid-angle line,
+.recharts-polar-grid-concentric-polygon {
+  stroke: var(--gridline);
+}
+
+.recharts-surface:focus {
+  outline: none;
+}
