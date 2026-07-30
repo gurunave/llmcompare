@@ -120,6 +120,19 @@ comparably measured" — it is never a zero.
   all-pairs gates, every chart pairs color with a second channel — dash patterns on
   the radar strokes, direct labels on scatter points, and colored chips beside names
   in the legend, table headers and selection tray.
+- Color outside the charts is an identity layer, never decoration for its own sake.
+  Each provider draws a stable hue from the same eight-slot palette (hashed from the
+  name, so a provider keeps its color as the catalog grows), licence has its own two
+  hues — aqua for open weights, violet for proprietary — and the nav rail gives each
+  section a hue so the sidebar reads as a map. Every dot and badge sits beside the
+  text it labels, so nothing rests on hue alone.
+- The cost-vs-capability cloud is split by licence in those same two hues. They clear
+  the all-pairs CVD and normal-vision gates in both modes; the cloud sits at partial
+  opacity so the labeled selection still reads on top of it.
+- Readability: table text at 15px with zebra striping, a sticky header and a hover
+  wash; the mean and SWE-bench columns carry a length bar under the number; light-mode
+  muted ink is stepped down from the palette default to clear 4.5:1 on the page plane;
+  and focus-visible draws one accent ring everywhere.
 - Dark is the default theme; the toggle persists to `localStorage` and is stamped
   before first paint so the page never flashes.
 - The selection lives in the URL (`?m=claude-opus-5,gpt-5`), so any comparison is

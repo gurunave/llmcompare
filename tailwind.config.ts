@@ -15,11 +15,23 @@ const config: Config = {
         },
         hairline: "var(--border)",
         grid: "var(--gridline)",
+        accent: {
+          DEFAULT: "var(--accent)",
+          text: "var(--accent-text)",
+        },
+        licence: {
+          open: "var(--open)",
+          proprietary: "var(--proprietary)",
+        },
         series: {
           1: "var(--series-1)",
           2: "var(--series-2)",
           3: "var(--series-3)",
           4: "var(--series-4)",
+          5: "var(--series-5)",
+          6: "var(--series-6)",
+          7: "var(--series-7)",
+          8: "var(--series-8)",
         },
         status: {
           good: "var(--status-good)",

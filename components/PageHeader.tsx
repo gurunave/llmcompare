@@ -11,11 +11,14 @@ export function PageHeader({
   lead,
   crumbs,
   actions,
+  badges,
 }: {
   title: string;
   lead?: string;
   crumbs?: Crumb[];
   actions?: ReactNode;
+  /** Identity chips shown under the lead — provider, licence, tags. */
+  badges?: ReactNode;
 }) {
   return (
     <header className="mb-5">
@@ -26,7 +29,7 @@ export function PageHeader({
               <li key={`${c.label}-${i}`} className="flex items-center gap-1.5">
                 {i > 0 && <span aria-hidden>›</span>}
                 {c.href ? (
-                  <Link href={c.href} className="hover:text-ink hover:underline">
+                  <Link href={c.href} className="text-accent-text hover:underline">
                     {c.label}
                   </Link>
                 ) : (
@@ -39,9 +42,14 @@ export function PageHeader({
       )}
 
       <div className="flex flex-wrap items-start justify-between gap-3">
-        <div>
-          <h1 className="text-2xl font-semibold tracking-tight text-ink">{title}</h1>
-          {lead && <p className="mt-1 max-w-2xl text-sm text-ink-secondary">{lead}</p>}
+        <div className="border-l-4 border-accent pl-3">
+          <h1 className="text-2xl font-bold tracking-tight text-ink sm:text-3xl">{title}</h1>
+          {lead && (
+            <p className="mt-1.5 max-w-2xl text-[0.9375rem] leading-relaxed text-ink-secondary">
+              {lead}
+            </p>
+          )}
+          {badges && <div className="mt-2.5 flex flex-wrap items-center gap-1.5">{badges}</div>}
         </div>
         {actions && <div className="flex flex-wrap items-center gap-1.5">{actions}</div>}
       </div>

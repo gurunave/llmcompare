@@ -25,10 +25,23 @@
   --series-2: #d95926;
   --series-3: #199e70;
   --series-4: #c98500;
+  --series-5: #d55181;
+  --series-6: #008300;
+  --series-7: #9085e9;
+  --series-8: #e66767;
 
   --status-good: #0ca30c;
   --status-warning: #fab219;
   --status-critical: #d03b3b;
+
+  /* Accent — slot 1's hue, stepped for text and for washes. */
+  --accent: #3987e5;
+  --accent-text: #86b6ef;
+  --accent-wash: rgba(57, 135, 229, 0.16);
+
+  /* Licence is a two-category encoding, reused verbatim in the scatter legend. */
+  --open: #199e70;
+  --proprietary: #9085e9;
 }
 
 :root[data-theme="light"] {
@@ -38,7 +51,9 @@
   --plane: #f9f9f7;
   --text-primary: #0b0b0b;
   --text-secondary: #52514e;
-  --text-muted: #898781;
+  /* Stepped down from the palette's #898781 so muted text clears 4.5:1 on the
+     light plane — it carries real labels here, not just axis ticks. */
+  --text-muted: #6b6963;
   --gridline: #e1e0d9;
   --baseline: #c3c2b7;
   --border: rgba(11, 11, 11, 0.1);
@@ -49,6 +64,17 @@
   --series-2: #eb6834;
   --series-3: #1baf7a;
   --series-4: #eda100;
+  --series-5: #e87ba4;
+  --series-6: #008300;
+  --series-7: #4a3aa7;
+  --series-8: #e34948;
+
+  --accent: #2a78d6;
+  --accent-text: #1c5cab;
+  --accent-wash: rgba(42, 120, 214, 0.12);
+
+  --open: #1baf7a;
+  --proprietary: #4a3aa7;
 }
 
 html,
@@ -67,9 +93,37 @@ body {
   overflow-x: hidden;
 }
 
+/* One visible focus treatment everywhere, in the accent hue. */
+:where(a, button, input, select, summary, [tabindex]):focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
 @layer components {
   .card {
     @apply rounded-xl border border-hairline bg-surface;
+  }
+
+  /* A hairline of accent along the top edge — enough to separate a panel from
+     the plane without adding a second border weight. */
+  .card-accent {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card-accent::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 3px;
+    background: linear-gradient(
+      90deg,
+      var(--series-1),
+      var(--series-3) 38%,
+      var(--series-4) 68%,
+      var(--series-2)
+    );
   }
 
   .chip {
@@ -77,7 +131,22 @@ body {
   }
 
   .chip-active {
-    @apply border-transparent bg-ink text-surface;
+    @apply border-transparent text-ink;
+    background: var(--accent-wash);
+    box-shadow: inset 0 0 0 1px var(--accent);
+  }
+
+  /* Tinted label — the dot or the accompanying text carries the meaning, the
+     wash only groups it. `--tint` is set per instance. */
+  .badge {
+    @apply inline-flex items-center gap-1.5 rounded-full px-2 py-0.5 text-[11px] font-medium text-ink;
+    background: color-mix(in srgb, var(--tint, var(--accent)) 14%, transparent);
+    box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--tint, var(--accent)) 40%, transparent);
+  }
+
+  .dot {
+    @apply inline-block h-2 w-2 shrink-0 rounded-full;
+    background: var(--tint, var(--accent));
   }
 
   .btn {
@@ -85,15 +154,31 @@ body {
   }
 
   .btn-primary {
-    @apply border-transparent bg-ink text-surface hover:opacity-90;
+    @apply border-transparent text-white hover:brightness-110;
+    background: var(--accent);
   }
 
   .field {
-    @apply w-full rounded-lg border border-hairline bg-plane px-3 py-2 text-sm text-ink outline-none placeholder:text-ink-muted focus:border-[var(--border-strong)];
+    @apply w-full rounded-lg border border-hairline bg-plane px-3 py-2 text-sm text-ink outline-none placeholder:text-ink-muted focus:border-[var(--accent)];
+  }
+
+  .link {
+    color: var(--accent-text);
+    @apply hover:underline;
   }
 
   .num {
     font-variant-numeric: tabular-nums;
+  }
+
+  /* Zebra striping plus a hover wash — the two cues that make a wide table
+     scannable across its full width. */
+  .data-table tbody tr:nth-child(even) {
+    background: color-mix(in srgb, var(--text-muted) 6%, transparent);
+  }
+
+  .data-table tbody tr:hover {
+    background: var(--accent-wash);
   }
 }
 

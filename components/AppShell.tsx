@@ -2,17 +2,33 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
 import { SelectionTray } from "@/components/SelectionTray";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { MODELS } from "@/lib/models";
 import { useSelection, withSelection } from "@/lib/selection";
 
+/** Each section carries one of the categorical hues, so the rail reads as a map. */
 const NAV = [
-  { href: "/", label: "Browse", match: (p: string) => p === "/" },
-  { href: "/compare", label: "Compare", match: (p: string) => p.startsWith("/compare") },
-  { href: "/recommend", label: "Recommend", match: (p: string) => p.startsWith("/recommend") },
-  { href: "/methodology", label: "Methodology", match: (p: string) => p.startsWith("/methodology") },
+  { href: "/", label: "Browse", tint: "var(--series-1)", match: (p: string) => p === "/" },
+  {
+    href: "/compare",
+    label: "Compare",
+    tint: "var(--series-3)",
+    match: (p: string) => p.startsWith("/compare"),
+  },
+  {
+    href: "/recommend",
+    label: "Recommend",
+    tint: "var(--series-4)",
+    match: (p: string) => p.startsWith("/recommend"),
+  },
+  {
+    href: "/methodology",
+    label: "Methodology",
+    tint: "var(--series-2)",
+    match: (p: string) => p.startsWith("/methodology"),
+  },
 ];
 
 export function AppShell({ children }: { children: ReactNode }) {
@@ -37,7 +53,10 @@ export function AppShell({ children }: { children: ReactNode }) {
         >
           <MenuIcon />
         </button>
-        <Link href={withSelection("/", ids)} className="font-semibold text-ink">
+        <Link
+          href={withSelection("/", ids)}
+          className="bg-gradient-to-r from-series-1 via-series-3 to-series-4 bg-clip-text font-bold text-transparent"
+        >
           LLM Compare
         </Link>
         <div className="ml-auto">
@@ -61,7 +80,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       >
         <div className="mb-5 hidden items-start justify-between gap-2 lg:flex">
           <Link href={withSelection("/", ids)}>
-            <span className="block text-lg font-semibold tracking-tight text-ink">
+            <span className="block bg-gradient-to-r from-series-1 via-series-3 to-series-4 bg-clip-text text-lg font-bold tracking-tight text-transparent">
               LLM Compare
             </span>
             <span className="mt-0.5 block text-xs text-ink-muted">
@@ -91,12 +110,20 @@ export function AppShell({ children }: { children: ReactNode }) {
                   <Link
                     href={withSelection(item.href, ids)}
                     aria-current={active ? "page" : undefined}
-                    className={`block rounded-lg px-3 py-2 text-sm transition-colors ${
+                    style={{ "--tint": item.tint } as CSSProperties}
+                    className={`flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm transition-colors ${
                       active
-                        ? "bg-[var(--wash)] font-medium text-ink"
+                        ? "bg-[color-mix(in_srgb,var(--tint)_14%,transparent)] font-semibold text-ink"
                         : "text-ink-secondary hover:bg-[var(--wash)] hover:text-ink"
                     }`}
                   >
+                    <span
+                      aria-hidden
+                      className={`h-2 w-2 shrink-0 rounded-full transition-opacity ${
+                        active ? "opacity-100" : "opacity-40"
+                      }`}
+                      style={{ background: "var(--tint)" }}
+                    />
                     {item.label}
                   </Link>
                 </li>

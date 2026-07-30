@@ -24,6 +24,7 @@ interface Point {
   y: number;
   z: number;
   color: string;
+  license: string;
 }
 
 export function ScatterPanel({
@@ -44,11 +45,19 @@ export function ScatterPanel({
     y: m.capability as number,
     z: m.context,
     color,
+    license: m.license === "open" ? "Open weights" : "Proprietary",
   });
 
-  const context = scored
-    .filter((m) => !selectedIds.has(m.id))
-    .map((m) => toPoint(m, "var(--text-muted)"));
+  // The unselected cloud is split by licence — two hues that clear the all-pairs
+  // gates in both modes, named in the legend below the plot. Opacity is the
+  // second channel: the cloud recedes, the labeled selection sits on top of it.
+  const unselected = scored.filter((m) => !selectedIds.has(m.id));
+  const openCloud = unselected
+    .filter((m) => m.license === "open")
+    .map((m) => toPoint(m, "var(--open)"));
+  const closedCloud = unselected
+    .filter((m) => m.license !== "open")
+    .map((m) => toPoint(m, "var(--proprietary)"));
 
   // Color caps at 3 slots for an all-pairs form; every highlighted point is also
   // directly labeled, so identity never rests on hue alone.
@@ -104,10 +113,19 @@ export function ScatterPanel({
             <ZAxis type="number" dataKey="z" range={[36, 240]} />
             <Tooltip content={<ScatterTooltip />} cursor={{ strokeDasharray: "3 3" }} />
             <Scatter
-              name="All models"
-              data={context}
-              fill="var(--text-muted)"
-              fillOpacity={0.28}
+              name="Open weights"
+              data={openCloud}
+              fill="var(--open)"
+              fillOpacity={0.55}
+              stroke="var(--surface-1)"
+              strokeWidth={2}
+              isAnimationActive={false}
+            />
+            <Scatter
+              name="Proprietary"
+              data={closedCloud}
+              fill="var(--proprietary)"
+              fillOpacity={0.55}
               stroke="var(--surface-1)"
               strokeWidth={2}
               isAnimationActive={false}
@@ -141,7 +159,33 @@ export function ScatterPanel({
           </ScatterChart>
         </ResponsiveContainer>
       </div>
+
+      <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-hairline pt-3">
+        <CloudKey color="var(--open)" label="Open weights" />
+        <CloudKey color="var(--proprietary)" label="Proprietary" />
+        {selected.map((m, i) => (
+          <CloudKey key={m.id} color={seriesColor(i)} label={m.name} solid />
+        ))}
+      </div>
     </ChartCard>
+  );
+}
+
+/** Legend key. The mark carries color; the label stays in ink tokens. */
+function CloudKey({ color, label, solid }: { color: string; label: string; solid?: boolean }) {
+  return (
+    <span className="inline-flex items-center gap-2 text-xs text-ink-secondary">
+      <span
+        className="h-2.5 w-2.5 shrink-0 rounded-full"
+        style={{
+          background: color,
+          opacity: solid ? 1 : 0.45,
+          boxShadow: solid ? "0 0 0 2px var(--surface-1)" : undefined,
+        }}
+        aria-hidden
+      />
+      {label}
+    </span>
   );
 }
 
@@ -204,7 +248,9 @@ function ScatterTooltip({
   return (
     <div className="card p-3 shadow-lg">
       <p className="text-sm font-semibold text-ink">{p.name}</p>
-      <p className="mb-2 text-xs text-ink-muted">{p.provider}</p>
+      <p className="mb-2 text-xs text-ink-muted">
+        {p.provider} · {p.license}
+      </p>
       <dl className="space-y-0.5 text-xs">
         <Row label="Mean score" value={p.y.toFixed(0)} />
         <Row label="Blended price" value={`${formatPrice(p.x)} / 1M`} />
