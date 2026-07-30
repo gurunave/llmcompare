@@ -31,11 +31,14 @@ const SPEEDS: { key: SpeedKey; label: string }[] = [
 export function Recommender({
   selected,
   onToggle,
+  alwaysOpen = false,
 }: {
   selected: string[];
   onToggle: (id: string) => void;
+  /** On its own route the questionnaire is the content, so it never collapses. */
+  alwaysOpen?: boolean;
 }) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(alwaysOpen);
   const [answers, setAnswers] = useState<Answers>(DEFAULT_ANSWERS);
   const results = useMemo(() => recommend(answers), [answers]);
 
@@ -45,25 +48,27 @@ export function Recommender({
 
   return (
     <section className="card p-4 sm:p-5">
-      <button
-        type="button"
-        onClick={() => setOpen((v) => !v)}
-        aria-expanded={open}
-        className="flex w-full items-center justify-between gap-4 text-left"
-      >
-        <span>
-          <span className="block text-base font-semibold text-ink">Not sure where to start?</span>
-          <span className="mt-0.5 block text-sm text-ink-secondary">
-            Answer four questions and I&apos;ll shortlist the models that fit.
+      {!alwaysOpen && (
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          aria-expanded={open}
+          className="flex w-full items-center justify-between gap-4 text-left"
+        >
+          <span>
+            <span className="block text-base font-semibold text-ink">Not sure where to start?</span>
+            <span className="mt-0.5 block text-sm text-ink-secondary">
+              Answer four questions and I&apos;ll shortlist the models that fit.
+            </span>
           </span>
-        </span>
-        <span aria-hidden className="text-ink-muted">
-          {open ? "▲" : "▼"}
-        </span>
-      </button>
+          <span aria-hidden className="text-ink-muted">
+            {open ? "▲" : "▼"}
+          </span>
+        </button>
+      )}
 
       {open && (
-        <div className="mt-5 space-y-4">
+        <div className={`space-y-4 ${alwaysOpen ? "" : "mt-5"}`}>
           <Question label="What are you mostly doing?">
             {(Object.keys(TASK_LABELS) as TaskKey[]).map((k) => (
               <Choice key={k} active={answers.task === k} onClick={() => set("task", k)}>

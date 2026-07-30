@@ -78,11 +78,14 @@ function GroupedBars({ selected }: { selected: DerivedModel[] }) {
 
   return (
     <>
-      <div className="mb-3 flex flex-wrap gap-x-4 gap-y-1.5">
-        {selected.map((m, i) => (
-          <LegendItem key={m.id} color={seriesColor(i)} label={m.name} />
-        ))}
-      </div>
+      {/* One series is named by the card title; a legend would only repeat it. */}
+      {selected.length > 1 && (
+        <div className="mb-3 flex flex-wrap gap-x-4 gap-y-1.5">
+          {selected.map((m, i) => (
+            <LegendItem key={m.id} color={seriesColor(i)} label={m.name} />
+          ))}
+        </div>
+      )}
       <div className="h-[320px] w-full">
         <ResponsiveContainer width="100%" height="100%">
           <BarChart data={data} margin={{ top: 8, right: 8, bottom: 4, left: -16 }} barGap={2}>
@@ -112,6 +115,7 @@ function GroupedBars({ selected }: { selected: DerivedModel[] }) {
                 radius={[4, 4, 0, 0]}
                 stroke="var(--surface-1)"
                 strokeWidth={2}
+                maxBarSize={56}
                 isAnimationActive={false}
               />
             ))}
