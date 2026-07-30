@@ -1,6 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, type CSSProperties } from "react";
+import { providerColor } from "@/lib/accent";
 import { formatPrice, formatTokens } from "@/lib/format";
 import { DEFAULT_ANSWERS, TASK_LABELS, recommend } from "@/lib/recommend";
 import type { Answers, BudgetKey, ContextKey, DeployKey, SpeedKey, TaskKey } from "@/lib/recommend";
@@ -121,16 +122,37 @@ export function Recommender({
                     <li
                       key={r.model.id}
                       className="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-hairline px-3 py-2.5"
+                      style={
+                        i === 0
+                          ? {
+                              borderColor: "var(--accent)",
+                              background: "var(--accent-wash)",
+                            }
+                          : undefined
+                      }
                     >
                       <div className="min-w-0">
-                        <p className="flex items-center gap-2 text-sm font-medium text-ink">
-                          <span className="num text-ink-muted">{i + 1}.</span>
+                        <p className="flex flex-wrap items-center gap-2 text-sm font-semibold text-ink">
+                          <span
+                            className={`num inline-flex h-5 w-5 items-center justify-center rounded-full text-[11px] font-bold ${
+                              i === 0 ? "bg-accent text-white" : "bg-[var(--wash)] text-ink-secondary"
+                            }`}
+                            aria-hidden
+                          >
+                            {i + 1}
+                          </span>
                           {r.model.name}
-                          <span className="text-xs font-normal text-ink-muted">{r.model.provider}</span>
+                          <span
+                            className="badge"
+                            style={
+                              { "--tint": providerColor(r.model.provider) } as CSSProperties
+                            }
+                          >
+                            <span className="dot" aria-hidden />
+                            {r.model.provider}
+                          </span>
                         </p>
-                        <p className="mt-0.5 text-xs text-ink-secondary">
-                          {r.reasons.join(" · ")}
-                        </p>
+                        <p className="mt-1 text-xs text-ink-secondary">{r.reasons.join(" · ")}</p>
                       </div>
                       <div className="flex items-center gap-3">
                         <span className="num hidden text-xs text-ink-muted sm:inline">

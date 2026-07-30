@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useMemo, useState } from "react";
+import { useMemo, useState, type CSSProperties } from "react";
+import { licenceColor, providerColor } from "@/lib/accent";
 import { formatPrice, formatScore, formatTokens } from "@/lib/format";
 import { MAX_SELECTION, MODELS, PROVIDERS } from "@/lib/models";
 import { withSelection } from "@/lib/selection";
@@ -87,10 +88,10 @@ export function ModelBrowser({
   const full = selected.length >= MAX_SELECTION;
 
   return (
-    <section className="card p-4 sm:p-5">
+    <section className="card card-accent p-4 sm:p-5">
       <header className="mb-4">
-        <h2 className="text-base font-semibold text-ink">Browse models</h2>
-        <p className="mt-0.5 text-sm text-ink-secondary">
+        <h2 className="text-lg font-semibold text-ink">Browse models</h2>
+        <p className="mt-1 text-sm text-ink-secondary">
           {rows.length} of {MODELS.length} models. Pick up to {MAX_SELECTION} to compare.
         </p>
       </header>
@@ -134,9 +135,10 @@ export function ModelBrowser({
       </div>
 
       <div className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
-        <table className="w-full min-w-[720px] border-collapse text-sm">
-          <thead>
-            <tr className="border-b border-hairline">
+        <table className="data-table w-full min-w-[760px] border-collapse text-[0.9375rem]">
+          {/* 85 rows deep, so the header follows the scroll. */}
+          <thead className="sticky top-0 z-10 bg-surface">
+            <tr className="border-b-2 border-[var(--border-strong)]">
               <th scope="col" className="w-10 py-2 pr-2">
                 <span className="sr-only">Select</span>
               </th>
@@ -152,7 +154,9 @@ export function ModelBrowser({
                     <button
                       type="button"
                       onClick={() => toggleSort(c.key)}
-                      className={`inline-flex items-center gap-1 hover:text-ink ${active ? "text-ink" : "text-ink-muted"}`}
+                      className={`inline-flex items-center gap-1 hover:text-ink ${
+                        active ? "text-accent-text" : "text-ink-muted"
+                      }`}
                     >
                       {c.label}
                       <span aria-hidden className="text-[10px]">
@@ -171,44 +175,60 @@ export function ModelBrowser({
               return (
                 <tr
                   key={m.id}
-                  className={`border-b border-hairline last:border-0 ${isSelected ? "bg-[var(--wash)]" : ""}`}
+                  className={`border-b border-hairline last:border-0 ${
+                    isSelected ? "bg-[var(--accent-wash)]" : ""
+                  }`}
                 >
-                  <td className="py-2 pr-2">
+                  <td className="py-2.5 pr-2">
                     <input
                       type="checkbox"
                       checked={isSelected}
                       disabled={disabled}
                       onChange={() => onToggle(m.id)}
                       aria-label={`Compare ${m.name}`}
-                      className="h-4 w-4 accent-[var(--series-1)] disabled:opacity-30"
+                      className="h-4 w-4 accent-[var(--accent)] disabled:opacity-30"
                     />
                   </td>
-                  <td className="py-2 pr-4">
+                  <td className="py-2.5 pr-4">
                     <Link
                       href={withSelection(`/models/${m.id}`, selected)}
-                      className="font-medium text-ink hover:underline"
+                      className="font-medium text-ink hover:text-accent-text hover:underline"
                     >
                       {m.name}
                     </Link>
+                    {/* Only the open badge is drawn — on a mostly proprietary
+                        catalog the inverse badge would repeat on every row. */}
                     {m.license === "open" && (
-                      <span className="ml-2 rounded border border-hairline px-1 py-0.5 text-[10px] uppercase tracking-wide text-ink-muted">
+                      <span
+                        className="badge ml-2 align-middle"
+                        style={{ "--tint": licenceColor("open") } as CSSProperties}
+                      >
                         open
                       </span>
                     )}
                   </td>
-                  <td className="py-2 pr-4 text-ink-secondary">{m.provider}</td>
-                  <td className="num py-2 pr-4 text-right text-ink-secondary">
+                  <td className="py-2.5 pr-4 text-ink-secondary">
+                    <span className="inline-flex items-center gap-2">
+                      <span
+                        className="dot"
+                        style={{ "--tint": providerColor(m.provider) } as CSSProperties}
+                        aria-hidden
+                      />
+                      {m.provider}
+                    </span>
+                  </td>
+                  <td className="num py-2.5 pr-4 text-right text-ink-secondary">
                     {formatTokens(m.context)}
                   </td>
-                  <td className="num py-2 pr-4 text-right text-ink-secondary">
+                  <td className="num py-2.5 pr-4 text-right text-ink-secondary">
                     {formatPrice(m.blendedPrice)}
                   </td>
-                  <td className="num py-2 pr-4 text-right text-ink-secondary">{m.speed}</td>
-                  <td className="num py-2 pr-4 text-right text-ink">
-                    {formatScore(m.capability)}
+                  <td className="num py-2.5 pr-4 text-right text-ink-secondary">{m.speed}</td>
+                  <td className="num py-2.5 pr-4 text-right">
+                    <ScoreCell value={m.capability} />
                   </td>
-                  <td className="num py-2 pr-4 text-right text-ink-secondary">
-                    {formatScore(m.scores.swebench)}
+                  <td className="num py-2.5 pr-4 text-right">
+                    <ScoreCell value={m.scores.swebench} />
                   </td>
                 </tr>
               );
@@ -224,6 +244,25 @@ export function ModelBrowser({
         </table>
       </div>
     </section>
+  );
+}
+
+/**
+ * The number stays in ink and carries the value; the bar under it is a length
+ * encoding for scanning a column at a glance, not a second color code.
+ */
+function ScoreCell({ value }: { value: number | null }) {
+  if (value === null) return <span className="text-ink-muted">—</span>;
+  return (
+    <span className="inline-flex flex-col items-end gap-1">
+      <span className="text-ink">{formatScore(value)}</span>
+      <span className="block h-1 w-14 rounded-full bg-[var(--wash)]" aria-hidden>
+        <span
+          className="block h-full rounded-full bg-accent"
+          style={{ width: `${Math.max(2, Math.min(100, value))}%` }}
+        />
+      </span>
+    </span>
   );
 }
 

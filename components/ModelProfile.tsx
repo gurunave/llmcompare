@@ -1,6 +1,8 @@
 "use client";
 
 import Link from "next/link";
+import type { CSSProperties } from "react";
+import { licenceColor, licenceLabel, providerColor, tagColor } from "@/lib/accent";
 import { ChartCard } from "@/components/ChartCard";
 import { PageHeader } from "@/components/PageHeader";
 import { SpecTable } from "@/components/SpecTable";
@@ -25,9 +27,31 @@ export function ModelProfile({
     <main className="mx-auto max-w-5xl space-y-4 px-4 py-6 lg:py-8">
       <PageHeader
         title={model.name}
-        lead={`${model.provider} · released ${formatMonth(model.released)} · ${
-          model.license === "open" ? "open weights" : "proprietary"
-        }`}
+        lead={`Released ${formatMonth(model.released)} · knowledge cutoff ${formatMonth(model.cutoff)}`}
+        badges={
+          <>
+            <span
+              className="badge"
+              style={{ "--tint": providerColor(model.provider) } as CSSProperties}
+            >
+              <span className="dot" aria-hidden />
+              {model.provider}
+            </span>
+            <span
+              className="badge"
+              style={{ "--tint": licenceColor(model.license) } as CSSProperties}
+            >
+              <span className="dot" aria-hidden />
+              {licenceLabel(model.license)}
+              {model.license === "open" && model.localTier ? ` · ${model.localTier}` : ""}
+            </span>
+            {model.tags.map((t) => (
+              <span key={t} className="badge" style={{ "--tint": tagColor(t) } as CSSProperties}>
+                {t}
+              </span>
+            ))}
+          </>
+        }
         crumbs={[
           { label: "Browse", href: withSelection("/", ids) },
           { label: model.provider },
@@ -56,12 +80,17 @@ export function ModelProfile({
       />
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <Stat label="Context" value={`${formatTokens(model.context)} tok`} />
-        <Stat label="Blended price" value={`${formatPrice(model.blendedPrice)} / 1M`} />
-        <Stat label="Output speed" value={`${model.speed} tok/s`} />
+        <Stat label="Context" value={`${formatTokens(model.context)} tok`} tint="var(--series-1)" />
+        <Stat
+          label="Blended price"
+          value={`${formatPrice(model.blendedPrice)} / 1M`}
+          tint="var(--series-3)"
+        />
+        <Stat label="Output speed" value={`${model.speed} tok/s`} tint="var(--series-4)" />
         <Stat
           label="Mean score"
           value={model.capability === null ? "—" : model.capability.toFixed(0)}
+          tint="var(--series-2)"
         />
       </div>
 
@@ -80,13 +109,17 @@ export function ModelProfile({
               <div className="min-w-0">
                 <Link
                   href={withSelection(`/models/${p.id}`, ids)}
-                  className="text-sm font-medium text-ink hover:underline"
+                  className="text-sm font-medium text-ink hover:text-accent-text hover:underline"
                 >
                   {p.name}
                 </Link>
-                <p className="mt-0.5 text-xs text-ink-secondary">
-                  {p.provider} · {formatPrice(p.blendedPrice)}/1M ·{" "}
-                  {formatTokens(p.context)} ctx
+                <p className="mt-1 flex flex-wrap items-center gap-1.5 text-xs text-ink-secondary">
+                  <span
+                    className="dot"
+                    style={{ "--tint": providerColor(p.provider) } as CSSProperties}
+                    aria-hidden
+                  />
+                  {p.provider} · {formatPrice(p.blendedPrice)}/1M · {formatTokens(p.context)} ctx
                 </p>
               </div>
               <button
@@ -117,11 +150,15 @@ export function ModelProfile({
   );
 }
 
-function Stat({ label, value }: { label: string; value: string }) {
+/** Stat tile: the value stays in ink; the tint is a left rule that groups it. */
+function Stat({ label, value, tint }: { label: string; value: string; tint: string }) {
   return (
-    <div className="card p-4">
-      <p className="text-xs uppercase tracking-wide text-ink-muted">{label}</p>
-      <p className="num mt-1 text-xl font-semibold text-ink">{value}</p>
+    <div
+      className="card border-l-4 p-4"
+      style={{ borderLeftColor: tint, background: `color-mix(in srgb, ${tint} 7%, var(--surface-1))` }}
+    >
+      <p className="text-xs font-medium uppercase tracking-wide text-ink-muted">{label}</p>
+      <p className="mt-1.5 text-2xl font-bold text-ink">{value}</p>
     </div>
   );
 }
