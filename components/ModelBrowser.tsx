@@ -1,8 +1,10 @@
 "use client";
 
+import Link from "next/link";
 import { useMemo, useState } from "react";
 import { formatPrice, formatScore, formatTokens } from "@/lib/format";
 import { MAX_SELECTION, MODELS, PROVIDERS } from "@/lib/models";
+import { withSelection } from "@/lib/selection";
 import type { DerivedModel } from "@/lib/types";
 
 type SortKey = "name" | "provider" | "context" | "price" | "speed" | "capability" | "swebench";
@@ -182,7 +184,12 @@ export function ModelBrowser({
                     />
                   </td>
                   <td className="py-2 pr-4">
-                    <span className="font-medium text-ink">{m.name}</span>
+                    <Link
+                      href={withSelection(`/models/${m.id}`, selected)}
+                      className="font-medium text-ink hover:underline"
+                    >
+                      {m.name}
+                    </Link>
                     {m.license === "open" && (
                       <span className="ml-2 rounded border border-hairline px-1 py-0.5 text-[10px] uppercase tracking-wide text-ink-muted">
                         open

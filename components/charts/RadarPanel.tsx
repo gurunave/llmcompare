@@ -34,14 +34,20 @@ export function RadarPanel({ models }: { models: DerivedModel[] }) {
     return row;
   });
 
+  // A single series needs no legend — the card title already names it.
+  const legend =
+    models.length > 1
+      ? models.map((m, i) => (
+          <LegendItem key={m.id} color={seriesColor(i)} dash={seriesDash(i)} label={m.name} />
+        ))
+      : undefined;
+
   return (
     <ChartCard
       title="Capability profile"
       subtitle="Every axis normalized 0-100 across the whole catalog. Bigger shape, broader model."
       note="Speed, value and context are log-scaled before normalizing, so a 10× lead reads as a step rather than swallowing the axis. A missing benchmark leaves a gap in the shape rather than plotting as zero."
-      actions={models.map((m, i) => (
-        <LegendItem key={m.id} color={seriesColor(i)} dash={seriesDash(i)} label={m.name} />
-      ))}
+      actions={legend}
     >
       <div className="h-[380px] w-full sm:h-[440px]">
         <ResponsiveContainer width="100%" height="100%">

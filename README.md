@@ -3,13 +3,28 @@
 A visual side-by-side comparison of large language models — capability, price,
 speed and context, for 50 models across 14 providers.
 
-Pick up to four models and the app renders a capability radar, a cost-vs-capability
-scatter, benchmark bars with a leaderboard mode, and a full spec table with the
-best value in each row marked. There is also a short questionnaire that shortlists
-models against a budget, deployment target and context requirement.
-
 Everything is driven by one bundled file — `data/models.json` — so there are no API
 keys, no backend and no network calls at runtime.
+
+## Pages
+
+| Route | What it does |
+|---|---|
+| `/` | Browse: cost-vs-capability scatter over the whole catalog, plus a sortable, filterable table. Selection happens here. |
+| `/compare` | The selection side by side: capability radar, benchmark bars with a leaderboard mode, and a spec table marking the best value per row. |
+| `/models/[id]` | One page per model — headline stats, its own radar and benchmark bars, full specs, and the closest alternatives by price and capability. 50 statically generated pages. |
+| `/recommend` | Four questions about task, budget, deployment target and context; hard constraints filter, cost and speed preferences rank. |
+| `/methodology` | Where the numbers come from, how blended price and the mean score are computed, what each radar axis means. |
+
+A left rail carries the navigation and the selection tray, so models can be added
+or dropped from any page; below `lg` it collapses into a drawer.
+
+### Selection state
+
+The selection is shared across every route by `lib/selection.tsx`. It lives in the
+`?m=` query **and** `localStorage`: a `?m=` link always wins on load so a shared
+URL shows the sender's picks, and otherwise your last visit is restored. Links
+between pages carry the current selection via `withSelection()`.
 
 ## Running it
 
@@ -114,9 +129,10 @@ comparably measured" — it is never a zero.
 ## Layout
 
 ```
-app/                 layout, page shell, design tokens
-components/          browser, recommender, spec table, selection tray
+app/                 one directory per route, plus design tokens and the root layout
+app/models/[id]/     statically generated model pages (generateStaticParams)
+components/          app shell, browser, recommender, spec table, selection tray
 components/charts/   radar, cost-vs-capability scatter, benchmark bars
-lib/                 typed catalog, derived metrics, recommender scoring
+lib/                 typed catalog, derived metrics, selection state, scoring
 data/models.json     the catalog
 ```
