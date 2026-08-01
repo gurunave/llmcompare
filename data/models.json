@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-07-30",
+    "lastReviewed": "2026-07-31",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. A null score means 'not published or not comparably measured', not zero.",
     "benchmarks": {
@@ -78,6 +78,42 @@
       "tags": [
         "workhorse",
         "agentic-coding"
+      ],
+      "url": "https://docs.anthropic.com/en/docs/about-claude/models"
+    },
+    {
+      "id": "claude-fable-5",
+      "name": "Claude Fable 5",
+      "provider": "Anthropic",
+      "released": "2026-06",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 1000000,
+      "maxOutput": 128000,
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 10,
+        "output": 50
+      },
+      "cutoff": "2026-01",
+      "speed": 63,
+      "scores": {
+        "mmluPro": 82,
+        "gpqa": 93,
+        "swebench": 95,
+        "aime": 90,
+        "mmmu": 89
+      },
+      "tags": [
+        "frontier",
+        "agentic-coding",
+        "long-horizon",
+        "flagship"
       ],
       "url": "https://docs.anthropic.com/en/docs/about-claude/models"
     },
