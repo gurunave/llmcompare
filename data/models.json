@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-07-31",
+    "lastReviewed": "2026-08-02",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. A null score means 'not published or not comparably measured', not zero.",
     "benchmarks": {
@@ -292,6 +292,215 @@
         "agentic-coding"
       ],
       "url": "https://platform.openai.com/docs/models"
+    },
+    {
+      "id": "deepseek-v4-pro",
+      "name": "DeepSeek V4 Pro",
+      "provider": "DeepSeek",
+      "released": "2026-04",
+      "license": "open",
+      "params": 1600,
+      "localTier": "cluster",
+      "context": 1048576,
+      "maxOutput": 384000,
+      "modalities": [
+        "text"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.435,
+        "output": 0.87
+      },
+      "cutoff": "2026-03",
+      "speed": 45,
+      "scores": {
+        "mmluPro": 88,
+        "gpqa": 90,
+        "swebench": 81,
+        "aime": null,
+        "mmmu": null
+      },
+      "tags": [
+        "open-weights",
+        "frontier",
+        "reasoning"
+      ],
+      "url": "https://api-docs.deepseek.com/"
+    },
+    {
+      "id": "deepseek-v4-flash",
+      "name": "DeepSeek V4 Flash",
+      "provider": "DeepSeek",
+      "released": "2026-04",
+      "license": "open",
+      "params": 284,
+      "localTier": "server",
+      "context": 1048576,
+      "maxOutput": 384000,
+      "modalities": [
+        "text"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.14,
+        "output": 0.28
+      },
+      "cutoff": "2026-03",
+      "speed": 110,
+      "scores": {
+        "mmluPro": null,
+        "gpqa": null,
+        "swebench": 79,
+        "aime": null,
+        "mmmu": null
+      },
+      "tags": [
+        "open-weights",
+        "cheap",
+        "agentic-coding"
+      ],
+      "url": "https://api-docs.deepseek.com/"
+    },
+    {
+      "id": "muse-spark-1-1",
+      "name": "Muse Spark 1.1",
+      "provider": "Meta",
+      "released": "2026-07",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 1048576,
+      "maxOutput": 65536,
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 1.25,
+        "output": 4.25
+      },
+      "cutoff": "2026-05",
+      "speed": 55,
+      "scores": {
+        "mmluPro": null,
+        "gpqa": null,
+        "swebench": null,
+        "aime": null,
+        "mmmu": null
+      },
+      "tags": [
+        "agentic-coding",
+        "multimodal"
+      ],
+      "url": "https://ai.meta.com/blog/introducing-muse-spark-meta-model-api/"
+    },
+    {
+      "id": "inkling",
+      "name": "Inkling",
+      "provider": "Thinking Machines",
+      "released": "2026-07",
+      "license": "open",
+      "params": 975,
+      "localTier": "cluster",
+      "context": 1048576,
+      "maxOutput": 32768,
+      "modalities": [
+        "text",
+        "image",
+        "audio"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 1.87,
+        "output": 4.68
+      },
+      "cutoff": "2026-05",
+      "speed": 55,
+      "scores": {
+        "mmluPro": 74,
+        "gpqa": 87,
+        "swebench": 78,
+        "aime": null,
+        "mmmu": null
+      },
+      "tags": [
+        "open-weights",
+        "multimodal",
+        "frontier"
+      ],
+      "url": "https://thinkingmachines.ai/model-card/inkling/"
+    },
+    {
+      "id": "gemini-3-1-pro",
+      "name": "Gemini 3.1 Pro",
+      "provider": "Google",
+      "released": "2026-02",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 1048576,
+      "maxOutput": 65536,
+      "modalities": [
+        "text",
+        "image",
+        "audio",
+        "video"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 2,
+        "output": 12
+      },
+      "cutoff": "2025-01",
+      "speed": 72,
+      "scores": {
+        "mmluPro": null,
+        "gpqa": 94,
+        "swebench": 81,
+        "aime": null,
+        "mmmu": null
+      },
+      "tags": [
+        "frontier",
+        "multimodal",
+        "long-context"
+      ],
+      "url": "https://ai.google.dev/gemini-api/docs/models"
+    },
+    {
+      "id": "grok-4-5",
+      "name": "Grok 4.5",
+      "provider": "xAI",
+      "released": "2026-07",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 500000,
+      "maxOutput": 64000,
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 2,
+        "output": 6
+      },
+      "cutoff": "2025-09",
+      "speed": 75,
+      "scores": {
+        "mmluPro": null,
+        "gpqa": 93,
+        "swebench": null,
+        "aime": null,
+        "mmmu": null
+      },
+      "tags": [
+        "agentic-coding",
+        "reasoning"
+      ],
+      "url": "https://docs.x.ai/docs/models"
     },
     {
       "id": "claude-opus-4-5",
