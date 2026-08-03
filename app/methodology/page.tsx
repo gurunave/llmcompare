@@ -109,6 +109,68 @@ export default function MethodologyPage() {
       </section>
 
       <section className="card p-4 sm:p-5">
+        <h2 className="text-base font-semibold text-ink">Sizing a model for hardware</h2>
+        <p className="mt-2 text-sm leading-relaxed text-ink-secondary">
+          The <a href="/hardware" className="link">hardware page</a> sizes the{" "}
+          {MODELS.filter((m) => m.arch).length} open-weight models against a machine. Each one
+          carries an <code>arch</code> block — layers, KV heads, head dimension, active parameters —
+          taken from its published <code>config.json</code>, or scaled from the nearest sibling and
+          marked <em>est.</em> where no config exists. Nothing is guessed silently.
+        </p>
+
+        <dl className="mt-3 space-y-3 text-sm">
+          <div>
+            <dt className="font-medium text-ink">Weights</dt>
+            <dd className="mt-0.5 text-ink-secondary">
+              Parameters × bytes per parameter, calibrated against real llama.cpp K-quant file
+              sizes rather than the nominal bit width — scales and zero-points are real bytes, so
+              &ldquo;4-bit&rdquo; lands nearer 4.8. FP16 2.0, Q8 1.06, Q6_K 0.82, Q5_K_M 0.72,
+              Q4_K_M 0.60, Q3_K_M 0.48 bytes per parameter.
+            </dd>
+          </div>
+          <div>
+            <dt className="font-medium text-ink">KV cache</dt>
+            <dd className="mt-0.5 text-ink-secondary">
+              <code>2 × layers × kvHeads × headDim × bytes × tokens</code>. Three architectures
+              break that formula and are handled separately: MLA models cache one compressed latent
+              instead of a K and a V, which is why a 685B DeepSeek needs less cache than a 70B
+              Llama; SSM hybrids hold a cache on only a few of their layers; and models that
+              interleave sliding-window attention pay a flat rate on most layers once the context
+              passes the window.
+            </dd>
+          </div>
+          <div>
+            <dt className="font-medium text-ink">Usable memory</dt>
+            <dd className="mt-0.5 text-ink-secondary">
+              94% of a discrete card, after the driver and display; 75% of a unified pool, which is
+              roughly what macOS hands the GPU by default. Runtime overhead is charged at 5% of
+              weights or 0.8 GB, whichever is larger. Anything past 90% of usable memory is marked{" "}
+              <em>tight</em> rather than fitting.
+            </dd>
+          </div>
+          <div>
+            <dt className="font-medium text-ink">Speed</dt>
+            <dd className="mt-0.5 text-ink-secondary">
+              Decoding one token reads the active weights once, so throughput is bounded by memory
+              bandwidth: <code>bandwidth ÷ (active weights + cache read)</code>. A mixture-of-experts
+              reads only its active parameters, which is why a 235B MoE decodes like a 22B dense
+              model. The range shown is the 55–85% of peak bandwidth a real runtime reaches.
+            </dd>
+          </div>
+        </dl>
+
+        <p className="mt-3 rounded-lg border border-hairline p-3 text-sm leading-relaxed text-ink-secondary">
+          <strong className="text-ink">These are estimates, and speed is an upper bound.</strong>{" "}
+          Memory should land within about 10–20% of a real runtime. Throughput is a roofline: it
+          assumes memory bandwidth is the only limit, so batching, long prompts and per-layer
+          synchronisation all pull it down. A large mixture-of-experts sharded across many devices
+          is where it is most optimistic — expert dispatch and cross-device traffic dominate there,
+          and real single-stream decoding can land several times below the figure shown. Benchmark
+          before you buy.
+        </p>
+      </section>
+
+      <section className="card p-4 sm:p-5">
         <h2 className="text-base font-semibold text-ink">Correcting something</h2>
         <p className="mt-2 text-sm leading-relaxed text-ink-secondary">
           Edit <code>data/models.json</code> and the charts, filters, normalization and

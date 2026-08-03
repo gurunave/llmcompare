@@ -20,6 +20,18 @@
       "license": "open",
       "params": 284,
       "localTier": "cluster",
+      "arch": {
+        "layers": 48,
+        "kvLayers": 48,
+        "kvHeads": null,
+        "headDim": null,
+        "attn": "mla",
+        "kvLatentDim": 576,
+        "activeParams": 24,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "estimated"
+      },
       "context": 1048576,
       "maxOutput": 65536,
       "modalities": [
@@ -161,6 +173,18 @@
       "license": "open",
       "params": 20,
       "localTier": "laptop",
+      "arch": {
+        "layers": 40,
+        "kvLayers": 40,
+        "kvHeads": 4,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": 3,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "estimated"
+      },
       "context": 1000000,
       "maxOutput": 32768,
       "modalities": [
@@ -198,6 +222,18 @@
       "license": "open",
       "params": 2800,
       "localTier": "cluster",
+      "arch": {
+        "layers": 72,
+        "kvLayers": 72,
+        "kvHeads": null,
+        "headDim": null,
+        "attn": "mla",
+        "kvLatentDim": 576,
+        "activeParams": 48,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "estimated"
+      },
       "context": 1048576,
       "maxOutput": 65536,
       "modalities": [
@@ -338,6 +374,18 @@
       "license": "open",
       "params": 1600,
       "localTier": "cluster",
+      "arch": {
+        "layers": 64,
+        "kvLayers": 64,
+        "kvHeads": null,
+        "headDim": null,
+        "attn": "mla",
+        "kvLatentDim": 576,
+        "activeParams": 60,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "estimated"
+      },
       "context": 1048576,
       "maxOutput": 384000,
       "modalities": [
@@ -406,6 +454,18 @@
       "license": "open",
       "params": 975,
       "localTier": "cluster",
+      "arch": {
+        "layers": 80,
+        "kvLayers": 80,
+        "kvHeads": 8,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": 60,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "estimated"
+      },
       "context": 1048576,
       "maxOutput": 32768,
       "modalities": [
@@ -852,6 +912,18 @@
       "license": "open",
       "params": 120,
       "localTier": "server",
+      "arch": {
+        "layers": 36,
+        "kvLayers": 36,
+        "kvHeads": 8,
+        "headDim": 64,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": 5.1,
+        "slidingWindow": 128,
+        "globalEvery": 2,
+        "source": "config"
+      },
       "context": 131072,
       "maxOutput": 32768,
       "modalities": [
@@ -886,6 +958,18 @@
       "license": "open",
       "params": 21,
       "localTier": "workstation",
+      "arch": {
+        "layers": 24,
+        "kvLayers": 24,
+        "kvHeads": 8,
+        "headDim": 64,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": 3.6,
+        "slidingWindow": 128,
+        "globalEvery": 2,
+        "source": "config"
+      },
       "context": 131072,
       "maxOutput": 32768,
       "modalities": [
@@ -1103,6 +1187,18 @@
       "license": "open",
       "params": 27,
       "localTier": "workstation",
+      "arch": {
+        "layers": 62,
+        "kvLayers": 62,
+        "kvHeads": 16,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": null,
+        "slidingWindow": 1024,
+        "globalEvery": 6,
+        "source": "config"
+      },
       "context": 131072,
       "maxOutput": 8192,
       "modalities": [
@@ -1138,6 +1234,18 @@
       "license": "open",
       "params": 12,
       "localTier": "workstation",
+      "arch": {
+        "layers": 48,
+        "kvLayers": 48,
+        "kvHeads": 8,
+        "headDim": 256,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": null,
+        "slidingWindow": 1024,
+        "globalEvery": 6,
+        "source": "config"
+      },
       "context": 131072,
       "maxOutput": 8192,
       "modalities": [
@@ -1172,6 +1280,18 @@
       "license": "open",
       "params": 4,
       "localTier": "laptop",
+      "arch": {
+        "layers": 34,
+        "kvLayers": 34,
+        "kvHeads": 4,
+        "headDim": 256,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": null,
+        "slidingWindow": 1024,
+        "globalEvery": 6,
+        "source": "config"
+      },
       "context": 131072,
       "maxOutput": 8192,
       "modalities": [
@@ -1207,6 +1327,18 @@
       "license": "open",
       "params": 8,
       "localTier": "laptop",
+      "arch": {
+        "layers": 35,
+        "kvLayers": 35,
+        "kvHeads": 2,
+        "headDim": 256,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": 4,
+        "slidingWindow": 512,
+        "globalEvery": 5,
+        "source": "config"
+      },
       "context": 32768,
       "maxOutput": 8192,
       "modalities": [
@@ -1245,6 +1377,18 @@
       "license": "open",
       "params": 1,
       "localTier": "laptop",
+      "arch": {
+        "layers": 26,
+        "kvLayers": 26,
+        "kvHeads": 1,
+        "headDim": 256,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": null,
+        "slidingWindow": 512,
+        "globalEvery": 6,
+        "source": "config"
+      },
       "context": 32768,
       "maxOutput": 8192,
       "modalities": [
@@ -1280,6 +1424,18 @@
       "license": "open",
       "params": 400,
       "localTier": "cluster",
+      "arch": {
+        "layers": 48,
+        "kvLayers": 48,
+        "kvHeads": 8,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": 17,
+        "slidingWindow": 8192,
+        "globalEvery": 4,
+        "source": "config"
+      },
       "context": 1048576,
       "maxOutput": 8192,
       "modalities": [
@@ -1315,6 +1471,18 @@
       "license": "open",
       "params": 109,
       "localTier": "server",
+      "arch": {
+        "layers": 48,
+        "kvLayers": 48,
+        "kvHeads": 8,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": 17,
+        "slidingWindow": 8192,
+        "globalEvery": 4,
+        "source": "config"
+      },
       "context": 10485760,
       "maxOutput": 8192,
       "modalities": [
@@ -1349,6 +1517,18 @@
       "license": "open",
       "params": 70,
       "localTier": "server",
+      "arch": {
+        "layers": 80,
+        "kvLayers": 80,
+        "kvHeads": 8,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": null,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 131072,
       "maxOutput": 8192,
       "modalities": [
@@ -1382,6 +1562,18 @@
       "license": "open",
       "params": 8,
       "localTier": "laptop",
+      "arch": {
+        "layers": 32,
+        "kvLayers": 32,
+        "kvHeads": 8,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": null,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 131072,
       "maxOutput": 8192,
       "modalities": [
@@ -1416,6 +1608,18 @@
       "license": "open",
       "params": 11,
       "localTier": "workstation",
+      "arch": {
+        "layers": 40,
+        "kvLayers": 40,
+        "kvHeads": 8,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": null,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 131072,
       "maxOutput": 8192,
       "modalities": [
@@ -1451,6 +1655,18 @@
       "license": "open",
       "params": 3,
       "localTier": "laptop",
+      "arch": {
+        "layers": 28,
+        "kvLayers": 28,
+        "kvHeads": 8,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": null,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 131072,
       "maxOutput": 8192,
       "modalities": [
@@ -1485,6 +1701,18 @@
       "license": "open",
       "params": 675,
       "localTier": "cluster",
+      "arch": {
+        "layers": 88,
+        "kvLayers": 88,
+        "kvHeads": 8,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": 41,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "estimated"
+      },
       "context": 256000,
       "maxOutput": 32000,
       "modalities": [
@@ -1586,6 +1814,18 @@
       "license": "open",
       "params": 24,
       "localTier": "workstation",
+      "arch": {
+        "layers": 40,
+        "kvLayers": 40,
+        "kvHeads": 8,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": null,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 128000,
       "maxOutput": 32000,
       "modalities": [
@@ -1653,6 +1893,18 @@
       "license": "open",
       "params": 8,
       "localTier": "laptop",
+      "arch": {
+        "layers": 36,
+        "kvLayers": 36,
+        "kvHeads": 8,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": null,
+        "slidingWindow": 32768,
+        "globalEvery": 2,
+        "source": "config"
+      },
       "context": 128000,
       "maxOutput": 8192,
       "modalities": [
@@ -1687,6 +1939,18 @@
       "license": "open",
       "params": 24,
       "localTier": "workstation",
+      "arch": {
+        "layers": 40,
+        "kvLayers": 40,
+        "kvHeads": 8,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": null,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 128000,
       "maxOutput": 40000,
       "modalities": [
@@ -1723,6 +1987,18 @@
       "license": "open",
       "params": 24,
       "localTier": "workstation",
+      "arch": {
+        "layers": 40,
+        "kvLayers": 40,
+        "kvHeads": 8,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": null,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 128000,
       "maxOutput": 32000,
       "modalities": [
@@ -1758,6 +2034,18 @@
       "license": "open",
       "params": 12,
       "localTier": "workstation",
+      "arch": {
+        "layers": 40,
+        "kvLayers": 40,
+        "kvHeads": 8,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": null,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 128000,
       "maxOutput": 8192,
       "modalities": [
@@ -1794,6 +2082,18 @@
       "license": "open",
       "params": 12,
       "localTier": "workstation",
+      "arch": {
+        "layers": 40,
+        "kvLayers": 40,
+        "kvHeads": 8,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": null,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 128000,
       "maxOutput": 16000,
       "modalities": [
@@ -1828,6 +2128,18 @@
       "license": "open",
       "params": 685,
       "localTier": "cluster",
+      "arch": {
+        "layers": 61,
+        "kvLayers": 61,
+        "kvHeads": null,
+        "headDim": null,
+        "attn": "mla",
+        "kvLatentDim": 576,
+        "activeParams": 37,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 163840,
       "maxOutput": 65536,
       "modalities": [
@@ -1862,6 +2174,18 @@
       "license": "open",
       "params": 685,
       "localTier": "cluster",
+      "arch": {
+        "layers": 61,
+        "kvLayers": 61,
+        "kvHeads": null,
+        "headDim": null,
+        "attn": "mla",
+        "kvLatentDim": 576,
+        "activeParams": 37,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 163840,
       "maxOutput": 65536,
       "modalities": [
@@ -1895,6 +2219,18 @@
       "license": "open",
       "params": 685,
       "localTier": "cluster",
+      "arch": {
+        "layers": 61,
+        "kvLayers": 61,
+        "kvHeads": null,
+        "headDim": null,
+        "attn": "mla",
+        "kvLatentDim": 576,
+        "activeParams": 37,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 131072,
       "maxOutput": 32768,
       "modalities": [
@@ -1928,6 +2264,18 @@
       "license": "open",
       "params": 70,
       "localTier": "server",
+      "arch": {
+        "layers": 80,
+        "kvLayers": 80,
+        "kvHeads": 8,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": null,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 131072,
       "maxOutput": 32768,
       "modalities": [
@@ -1963,6 +2311,18 @@
       "license": "open",
       "params": 235,
       "localTier": "cluster",
+      "arch": {
+        "layers": 94,
+        "kvLayers": 94,
+        "kvHeads": 4,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": 22,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 262144,
       "maxOutput": 32768,
       "modalities": [
@@ -1997,6 +2357,18 @@
       "license": "open",
       "params": 480,
       "localTier": "cluster",
+      "arch": {
+        "layers": 62,
+        "kvLayers": 62,
+        "kvHeads": 4,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": 35,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 262144,
       "maxOutput": 65536,
       "modalities": [
@@ -2031,6 +2403,18 @@
       "license": "open",
       "params": 32,
       "localTier": "workstation",
+      "arch": {
+        "layers": 64,
+        "kvLayers": 64,
+        "kvHeads": 8,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": null,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 131072,
       "maxOutput": 32768,
       "modalities": [
@@ -2065,6 +2449,18 @@
       "license": "open",
       "params": 8,
       "localTier": "laptop",
+      "arch": {
+        "layers": 36,
+        "kvLayers": 36,
+        "kvHeads": 8,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": null,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 131072,
       "maxOutput": 32768,
       "modalities": [
@@ -2099,6 +2495,18 @@
       "license": "open",
       "params": 30,
       "localTier": "workstation",
+      "arch": {
+        "layers": 48,
+        "kvLayers": 48,
+        "kvHeads": 4,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": 3,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 262144,
       "maxOutput": 32768,
       "modalities": [
@@ -2135,6 +2543,18 @@
       "license": "open",
       "params": 80,
       "localTier": "server",
+      "arch": {
+        "layers": 48,
+        "kvLayers": 12,
+        "kvHeads": 2,
+        "headDim": 256,
+        "attn": "hybrid",
+        "kvLatentDim": null,
+        "activeParams": 3,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 262144,
       "maxOutput": 32768,
       "modalities": [
@@ -2170,6 +2590,18 @@
       "license": "open",
       "params": 30,
       "localTier": "workstation",
+      "arch": {
+        "layers": 48,
+        "kvLayers": 48,
+        "kvHeads": 4,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": 3,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 262144,
       "maxOutput": 32768,
       "modalities": [
@@ -2204,6 +2636,18 @@
       "license": "open",
       "params": 14,
       "localTier": "workstation",
+      "arch": {
+        "layers": 40,
+        "kvLayers": 40,
+        "kvHeads": 8,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": null,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 131072,
       "maxOutput": 16384,
       "modalities": [
@@ -2237,6 +2681,18 @@
       "license": "open",
       "params": 4,
       "localTier": "laptop",
+      "arch": {
+        "layers": 36,
+        "kvLayers": 36,
+        "kvHeads": 8,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": null,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 262144,
       "maxOutput": 16384,
       "modalities": [
@@ -2271,6 +2727,18 @@
       "license": "open",
       "params": 235,
       "localTier": "cluster",
+      "arch": {
+        "layers": 94,
+        "kvLayers": 94,
+        "kvHeads": 4,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": 22,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 262144,
       "maxOutput": 32768,
       "modalities": [
@@ -2308,6 +2776,18 @@
       "license": "open",
       "params": 32,
       "localTier": "workstation",
+      "arch": {
+        "layers": 64,
+        "kvLayers": 64,
+        "kvHeads": 8,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": null,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 131072,
       "maxOutput": 8192,
       "modalities": [
@@ -2444,6 +2924,18 @@
       "license": "open",
       "params": 1000,
       "localTier": "cluster",
+      "arch": {
+        "layers": 61,
+        "kvLayers": 61,
+        "kvHeads": null,
+        "headDim": null,
+        "attn": "mla",
+        "kvLatentDim": 576,
+        "activeParams": 32,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 262144,
       "maxOutput": 32768,
       "modalities": [
@@ -2478,6 +2970,18 @@
       "license": "open",
       "params": 1000,
       "localTier": "cluster",
+      "arch": {
+        "layers": 61,
+        "kvLayers": 61,
+        "kvHeads": null,
+        "headDim": null,
+        "attn": "mla",
+        "kvLatentDim": 576,
+        "activeParams": 32,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 262144,
       "maxOutput": 32768,
       "modalities": [
@@ -2513,6 +3017,18 @@
       "license": "open",
       "params": 357,
       "localTier": "cluster",
+      "arch": {
+        "layers": 92,
+        "kvLayers": 92,
+        "kvHeads": 8,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": 32,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 204800,
       "maxOutput": 32768,
       "modalities": [
@@ -2547,6 +3063,18 @@
       "license": "open",
       "params": 106,
       "localTier": "server",
+      "arch": {
+        "layers": 46,
+        "kvLayers": 46,
+        "kvHeads": 8,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": 12,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 131072,
       "maxOutput": 32768,
       "modalities": [
@@ -2582,6 +3110,18 @@
       "license": "open",
       "params": 230,
       "localTier": "cluster",
+      "arch": {
+        "layers": 62,
+        "kvLayers": 62,
+        "kvHeads": 8,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": 10,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 204800,
       "maxOutput": 32768,
       "modalities": [
@@ -2616,6 +3156,18 @@
       "license": "open",
       "params": 111,
       "localTier": "server",
+      "arch": {
+        "layers": 64,
+        "kvLayers": 64,
+        "kvHeads": 8,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": null,
+        "slidingWindow": 4096,
+        "globalEvery": 4,
+        "source": "config"
+      },
       "context": 256000,
       "maxOutput": 8192,
       "modalities": [
@@ -2650,6 +3202,18 @@
       "license": "open",
       "params": 111,
       "localTier": "server",
+      "arch": {
+        "layers": 64,
+        "kvLayers": 64,
+        "kvHeads": 8,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": null,
+        "slidingWindow": 4096,
+        "globalEvery": 4,
+        "source": "config"
+      },
       "context": 262144,
       "maxOutput": 32768,
       "modalities": [
@@ -2684,6 +3248,18 @@
       "license": "open",
       "params": 7,
       "localTier": "laptop",
+      "arch": {
+        "layers": 32,
+        "kvLayers": 32,
+        "kvHeads": 8,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": null,
+        "slidingWindow": 4096,
+        "globalEvery": 4,
+        "source": "config"
+      },
       "context": 131072,
       "maxOutput": 4096,
       "modalities": [
@@ -2824,6 +3400,18 @@
       "license": "open",
       "params": 14,
       "localTier": "workstation",
+      "arch": {
+        "layers": 40,
+        "kvLayers": 40,
+        "kvHeads": 10,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": null,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 16000,
       "maxOutput": 8192,
       "modalities": [
@@ -2858,6 +3446,18 @@
       "license": "open",
       "params": 4,
       "localTier": "laptop",
+      "arch": {
+        "layers": 32,
+        "kvLayers": 32,
+        "kvHeads": 8,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": null,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 128000,
       "maxOutput": 8192,
       "modalities": [
@@ -2892,6 +3492,18 @@
       "license": "open",
       "params": 14,
       "localTier": "workstation",
+      "arch": {
+        "layers": 40,
+        "kvLayers": 40,
+        "kvHeads": 10,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": null,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 32768,
       "maxOutput": 32768,
       "modalities": [
@@ -2927,6 +3539,18 @@
       "license": "open",
       "params": 49,
       "localTier": "server",
+      "arch": {
+        "layers": 80,
+        "kvLayers": 64,
+        "kvHeads": 8,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": null,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "estimated"
+      },
       "context": 131072,
       "maxOutput": 32768,
       "modalities": [
@@ -2962,6 +3586,18 @@
       "license": "open",
       "params": 9,
       "localTier": "laptop",
+      "arch": {
+        "layers": 56,
+        "kvLayers": 4,
+        "kvHeads": 8,
+        "headDim": 128,
+        "attn": "hybrid",
+        "kvLatentDim": null,
+        "activeParams": null,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 131072,
       "maxOutput": 16384,
       "modalities": [
@@ -2997,6 +3633,18 @@
       "license": "open",
       "params": 32,
       "localTier": "workstation",
+      "arch": {
+        "layers": 64,
+        "kvLayers": 64,
+        "kvHeads": 8,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": null,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 65536,
       "maxOutput": 16384,
       "modalities": [
@@ -3032,6 +3680,18 @@
       "license": "open",
       "params": 7,
       "localTier": "laptop",
+      "arch": {
+        "layers": 32,
+        "kvLayers": 32,
+        "kvHeads": 8,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": null,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 65536,
       "maxOutput": 16384,
       "modalities": [
@@ -3067,6 +3727,18 @@
       "license": "open",
       "params": 32,
       "localTier": "workstation",
+      "arch": {
+        "layers": 40,
+        "kvLayers": 8,
+        "kvHeads": 8,
+        "headDim": 128,
+        "attn": "hybrid",
+        "kvLatentDim": null,
+        "activeParams": 9,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 131072,
       "maxOutput": 16384,
       "modalities": [
@@ -3102,6 +3774,18 @@
       "license": "open",
       "params": 3,
       "localTier": "laptop",
+      "arch": {
+        "layers": 40,
+        "kvLayers": 40,
+        "kvHeads": 8,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": null,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 131072,
       "maxOutput": 8192,
       "modalities": [
@@ -3137,6 +3821,18 @@
       "license": "open",
       "params": 80,
       "localTier": "server",
+      "arch": {
+        "layers": 32,
+        "kvLayers": 32,
+        "kvHeads": 8,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": 13,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 262144,
       "maxOutput": 32768,
       "modalities": [
@@ -3171,6 +3867,18 @@
       "license": "open",
       "params": 300,
       "localTier": "cluster",
+      "arch": {
+        "layers": 54,
+        "kvLayers": 54,
+        "kvHeads": 8,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": 47,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 131072,
       "maxOutput": 16384,
       "modalities": [
@@ -3204,6 +3912,18 @@
       "license": "open",
       "params": 36,
       "localTier": "workstation",
+      "arch": {
+        "layers": 64,
+        "kvLayers": 64,
+        "kvHeads": 8,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": null,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 524288,
       "maxOutput": 32768,
       "modalities": [
@@ -3239,6 +3959,18 @@
       "license": "open",
       "params": 10,
       "localTier": "workstation",
+      "arch": {
+        "layers": 40,
+        "kvLayers": 40,
+        "kvHeads": 4,
+        "headDim": 256,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": null,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 32768,
       "maxOutput": 8192,
       "modalities": [
@@ -3272,6 +4004,18 @@
       "license": "open",
       "params": 3,
       "localTier": "laptop",
+      "arch": {
+        "layers": 36,
+        "kvLayers": 36,
+        "kvHeads": 4,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": null,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 131072,
       "maxOutput": 8192,
       "modalities": [
@@ -3307,6 +4051,18 @@
       "license": "open",
       "params": 52,
       "localTier": "server",
+      "arch": {
+        "layers": 32,
+        "kvLayers": 4,
+        "kvHeads": 8,
+        "headDim": 128,
+        "attn": "hybrid",
+        "kvLatentDim": null,
+        "activeParams": 12,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 262144,
       "maxOutput": 4096,
       "modalities": [
@@ -3341,6 +4097,18 @@
       "license": "open",
       "params": 70,
       "localTier": "server",
+      "arch": {
+        "layers": 80,
+        "kvLayers": 80,
+        "kvHeads": 8,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": null,
+        "slidingWindow": null,
+        "globalEvery": null,
+        "source": "config"
+      },
       "context": 65536,
       "maxOutput": 8192,
       "modalities": [
