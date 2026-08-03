@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo, useState } from "react";
 import {
   CartesianGrid,
   LabelList,
@@ -12,7 +13,15 @@ import {
   ZAxis,
 } from "recharts";
 import { ChartCard } from "@/components/ChartCard";
-import { formatPrice, formatTokens } from "@/lib/format";
+import { formatTokens } from "@/lib/format";
+import {
+  axisScale,
+  DEFAULT_X,
+  DEFAULT_Y,
+  METRICS,
+  metricOf,
+  type Metric,
+} from "@/lib/metrics";
 import { seriesColor } from "@/lib/series";
 import type { DerivedModel } from "@/lib/types";
 
@@ -34,42 +43,111 @@ export function ScatterPanel({
   all: DerivedModel[];
   selected: DerivedModel[];
 }) {
-  const selectedIds = new Set(selected.map((m) => m.id));
-  const scored = all.filter((m) => m.capability !== null);
+  const [xKey, setXKey] = useState(DEFAULT_X);
+  const [yKey, setYKey] = useState(DEFAULT_Y);
+  const xMetric = metricOf(xKey, DEFAULT_X);
+  const yMetric = metricOf(yKey, DEFAULT_Y);
+  const isDefault = xMetric.key === DEFAULT_X && yMetric.key === DEFAULT_Y;
 
-  const toPoint = (m: DerivedModel, color: string): Point => ({
-    id: m.id,
-    name: m.name,
-    provider: m.provider,
-    x: Math.max(m.blendedPrice, 0.01),
-    y: m.capability as number,
-    z: m.context,
-    color,
-    license: m.license === "open" ? "Open weights" : "Proprietary",
-  });
+  const selectedIds = new Set(selected.map((m) => m.id));
+
+  // A model is plottable only when both chosen metrics are published for it —
+  // parameter counts and some benchmarks are missing across much of the catalog.
+  const { plottable, toPoint } = useMemo(() => {
+    const readable = (metric: Metric, m: DerivedModel): number | null => {
+      const v = metric.value(m);
+      if (v === null || !Number.isFinite(v)) return null;
+      // A log axis cannot show zero; free tiers land there, so floor them.
+      if (metric.log) return Math.max(v, 0.01);
+      return v;
+    };
+
+    const rows = all
+      .map((m) => ({ m, x: readable(xMetric, m), y: readable(yMetric, m) }))
+      .filter((r): r is { m: DerivedModel; x: number; y: number } => r.x !== null && r.y !== null);
+
+    const point = (m: DerivedModel, x: number, y: number, color: string): Point => ({
+      id: m.id,
+      name: m.name,
+      provider: m.provider,
+      x,
+      y,
+      z: m.context,
+      color,
+      license: m.license === "open" ? "Open weights" : "Proprietary",
+    });
+
+    return {
+      plottable: rows,
+      toPoint: point,
+    };
+  }, [all, xMetric, yMetric]);
+
+  const xScale = axisScale(
+    xMetric,
+    plottable.map((r) => r.x)
+  );
+  const yScale = axisScale(
+    yMetric,
+    plottable.map((r) => r.y)
+  );
 
   // The unselected cloud is split by licence — two hues that clear the all-pairs
   // gates in both modes, named in the legend below the plot. Opacity is the
   // second channel: the cloud recedes, the labeled selection sits on top of it.
-  const unselected = scored.filter((m) => !selectedIds.has(m.id));
+  const unselected = plottable.filter((r) => !selectedIds.has(r.m.id));
   const openCloud = unselected
-    .filter((m) => m.license === "open")
-    .map((m) => toPoint(m, "var(--open)"));
+    .filter((r) => r.m.license === "open")
+    .map((r) => toPoint(r.m, r.x, r.y, "var(--open)"));
   const closedCloud = unselected
-    .filter((m) => m.license !== "open")
-    .map((m) => toPoint(m, "var(--proprietary)"));
+    .filter((r) => r.m.license !== "open")
+    .map((r) => toPoint(r.m, r.x, r.y, "var(--proprietary)"));
 
   // Color caps at 3 slots for an all-pairs form; every highlighted point is also
   // directly labeled, so identity never rests on hue alone.
   const highlights = selected
-    .filter((m) => m.capability !== null)
-    .map((m, i) => ({ point: toPoint(m, seriesColor(i)), index: i }));
+    .map((m, i) => ({ row: plottable.find((r) => r.m.id === m.id), index: i }))
+    .filter((h): h is { row: { m: DerivedModel; x: number; y: number }; index: number } =>
+      Boolean(h.row)
+    )
+    .map(({ row, index }) => ({
+      point: toPoint(row.m, row.x, row.y, seriesColor(index)),
+      index,
+    }));
+
+  const omitted = all.length - plottable.length;
 
   return (
     <ChartCard
-      title="Cost vs capability"
-      subtitle="Blended price per 1M tokens against mean benchmark score. Up and to the left is the value frontier."
-      note="Bubble size is the context window. Price is blended at a 3:1 input:output mix; the x-axis is logarithmic because prices span three orders of magnitude. Models that publish no benchmarks are omitted."
+      title={`${xMetric.label} vs ${yMetric.label}`}
+      subtitle={`${yMetric.axisLabel} against ${xMetric.axisLabel}. Pick either axis to reframe the comparison.`}
+      note={`Bubble size is the context window.${
+        xMetric.key === "price" || yMetric.key === "price"
+          ? " Price is blended at a 3:1 input:output mix."
+          : ""
+      }${
+        xScale.log || yScale.log
+          ? ` The ${logAxisNote(xScale.log, yScale.log)} logarithmic because the values span orders of magnitude.`
+          : ""
+      }${omitted > 0 ? ` ${omitted} model${omitted === 1 ? "" : "s"} without both values ${omitted === 1 ? "is" : "are"} omitted.` : ""}`}
+      actions={
+        <div className="flex flex-wrap items-center gap-1.5">
+          <AxisPicker label="X" value={xMetric.key} onChange={setXKey} />
+          <AxisPicker label="Y" value={yMetric.key} onChange={setYKey} />
+          <button
+            type="button"
+            onClick={() => {
+              setXKey(DEFAULT_X);
+              setYKey(DEFAULT_Y);
+            }}
+            disabled={isDefault}
+            className="chip disabled:opacity-40 disabled:hover:border-hairline"
+            title="Back to blended price vs mean benchmark score"
+          >
+            Reset
+          </button>
+        </div>
+      }
     >
       <div className="h-[380px] w-full sm:h-[440px]">
         <ResponsiveContainer width="100%" height="100%">
@@ -78,15 +156,15 @@ export function ScatterPanel({
             <XAxis
               type="number"
               dataKey="x"
-              scale="log"
-              domain={[0.015, 30]}
-              ticks={[0.03, 0.1, 0.3, 1, 3, 10, 30]}
-              tickFormatter={(v: number) => formatPrice(v)}
+              scale={xScale.log ? "log" : "linear"}
+              domain={xScale.domain}
+              ticks={xScale.ticks}
+              tickFormatter={(v: number) => xMetric.format(v)}
               tick={{ fill: "var(--text-muted)", fontSize: 11 }}
               tickLine={false}
               axisLine={{ stroke: "var(--baseline)" }}
               label={{
-                value: "Blended $ / 1M tokens (log)",
+                value: xScale.log ? `${xMetric.axisLabel} (log)` : xMetric.axisLabel,
                 position: "insideBottom",
                 offset: -16,
                 fill: "var(--text-muted)",
@@ -96,13 +174,16 @@ export function ScatterPanel({
             <YAxis
               type="number"
               dataKey="y"
-              domain={[20, 100]}
-              ticks={[20, 40, 60, 80, 100]}
+              scale={yScale.log ? "log" : "linear"}
+              domain={yScale.domain}
+              ticks={yScale.ticks}
+              tickFormatter={(v: number) => yMetric.format(v)}
               tick={{ fill: "var(--text-muted)", fontSize: 11 }}
               tickLine={false}
               axisLine={{ stroke: "var(--baseline)" }}
+              width={64}
               label={{
-                value: "Mean benchmark score",
+                value: yScale.log ? `${yMetric.axisLabel} (log)` : yMetric.axisLabel,
                 angle: -90,
                 position: "insideLeft",
                 fill: "var(--text-muted)",
@@ -111,7 +192,10 @@ export function ScatterPanel({
               }}
             />
             <ZAxis type="number" dataKey="z" range={[36, 240]} />
-            <Tooltip content={<ScatterTooltip />} cursor={{ strokeDasharray: "3 3" }} />
+            <Tooltip
+              content={<ScatterTooltip xMetric={xMetric} yMetric={yMetric} />}
+              cursor={{ strokeDasharray: "3 3" }}
+            />
             <Scatter
               name="Open weights"
               data={openCloud}
@@ -141,7 +225,7 @@ export function ScatterPanel({
                 strokeWidth={2}
                 isAnimationActive={false}
               >
-                {/* Selected points cluster in the top-right, so labels are
+                {/* Selected points often cluster in one corner, so labels are
                     single-line, flipped to the inside of the plot, and
                     vertically staggered rather than stacked on each other. */}
                 <LabelList
@@ -149,7 +233,7 @@ export function ScatterPanel({
                   content={(props) => (
                     <PointLabel
                       {...props}
-                      anchor={labelAnchor(point.x, index)}
+                      anchor={labelAnchor(point.x, index, xScale)}
                       stagger={LABEL_LANES[index] ?? 0}
                     />
                   )}
@@ -161,14 +245,50 @@ export function ScatterPanel({
       </div>
 
       <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-hairline pt-3">
-        <CloudKey color="var(--open)" label="Open weights" />
-        <CloudKey color="var(--proprietary)" label="Proprietary" />
-        {selected.map((m, i) => (
-          <CloudKey key={m.id} color={seriesColor(i)} label={m.name} solid />
+        {/* Keys only for marks the current axes actually put on the plot — a
+            parameter axis, say, drops every proprietary model. */}
+        {openCloud.length > 0 && <CloudKey color="var(--open)" label="Open weights" />}
+        {closedCloud.length > 0 && <CloudKey color="var(--proprietary)" label="Proprietary" />}
+        {highlights.map(({ point, index }) => (
+          <CloudKey key={point.id} color={seriesColor(index)} label={point.name} solid />
         ))}
       </div>
     </ChartCard>
   );
+}
+
+/** Axis metric picker — a plain select, so it works on touch and by keyboard. */
+function AxisPicker({
+  label,
+  value,
+  onChange,
+}: {
+  label: string;
+  value: string;
+  onChange: (key: string) => void;
+}) {
+  return (
+    <label className="inline-flex items-center gap-1.5 text-xs text-ink-secondary">
+      <span className="font-medium">{label}</span>
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        aria-label={`${label} axis metric`}
+        className="field w-auto py-1.5 text-xs"
+      >
+        {METRICS.map((m) => (
+          <option key={m.key} value={m.key}>
+            {m.label}
+          </option>
+        ))}
+      </select>
+    </label>
+  );
+}
+
+function logAxisNote(x: boolean, y: boolean): string {
+  if (x && y) return "axes are";
+  return x ? "x-axis is" : "y-axis is";
 }
 
 /** Legend key. The mark carries color; the label stays in ink tokens. */
@@ -197,9 +317,17 @@ const LABEL_LANES = [-16, -2, 16, 30];
  * same corner still get four readable names. Points near an edge of the plot
  * always label toward the middle.
  */
-function labelAnchor(price: number, index: number): "start" | "end" {
-  if (price >= 8) return "end";
-  if (price <= 0.06) return "start";
+function labelAnchor(
+  x: number,
+  index: number,
+  scale: { domain: [number, number]; log: boolean }
+): "start" | "end" {
+  const [lo, hi] = scale.domain;
+  const pos = scale.log
+    ? (Math.log10(x) - Math.log10(lo)) / (Math.log10(hi) - Math.log10(lo) || 1)
+    : (x - lo) / (hi - lo || 1);
+  if (pos >= 0.8) return "end";
+  if (pos <= 0.2) return "start";
   return index % 2 === 0 ? "end" : "start";
 }
 
@@ -239,9 +367,13 @@ function PointLabel({ x, y, width, height, value, anchor, stagger }: PointLabelP
 function ScatterTooltip({
   active,
   payload,
+  xMetric,
+  yMetric,
 }: {
   active?: boolean;
   payload?: Array<{ payload: Point }>;
+  xMetric: Metric;
+  yMetric: Metric;
 }) {
   if (!active || !payload?.length) return null;
   const p = payload[0].payload;
@@ -252,9 +384,11 @@ function ScatterTooltip({
         {p.provider} · {p.license}
       </p>
       <dl className="space-y-0.5 text-xs">
-        <Row label="Mean score" value={p.y.toFixed(0)} />
-        <Row label="Blended price" value={`${formatPrice(p.x)} / 1M`} />
-        <Row label="Context" value={`${formatTokens(p.z)} tokens`} />
+        <Row label={yMetric.label} value={yMetric.format(p.y)} />
+        <Row label={xMetric.label} value={xMetric.format(p.x)} />
+        {xMetric.key !== "context" && yMetric.key !== "context" && (
+          <Row label="Context" value={`${formatTokens(p.z)} tokens`} />
+        )}
       </dl>
     </div>
   );
