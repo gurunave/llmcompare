@@ -9,7 +9,8 @@ import { MAX_SELECTION } from "@/lib/models";
 import { useSelection } from "@/lib/selection";
 
 export default function ComparePage() {
-  const { models } = useSelection();
+  const { models, hidden, toggleVisible, solo, showAll } = useSelection();
+  const visibility = { hidden, onToggle: toggleVisible, onSolo: solo, onShowAll: showAll };
 
   return (
     <main className="mx-auto max-w-5xl space-y-4 px-4 py-6 lg:py-8">
@@ -35,8 +36,10 @@ export default function ComparePage() {
         </section>
       ) : (
         <>
-          <RadarPanel models={models} />
-          <BenchmarkPanel selected={models} />
+          <RadarPanel models={models} {...visibility} />
+          <BenchmarkPanel selected={models} {...visibility} />
+          {/* The table is a data table, not a series view — it always shows
+              every selected model, whatever the charts are hiding. */}
           <SpecTable models={models} />
         </>
       )}

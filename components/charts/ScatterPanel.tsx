@@ -13,6 +13,7 @@ import {
   ZAxis,
 } from "recharts";
 import { ChartCard } from "@/components/ChartCard";
+import { SeriesLegend } from "@/components/SeriesLegend";
 import { formatTokens } from "@/lib/format";
 import {
   axisScale,
@@ -20,9 +21,10 @@ import {
   DEFAULT_Y,
   METRICS,
   metricOf,
+  type AxisScale,
   type Metric,
 } from "@/lib/metrics";
-import { seriesColor } from "@/lib/series";
+import { seriesBadge, seriesColor } from "@/lib/series";
 import type { DerivedModel } from "@/lib/types";
 
 interface Point {
@@ -36,20 +38,37 @@ interface Point {
   license: string;
 }
 
+/** Past this many labeled points the names come off and the badges carry identity. */
+const NAMED_LABEL_LIMIT = 5;
+
+interface ScatterProps {
+  all: DerivedModel[];
+  /** The whole selection — position in this list fixes each series' color and badge. */
+  selected: DerivedModel[];
+  hidden?: Set<string>;
+  onToggle?: (id: string) => void;
+  onSolo?: (id: string) => void;
+  onShowAll?: () => void;
+}
+
 export function ScatterPanel({
   all,
   selected,
-}: {
-  all: DerivedModel[];
-  selected: DerivedModel[];
-}) {
+  hidden,
+  onToggle,
+  onSolo,
+  onShowAll,
+}: ScatterProps) {
   const [xKey, setXKey] = useState(DEFAULT_X);
   const [yKey, setYKey] = useState(DEFAULT_Y);
   const xMetric = metricOf(xKey, DEFAULT_X);
   const yMetric = metricOf(yKey, DEFAULT_Y);
   const isDefault = xMetric.key === DEFAULT_X && yMetric.key === DEFAULT_Y;
 
-  const selectedIds = new Set(selected.map((m) => m.id));
+  // A hidden model is still in the catalog, so it rejoins the anonymous cloud
+  // rather than vanishing — toggling a series off stops it being called out, it
+  // does not delete a data point.
+  const shownIds = new Set(selected.filter((m) => !hidden?.has(m.id)).map((m) => m.id));
 
   // A model is plottable only when both chosen metrics are published for it —
   // parameter counts and some benchmarks are missing across much of the catalog.
@@ -95,7 +114,7 @@ export function ScatterPanel({
   // The unselected cloud is split by licence — two hues that clear the all-pairs
   // gates in both modes, named in the legend below the plot. Opacity is the
   // second channel: the cloud recedes, the labeled selection sits on top of it.
-  const unselected = plottable.filter((r) => !selectedIds.has(r.m.id));
+  const unselected = plottable.filter((r) => !shownIds.has(r.m.id));
   const openCloud = unselected
     .filter((r) => r.m.license === "open")
     .map((r) => toPoint(r.m, r.x, r.y, "var(--open)"));
@@ -103,10 +122,13 @@ export function ScatterPanel({
     .filter((r) => r.m.license !== "open")
     .map((r) => toPoint(r.m, r.x, r.y, "var(--proprietary)"));
 
-  // Color caps at 3 slots for an all-pairs form; every highlighted point is also
-  // directly labeled, so identity never rests on hue alone.
+  // Every highlighted point carries its series number, so identity never rests
+  // on hue alone — which matters most past eight series, where hues repeat.
   const highlights = selected
-    .map((m, i) => ({ row: plottable.find((r) => r.m.id === m.id), index: i }))
+    .map((m, i) => ({
+      row: shownIds.has(m.id) ? plottable.find((r) => r.m.id === m.id) : undefined,
+      index: i,
+    }))
     .filter((h): h is { row: { m: DerivedModel; x: number; y: number }; index: number } =>
       Boolean(h.row)
     )
@@ -114,6 +136,15 @@ export function ScatterPanel({
       point: toPoint(row.m, row.x, row.y, seriesColor(index)),
       index,
     }));
+
+  // Labels are placed from the plotted positions rather than from a fixed lane
+  // table, so a cluster of eight in one corner still resolves into eight lines.
+  const placements = placeLabels(
+    highlights.map((h) => h.point),
+    xScale,
+    yScale
+  );
+  const withNames = highlights.length <= NAMED_LABEL_LIMIT;
 
   const omitted = all.length - plottable.length;
 
@@ -226,15 +257,17 @@ export function ScatterPanel({
                 isAnimationActive={false}
               >
                 {/* Selected points often cluster in one corner, so labels are
-                    single-line, flipped to the inside of the plot, and
-                    vertically staggered rather than stacked on each other. */}
+                    single-line, flipped to the inside of the plot, and pushed
+                    into free lanes rather than stacked on each other. */}
                 <LabelList
                   dataKey="name"
                   content={(props) => (
                     <PointLabel
                       {...props}
-                      anchor={labelAnchor(point.x, index, xScale)}
-                      stagger={LABEL_LANES[index] ?? 0}
+                      index={index}
+                      anchor={placements.get(point.id)?.anchor ?? "end"}
+                      stagger={placements.get(point.id)?.stagger ?? 0}
+                      withName={withNames}
                     />
                   )}
                 />
@@ -244,14 +277,20 @@ export function ScatterPanel({
         </ResponsiveContainer>
       </div>
 
-      <div className="mt-3 flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-hairline pt-3">
-        {/* Keys only for marks the current axes actually put on the plot — a
-            parameter axis, say, drops every proprietary model. */}
-        {openCloud.length > 0 && <CloudKey color="var(--open)" label="Open weights" />}
-        {closedCloud.length > 0 && <CloudKey color="var(--proprietary)" label="Proprietary" />}
-        {highlights.map(({ point, index }) => (
-          <CloudKey key={point.id} color={seriesColor(index)} label={point.name} solid />
-        ))}
+      <div className="mt-3 space-y-2 border-t border-hairline pt-3">
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+          {/* Keys only for marks the current axes actually put on the plot — a
+              parameter axis, say, drops every proprietary model. */}
+          {openCloud.length > 0 && <CloudKey color="var(--open)" label="Open weights" />}
+          {closedCloud.length > 0 && <CloudKey color="var(--proprietary)" label="Proprietary" />}
+        </div>
+        <SeriesLegend
+          models={selected}
+          hidden={hidden}
+          onToggle={onToggle}
+          onSolo={onSolo}
+          onShowAll={onShowAll}
+        />
       </div>
     </ChartCard>
   );
@@ -309,26 +348,64 @@ function CloudKey({ color, label, solid }: { color: string; label: string; solid
   );
 }
 
-/** One vertical lane per selected model, 14px apart — a text line's height. */
-const LABEL_LANES = [-16, -2, 16, 30];
+/** A text line's height — the vertical step between two stacked labels. */
+const LANE = 15;
+
+interface Placement {
+  anchor: "start" | "end";
+  stagger: number;
+}
+
+/** Where a value sits in its axis domain, 0 at the low end and 1 at the high. */
+function fraction(v: number, scale: AxisScale): number {
+  const [lo, hi] = scale.domain;
+  return scale.log
+    ? (Math.log10(v) - Math.log10(lo)) / (Math.log10(hi) - Math.log10(lo) || 1)
+    : (v - lo) / (hi - lo || 1);
+}
 
 /**
- * Labels alternate sides and sit in separate vertical lanes, so four points in the
- * same corner still get four readable names. Points near an edge of the plot
- * always label toward the middle.
+ * Labels are placed in domain space, before the chart has pixels to measure.
+ * Points that land within a few percent of the plot of each other form a
+ * cluster, and a cluster's labels are dealt into separate vertical lanes and
+ * alternating sides — which is what makes eight models in one corner readable.
+ * Points near an edge always label toward the middle of the plot.
  */
-function labelAnchor(
-  x: number,
-  index: number,
-  scale: { domain: [number, number]; log: boolean }
-): "start" | "end" {
-  const [lo, hi] = scale.domain;
-  const pos = scale.log
-    ? (Math.log10(x) - Math.log10(lo)) / (Math.log10(hi) - Math.log10(lo) || 1)
-    : (x - lo) / (hi - lo || 1);
-  if (pos >= 0.8) return "end";
-  if (pos <= 0.2) return "start";
-  return index % 2 === 0 ? "end" : "start";
+function placeLabels(
+  points: Point[],
+  xScale: AxisScale,
+  yScale: AxisScale
+): Map<string, Placement> {
+  const NEAR = 0.07;
+  const spots = points.map((p) => ({
+    id: p.id,
+    fx: fraction(p.x, xScale),
+    fy: fraction(p.y, yScale),
+  }));
+
+  // Group by proximity, tallest point first so lanes read top to bottom.
+  const order = [...spots].sort((a, b) => b.fy - a.fy);
+  const clusters: (typeof order)[] = [];
+  for (const spot of order) {
+    const near = clusters.find((c) =>
+      c.some((o) => Math.abs(o.fx - spot.fx) < NEAR && Math.abs(o.fy - spot.fy) < NEAR)
+    );
+    if (near) near.push(spot);
+    else clusters.push([spot]);
+  }
+
+  const out = new Map<string, Placement>();
+  for (const cluster of clusters) {
+    cluster.forEach((spot, j) => {
+      const anchor: "start" | "end" =
+        spot.fx >= 0.78 ? "end" : spot.fx <= 0.22 ? "start" : j % 2 === 0 ? "end" : "start";
+      out.set(spot.id, {
+        anchor,
+        stagger: cluster.length === 1 ? 0 : (j - (cluster.length - 1) / 2) * LANE,
+      });
+    });
+  }
+  return out;
 }
 
 interface PointLabelProps {
@@ -337,30 +414,65 @@ interface PointLabelProps {
   width?: number | string;
   height?: number | string;
   value?: string | number;
+  index: number;
   anchor: "start" | "end";
   stagger: number;
+  withName: boolean;
 }
 
-function PointLabel({ x, y, width, height, value, anchor, stagger }: PointLabelProps) {
+/**
+ * The mark's label: a numbered badge, plus the model name while few enough
+ * points are labeled for names to fit. The badge is drawn on the card surface
+ * in the series color, which reads in both themes and needs no light/dark swap.
+ */
+function PointLabel({
+  x,
+  y,
+  width,
+  height,
+  value,
+  index,
+  anchor,
+  stagger,
+  withName,
+}: PointLabelProps) {
   const px = Number(x ?? 0);
   const py = Number(y ?? 0);
   const w = Number(width ?? 0);
   const h = Number(height ?? 0);
   const cx = px + w / 2;
-  const cy = py + h / 2;
-  const gap = w / 2 + 8;
+  const cy = py + h / 2 + stagger;
+  const gap = w / 2 + 12;
+  const badgeX = anchor === "end" ? cx - gap : cx + gap;
+  const color = seriesColor(index);
 
   return (
-    <text
-      x={anchor === "end" ? cx - gap : cx + gap}
-      y={cy + stagger}
-      dy={4}
-      textAnchor={anchor}
-      fill="var(--text-primary)"
-      fontSize={12}
-    >
-      {value}
-    </text>
+    <g>
+      <circle cx={badgeX} cy={cy} r={8} fill="var(--surface-1)" stroke={color} strokeWidth={2} />
+      <text
+        x={badgeX}
+        y={cy}
+        dy={3.5}
+        textAnchor="middle"
+        fill={color}
+        fontSize={10}
+        fontWeight={600}
+      >
+        {seriesBadge(index)}
+      </text>
+      {withName && (
+        <text
+          x={anchor === "end" ? badgeX - 12 : badgeX + 12}
+          y={cy}
+          dy={4}
+          textAnchor={anchor}
+          fill="var(--text-primary)"
+          fontSize={12}
+        >
+          {value}
+        </text>
+      )}
+    </g>
   );
 }
 

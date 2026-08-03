@@ -4,16 +4,19 @@ import { useState } from "react";
 import {
   Bar,
   BarChart,
+  Brush,
   CartesianGrid,
   Cell,
+  LabelList,
   ResponsiveContainer,
   Tooltip,
   XAxis,
   YAxis,
 } from "recharts";
-import { ChartCard, LegendItem } from "@/components/ChartCard";
+import { ChartCard } from "@/components/ChartCard";
+import { AllHidden, SeriesBadge, SeriesLegend } from "@/components/SeriesLegend";
 import { MODELS } from "@/lib/models";
-import { seriesColor } from "@/lib/series";
+import { seriesBadge, seriesColor } from "@/lib/series";
 import type { DerivedModel, ScoreKey } from "@/lib/types";
 
 const BENCHMARKS: { key: ScoreKey; label: string; blurb: string }[] = [
@@ -25,10 +28,46 @@ const BENCHMARKS: { key: ScoreKey; label: string; blurb: string }[] = [
 ];
 
 type Mode = "selected" | "leaderboard";
+/** Which way the bars run: columns off a bottom axis, or rows off a left axis. */
+type Orientation = "columns" | "rows";
+type Density = "compact" | "comfortable" | "large";
 
-export function BenchmarkPanel({ selected }: { selected: DerivedModel[] }) {
+/** Bar thickness in px — the zoom control for a categorical chart. */
+const BAR_SIZE: Record<Density, { columns: number; rows: number }> = {
+  compact: { columns: 8, rows: 10 },
+  comfortable: { columns: 14, rows: 14 },
+  large: { columns: 22, rows: 20 },
+};
+
+const BAR_GAP = 2;
+/** Breathing room between one benchmark group and the next. */
+const GROUP_PAD = { columns: 28, rows: 30 };
+/** Space reserved for the category labels, kept identical in the pinned axis. */
+const ROW_AXIS_WIDTH = 96;
+const COLUMN_AXIS_WIDTH = 38;
+const PLOT_HEIGHT = 320;
+
+interface Props {
+  /** The whole selection — position in this list fixes each series' color and badge. */
+  selected: DerivedModel[];
+  hidden?: Set<string>;
+  onToggle?: (id: string) => void;
+  onSolo?: (id: string) => void;
+  onShowAll?: () => void;
+}
+
+export function BenchmarkPanel({ selected, hidden, onToggle, onSolo, onShowAll }: Props) {
   const [mode, setMode] = useState<Mode>("selected");
   const [board, setBoard] = useState<ScoreKey>("swebench");
+  const [orientation, setOrientation] = useState<Orientation | null>(null);
+  const [density, setDensity] = useState<Density>("comfortable");
+
+  const series = selected.map((m, i) => ({ model: m, index: i, off: Boolean(hidden?.has(m.id)) }));
+  const shown = series.filter((s) => !s.off);
+
+  // Columns read best for a handful of series; past that the bars get thinner
+  // than their own outline, so rows become the default. An explicit choice wins.
+  const layout: Orientation = orientation ?? (shown.length > 6 ? "rows" : "columns");
 
   return (
     <ChartCard
@@ -60,74 +99,259 @@ export function BenchmarkPanel({ selected }: { selected: DerivedModel[] }) {
         </div>
       )}
 
+      {mode === "selected" && selected.length > 1 && (
+        <div className="mb-3 flex flex-wrap items-center gap-x-4 gap-y-2">
+          <ControlGroup label="Bars">
+            <ModeChip active={layout === "columns"} onClick={() => setOrientation("columns")}>
+              Columns
+            </ModeChip>
+            <ModeChip active={layout === "rows"} onClick={() => setOrientation("rows")}>
+              Rows
+            </ModeChip>
+          </ControlGroup>
+          <ControlGroup label="Size">
+            {(["compact", "comfortable", "large"] as Density[]).map((d) => (
+              <ModeChip key={d} active={density === d} onClick={() => setDensity(d)}>
+                {d === "compact" ? "S" : d === "comfortable" ? "M" : "L"}
+              </ModeChip>
+            ))}
+          </ControlGroup>
+        </div>
+      )}
+
       {mode === "selected" ? (
-        <GroupedBars selected={selected} />
+        shown.length === 0 ? (
+          <AllHidden onShowAll={onShowAll} />
+        ) : (
+          <GroupedBars shown={shown} layout={layout} density={density} />
+        )
       ) : (
-        <Leaderboard metric={board} selected={selected} />
+        <Leaderboard metric={board} series={series} />
+      )}
+
+      {mode === "selected" && selected.length > 1 && (
+        <div className="mt-3 border-t border-hairline pt-3">
+          <SeriesLegend
+            models={selected}
+            hidden={hidden}
+            onToggle={onToggle}
+            onSolo={onSolo}
+            onShowAll={onShowAll}
+          />
+        </div>
       )}
     </ChartCard>
   );
 }
 
-function GroupedBars({ selected }: { selected: DerivedModel[] }) {
+interface Shown {
+  model: DerivedModel;
+  index: number;
+}
+
+/**
+ * Grouped bars that grow rather than shrink. Adding models lengthens the chart
+ * and the container scrolls; bar thickness stays where the reader put it. The
+ * value axis is drawn a second time in a pinned strip outside the scroller, so
+ * it is still there once the plot has been scrolled away from it.
+ */
+function GroupedBars({
+  shown,
+  layout,
+  density,
+}: {
+  shown: Shown[];
+  layout: Orientation;
+  density: Density;
+}) {
   const data = BENCHMARKS.map((b) => {
     const row: Record<string, string | number | null> = { name: b.label, blurb: b.blurb };
-    for (const m of selected) row[m.id] = m.scores[b.key];
+    for (const { model } of shown) row[model.id] = model.scores[b.key];
     return row;
   });
 
-  return (
-    <>
-      {/* One series is named by the card title; a legend would only repeat it. */}
-      {selected.length > 1 && (
-        <div className="mb-3 flex flex-wrap gap-x-4 gap-y-1.5">
-          {selected.map((m, i) => (
-            <LegendItem key={m.id} color={seriesColor(i)} label={m.name} />
-          ))}
-        </div>
+  const size = BAR_SIZE[density][layout];
+  const group = shown.length * (size + BAR_GAP) + GROUP_PAD[layout];
+  const extent = BENCHMARKS.length * group;
+  const labelBadges = size >= 14;
+
+  const bars = shown.map(({ model, index }) => (
+    <Bar
+      key={model.id}
+      dataKey={model.id}
+      name={model.name}
+      fill={seriesColor(index)}
+      radius={layout === "columns" ? [4, 4, 0, 0] : [0, 4, 4, 0]}
+      stroke="var(--surface-1)"
+      strokeWidth={size >= 12 ? 2 : 1}
+      barSize={size}
+      isAnimationActive={false}
+    >
+      {labelBadges && (
+        <LabelList
+          dataKey={model.id}
+          position={layout === "columns" ? "top" : "right"}
+          content={(props) => <BadgeLabel {...props} index={index} />}
+        />
       )}
-      <div className="h-[320px] w-full">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={data} margin={{ top: 8, right: 8, bottom: 4, left: -16 }} barGap={2}>
-            <CartesianGrid stroke="var(--gridline)" strokeDasharray="2 4" vertical={false} />
-            <XAxis
-              dataKey="name"
-              tick={{ fill: "var(--text-secondary)", fontSize: 12 }}
-              tickLine={false}
-              axisLine={{ stroke: "var(--baseline)" }}
-            />
-            <YAxis
-              domain={[0, 100]}
-              tick={{ fill: "var(--text-muted)", fontSize: 11 }}
-              tickLine={false}
-              axisLine={false}
-            />
-            <Tooltip
-              cursor={{ fill: "var(--text-muted)", fillOpacity: 0.08 }}
-              content={<BarTooltip selected={selected} />}
-            />
-            {selected.map((m, i) => (
-              <Bar
-                key={m.id}
-                dataKey={m.id}
-                name={m.name}
-                fill={seriesColor(i)}
-                radius={[4, 4, 0, 0]}
-                stroke="var(--surface-1)"
-                strokeWidth={2}
-                maxBarSize={56}
-                isAnimationActive={false}
+    </Bar>
+  ));
+
+  const tooltip = (
+    <Tooltip
+      cursor={{ fill: "var(--text-muted)", fillOpacity: 0.08 }}
+      content={<BarTooltip shown={shown} />}
+    />
+  );
+
+  if (layout === "rows") {
+    const height = Math.max(extent + 8, 200);
+    return (
+      <>
+        <div className="max-h-[460px] overflow-y-auto pr-1">
+          <ResponsiveContainer width="100%" height={height}>
+            <BarChart
+              data={data}
+              layout="vertical"
+              margin={{ top: 4, right: 40, bottom: 4, left: 0 }}
+              barGap={BAR_GAP}
+            >
+              <CartesianGrid stroke="var(--gridline)" strokeDasharray="2 4" horizontal={false} />
+              <XAxis type="number" domain={[0, 100]} hide />
+              <YAxis
+                type="category"
+                dataKey="name"
+                width={ROW_AXIS_WIDTH}
+                tick={{ fill: "var(--text-secondary)", fontSize: 12 }}
+                tickLine={false}
+                axisLine={{ stroke: "var(--baseline)" }}
               />
-            ))}
-          </BarChart>
-        </ResponsiveContainer>
+              {tooltip}
+              {bars}
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+        {/* The pinned value axis: same margins and axis width, so its ticks sit
+            exactly under the scrolling plot's gridlines. */}
+        <PinnedAxis layout="rows" />
+      </>
+    );
+  }
+
+  return (
+    <div className="flex items-stretch">
+      <PinnedAxis layout="columns" />
+      <div className="min-w-0 flex-1 overflow-x-auto">
+        <div style={{ minWidth: extent }}>
+          <ResponsiveContainer width="100%" height={PLOT_HEIGHT + 44}>
+            <BarChart
+              data={data}
+              margin={{ top: 8, right: 8, bottom: 4, left: 0 }}
+              barGap={BAR_GAP}
+            >
+              <CartesianGrid stroke="var(--gridline)" strokeDasharray="2 4" vertical={false} />
+              <XAxis
+                dataKey="name"
+                tick={{ fill: "var(--text-secondary)", fontSize: 12 }}
+                tickLine={false}
+                axisLine={{ stroke: "var(--baseline)" }}
+              />
+              <YAxis domain={[0, 100]} width={0} tick={false} axisLine={false} />
+              {tooltip}
+              {bars}
+              {/* Windowing the benchmark axis is the other half of zoom: fewer
+                  groups on screen means each group gets more room. */}
+              <Brush
+                dataKey="name"
+                height={22}
+                travellerWidth={8}
+                stroke="var(--border-strong)"
+                fill="var(--wash)"
+              />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
       </div>
-    </>
+    </div>
   );
 }
 
-function Leaderboard({ metric, selected }: { metric: ScoreKey; selected: DerivedModel[] }) {
-  const rank = new Map(selected.map((m, i) => [m.id, i]));
+/** A chart with nothing in it but the 0-100 axis, kept outside the scroller. */
+function PinnedAxis({ layout }: { layout: Orientation }) {
+  if (layout === "rows") {
+    return (
+      <div className="h-[30px] w-full pr-1">
+        <ResponsiveContainer width="100%" height={30}>
+          <BarChart data={[{ name: "" }]} layout="vertical" margin={{ top: 0, right: 40, bottom: 0, left: 0 }}>
+            <XAxis
+              type="number"
+              domain={[0, 100]}
+              tick={{ fill: "var(--text-muted)", fontSize: 11 }}
+              tickLine={false}
+              axisLine={{ stroke: "var(--baseline)" }}
+            />
+            <YAxis type="category" dataKey="name" width={ROW_AXIS_WIDTH} tick={false} axisLine={false} />
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+    );
+  }
+
+  return (
+    <div style={{ width: COLUMN_AXIS_WIDTH }} className="shrink-0">
+      <ResponsiveContainer width="100%" height={PLOT_HEIGHT + 44}>
+        <BarChart data={[{ name: "" }]} margin={{ top: 8, right: 0, bottom: 4, left: 0 }}>
+          {/* 30px for the category labels plus 22 for the brush strip, so this
+              axis ends level with the scrolling plot rather than below it. */}
+          <XAxis dataKey="name" tick={false} axisLine={false} height={52} />
+          <YAxis
+            domain={[0, 100]}
+            width={COLUMN_AXIS_WIDTH}
+            tick={{ fill: "var(--text-muted)", fontSize: 11 }}
+            tickLine={false}
+            axisLine={false}
+          />
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
+  );
+}
+
+interface BadgeLabelProps {
+  x?: number | string;
+  y?: number | string;
+  width?: number | string;
+  height?: number | string;
+  value?: number | string | null;
+  index: number;
+}
+
+/** The series number at the end of a bar, so a bar names itself without the legend. */
+function BadgeLabel({ x, y, width, height, value, index }: BadgeLabelProps) {
+  if (value === null || value === undefined || value === "") return null;
+  const px = Number(x ?? 0);
+  const py = Number(y ?? 0);
+  const w = Number(width ?? 0);
+  const h = Number(height ?? 0);
+  const isRow = w > h;
+
+  return (
+    <text
+      x={isRow ? px + w + 6 : px + w / 2}
+      y={isRow ? py + h / 2 + 4 : py - 4}
+      textAnchor={isRow ? "start" : "middle"}
+      fill={seriesColor(index)}
+      fontSize={10}
+      fontWeight={600}
+      className="num"
+    >
+      {seriesBadge(index)}
+    </text>
+  );
+}
+
+function Leaderboard({ metric, series }: { metric: ScoreKey; series: Array<Shown & { off: boolean }> }) {
+  const rank = new Map(series.filter((s) => !s.off).map((s) => [s.model.id, s.index]));
   const data = MODELS.filter((m) => typeof m.scores[metric] === "number")
     .sort((a, b) => (b.scores[metric] as number) - (a.scores[metric] as number))
     .slice(0, 12)
@@ -176,12 +400,12 @@ function BarTooltip({
   active,
   payload,
   label,
-  selected,
+  shown,
 }: {
   active?: boolean;
   payload?: Array<{ payload: Record<string, string | number | null> }>;
   label?: string;
-  selected: DerivedModel[];
+  shown: Shown[];
 }) {
   if (!active || !payload?.length) return null;
   const row = payload[0].payload;
@@ -190,14 +414,14 @@ function BarTooltip({
       <p className="text-sm font-semibold text-ink">{label}</p>
       <p className="mb-2 text-xs text-ink-muted">{String(row.blurb)}</p>
       <ul className="space-y-1">
-        {selected.map((m, i) => (
-          <li key={m.id} className="flex items-center justify-between gap-4 text-xs">
+        {shown.map(({ model, index }) => (
+          <li key={model.id} className="flex items-center justify-between gap-4 text-xs">
             <span className="flex items-center gap-2 text-ink-secondary">
-              <span className="h-2 w-2 rounded-full" style={{ background: seriesColor(i) }} aria-hidden />
-              {m.name}
+              <SeriesBadge index={index} />
+              {model.name}
             </span>
             <span className="num text-ink">
-              {typeof row[m.id] === "number" ? row[m.id] : "not published"}
+              {typeof row[model.id] === "number" ? row[model.id] : "not published"}
             </span>
           </li>
         ))}
@@ -220,6 +444,15 @@ function RankTooltip({
       <p className="text-sm font-semibold text-ink">{p.name}</p>
       <p className="num text-xs text-ink-secondary">Score {p.value}</p>
     </div>
+  );
+}
+
+function ControlGroup({ label, children }: { label: string; children: React.ReactNode }) {
+  return (
+    <span className="inline-flex items-center gap-1.5">
+      <span className="text-xs text-ink-muted">{label}</span>
+      {children}
+    </span>
   );
 }
 

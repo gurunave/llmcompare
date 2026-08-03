@@ -88,4 +88,11 @@ export const PROVIDERS = Array.from(new Set(MODELS.map((m) => m.provider))).sort
 
 export const TAGS = Array.from(new Set(MODELS.flatMap((m) => m.tags))).sort();
 
-export const MAX_SELECTION = 4;
+export const MAX_SELECTION = 10;
+
+/**
+ * Above this many series a chart stops filling shapes and starts leaning on
+ * outlines, badges and the legend toggles — everything stays on screen, it just
+ * stops pretending overlapping translucent fills are readable.
+ */
+export const DENSE_SERIES = 4;
