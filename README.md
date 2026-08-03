@@ -115,11 +115,18 @@ comparably measured" — it is never a zero.
 
 ## Design notes
 
-- Categorical colors come from a CVD-validated palette; the four series slots pass
-  the adjacent-pair separation gates, and because four slots do not clear the
-  all-pairs gates, every chart pairs color with a second channel — dash patterns on
-  the radar strokes, direct labels on scatter points, and colored chips beside names
-  in the legend, table headers and selection tray.
+- Up to ten models can be compared at once, which is more than any palette can name.
+  Categorical colors come from a CVD-validated palette, ordered so the first six
+  selections take its most separated slots; past eight the hues repeat outright. So
+  identity never rests on hue: every series carries a **number**, drawn as a badge on
+  the mark and repeated in the legend, the selection tray and the table header. Radar
+  strokes add a dash pattern, bars label their ends with the badge, and scatter points
+  keep their names while few enough are labeled to fit.
+- Each chart legend is also a visibility control: click a chip to hide that series
+  everywhere on the page, shift-click to isolate it. Hidden state is carried by a
+  strike-through and a hollow mark as well as by opacity, rides along in the share
+  link as `?hide=`, and never touches the spec table — a data table stays complete.
+  A hidden model on the scatter rejoins the anonymous cloud rather than vanishing.
 - Color outside the charts is an identity layer, never decoration for its own sake.
   Each provider draws a stable hue from the same eight-slot palette (hashed from the
   name, so a provider keeps its color as the catalog grows), licence has its own two
@@ -136,9 +143,15 @@ comparably measured" — it is never a zero.
 - Dark is the default theme; the toggle persists to `localStorage` and is stamped
   before first paint so the page never flashes.
 - The selection lives in the URL (`?m=claude-opus-5,gpt-5`), so any comparison is
-  shareable.
-- Wide tables scroll inside their own containers; the page body never scrolls
-  sideways.
+  shareable. Order matters: it assigns the colors and badge numbers, and the tray's
+  arrows reorder it.
+- Charts grow rather than shrink. Benchmark bars run as columns or rows, at three bar
+  sizes, and the plot scrolls inside its container while the 0-100 axis is drawn a
+  second time in a pinned strip outside the scroller, so the scale is still there once
+  you have scrolled away from it. A brush windows the benchmark axis. The radar drops
+  its fills above four series so ten outlines stay traceable.
+- Wide tables scroll inside their own containers, with the spec column pinned; the page
+  body never scrolls sideways.
 
 ## Layout
 

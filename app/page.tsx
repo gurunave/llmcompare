@@ -36,7 +36,7 @@ const PRESETS: { label: string; tint: string; ids: string[] }[] = [
 ];
 
 export default function BrowsePage() {
-  const { ids, models, toggle, select } = useSelection();
+  const { ids, models, hidden, toggle, select, toggleVisible, solo, showAll } = useSelection();
 
   return (
     <main className="mx-auto max-w-5xl space-y-4 px-4 py-6 lg:py-8">
@@ -74,7 +74,14 @@ export default function BrowsePage() {
         </section>
       )}
 
-      <ScatterPanel all={MODELS} selected={models} />
+      <ScatterPanel
+        all={MODELS}
+        selected={models}
+        hidden={hidden}
+        onToggle={toggleVisible}
+        onSolo={solo}
+        onShowAll={showAll}
+      />
 
       <ModelBrowser selected={ids} onToggle={toggle} />
     </main>

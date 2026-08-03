@@ -1,8 +1,8 @@
 "use client";
 
 import { ChartCard } from "@/components/ChartCard";
+import { SeriesBadge } from "@/components/SeriesLegend";
 import { formatMonth, formatParams, formatPrice, formatScore, formatTokens } from "@/lib/format";
-import { seriesColor } from "@/lib/series";
 import type { DerivedModel } from "@/lib/types";
 
 type Dir = "high" | "low" | null;
@@ -112,21 +112,26 @@ export function SpecTable({ models }: { models: DerivedModel[] }) {
       subtitle="A bold value is the best in its row. Rows where every model ties are not marked."
       note="Prices are list rates for the standard tier; batch, cached-input and volume discounts are not reflected."
     >
+      {/* The spec column is pinned: with ten models the value columns scroll
+          sideways, and a value is meaningless once its row label has left. */}
       <div className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
         <table className="w-full min-w-[560px] border-collapse text-sm">
           <thead>
             <tr className="border-b border-hairline">
-              <th scope="col" className="py-2 pr-4 text-left font-medium text-ink-muted">
+              <th
+                scope="col"
+                className="sticky left-0 z-10 bg-surface py-2 pr-4 text-left font-medium text-ink-muted"
+              >
                 Spec
               </th>
               {models.map((m, i) => (
-                <th key={m.id} scope="col" className="py-2 pl-4 text-left font-semibold text-ink">
+                <th
+                  key={m.id}
+                  scope="col"
+                  className="whitespace-nowrap py-2 pl-4 text-left font-semibold text-ink"
+                >
                   <span className="flex items-center gap-2">
-                    <span
-                      className="h-2.5 w-2.5 shrink-0 rounded-full"
-                      style={{ background: seriesColor(i) }}
-                      aria-hidden
-                    />
+                    <SeriesBadge index={i} />
                     {m.name}
                   </span>
                 </th>
@@ -149,7 +154,7 @@ export function SpecTable({ models }: { models: DerivedModel[] }) {
                 <tr key={row.label} className="border-b border-hairline last:border-0">
                   <th
                     scope="row"
-                    className="py-2 pr-4 text-left font-normal text-ink-secondary"
+                    className="sticky left-0 z-10 whitespace-nowrap bg-surface py-2 pr-4 text-left font-normal text-ink-secondary"
                   >
                     {row.label}
                   </th>
