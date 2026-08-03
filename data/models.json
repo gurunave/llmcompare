@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-07-31",
+    "lastReviewed": "2026-08-01",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. A null score means 'not published or not comparably measured', not zero.",
     "benchmarks": {
@@ -12,6 +12,42 @@
     }
   },
   "models": [
+    {
+      "id": "deepseek-v4-flash",
+      "name": "DeepSeek-V4-Flash-0731",
+      "provider": "DeepSeek",
+      "released": "2026-07",
+      "license": "open",
+      "params": 284,
+      "localTier": "cluster",
+      "context": 1048576,
+      "maxOutput": 65536,
+      "modalities": [
+        "text"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.14,
+        "output": 0.28
+      },
+      "cutoff": "2026-04",
+      "speed": 150,
+      "scores": {
+        "mmluPro": 86,
+        "gpqa": 91,
+        "swebench": 74,
+        "aime": 97,
+        "mmmu": null
+      },
+      "tags": [
+        "open-weights",
+        "agentic-coding",
+        "reasoning",
+        "cheap",
+        "long-context"
+      ],
+      "url": "https://api-docs.deepseek.com/"
+    },
     {
       "id": "claude-opus-5",
       "name": "Claude Opus 5",
