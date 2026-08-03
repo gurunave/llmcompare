@@ -1,0 +1,248 @@
+{
+  "meta": {
+    "lastReviewed": "2026-08-03",
+    "note": "Memory is the usable frame buffer or installed system RAM; bandwidth is the peak theoretical figure the vendor publishes, which is what bounds single-stream decoding. Unified devices share one pool between CPU and GPU, so only part of it can be handed to a model."
+  },
+  "devices": [
+    {
+      "id": "rtx-5090",
+      "label": "RTX 5090",
+      "group": "NVIDIA consumer",
+      "memoryGB": 32,
+      "bandwidthGBs": 1792,
+      "devices": 1,
+      "unified": false,
+      "note": "GDDR7"
+    },
+    {
+      "id": "rtx-4090",
+      "label": "RTX 4090",
+      "group": "NVIDIA consumer",
+      "memoryGB": 24,
+      "bandwidthGBs": 1008,
+      "devices": 1,
+      "unified": false,
+      "note": null
+    },
+    {
+      "id": "rtx-4090-x2",
+      "label": "2 × RTX 4090",
+      "group": "NVIDIA consumer",
+      "memoryGB": 48,
+      "bandwidthGBs": 1008,
+      "devices": 2,
+      "unified": false,
+      "note": "Split across two cards over PCIe"
+    },
+    {
+      "id": "rtx-3090",
+      "label": "RTX 3090",
+      "group": "NVIDIA consumer",
+      "memoryGB": 24,
+      "bandwidthGBs": 936,
+      "devices": 1,
+      "unified": false,
+      "note": "The cheapest 24 GB card on the used market"
+    },
+    {
+      "id": "rtx-5080",
+      "label": "RTX 5080",
+      "group": "NVIDIA consumer",
+      "memoryGB": 16,
+      "bandwidthGBs": 960,
+      "devices": 1,
+      "unified": false,
+      "note": null
+    },
+    {
+      "id": "rtx-4070-ti-super",
+      "label": "RTX 4070 Ti Super",
+      "group": "NVIDIA consumer",
+      "memoryGB": 16,
+      "bandwidthGBs": 672,
+      "devices": 1,
+      "unified": false,
+      "note": null
+    },
+    {
+      "id": "rtx-3060-12",
+      "label": "RTX 3060 12 GB",
+      "group": "NVIDIA consumer",
+      "memoryGB": 12,
+      "bandwidthGBs": 360,
+      "devices": 1,
+      "unified": false,
+      "note": "The entry point for local inference"
+    },
+    {
+      "id": "rtx-pro-6000",
+      "label": "RTX PRO 6000 Blackwell",
+      "group": "NVIDIA pro & datacenter",
+      "memoryGB": 96,
+      "bandwidthGBs": 1792,
+      "devices": 1,
+      "unified": false,
+      "note": "Workstation card, single slot of 96 GB"
+    },
+    {
+      "id": "rtx-6000-ada",
+      "label": "RTX 6000 Ada",
+      "group": "NVIDIA pro & datacenter",
+      "memoryGB": 48,
+      "bandwidthGBs": 960,
+      "devices": 1,
+      "unified": false,
+      "note": null
+    },
+    {
+      "id": "l40s",
+      "label": "L40S",
+      "group": "NVIDIA pro & datacenter",
+      "memoryGB": 48,
+      "bandwidthGBs": 864,
+      "devices": 1,
+      "unified": false,
+      "note": null
+    },
+    {
+      "id": "a100-80",
+      "label": "A100 80 GB",
+      "group": "NVIDIA pro & datacenter",
+      "memoryGB": 80,
+      "bandwidthGBs": 2039,
+      "devices": 1,
+      "unified": false,
+      "note": "HBM2e"
+    },
+    {
+      "id": "h100-80",
+      "label": "H100 80 GB",
+      "group": "NVIDIA pro & datacenter",
+      "memoryGB": 80,
+      "bandwidthGBs": 3350,
+      "devices": 1,
+      "unified": false,
+      "note": "SXM, HBM3"
+    },
+    {
+      "id": "h200",
+      "label": "H200 141 GB",
+      "group": "NVIDIA pro & datacenter",
+      "memoryGB": 141,
+      "bandwidthGBs": 4800,
+      "devices": 1,
+      "unified": false,
+      "note": "HBM3e"
+    },
+    {
+      "id": "h100-x8",
+      "label": "8 × H100 (DGX node)",
+      "group": "NVIDIA pro & datacenter",
+      "memoryGB": 640,
+      "bandwidthGBs": 3350,
+      "devices": 8,
+      "unified": false,
+      "note": "NVLink-connected, the usual home for a frontier open model"
+    },
+    {
+      "id": "mac-m4-24",
+      "label": "Mac (M4, 24 GB)",
+      "group": "Apple unified memory",
+      "memoryGB": 24,
+      "bandwidthGBs": 120,
+      "devices": 1,
+      "unified": true,
+      "note": null
+    },
+    {
+      "id": "mac-m4-pro-48",
+      "label": "Mac (M4 Pro, 48 GB)",
+      "group": "Apple unified memory",
+      "memoryGB": 48,
+      "bandwidthGBs": 273,
+      "devices": 1,
+      "unified": true,
+      "note": null
+    },
+    {
+      "id": "mac-m1-max-64",
+      "label": "Mac (M1 Max, 64 GB)",
+      "group": "Apple unified memory",
+      "memoryGB": 64,
+      "bandwidthGBs": 400,
+      "devices": 1,
+      "unified": true,
+      "note": null
+    },
+    {
+      "id": "mac-m4-max-128",
+      "label": "Mac (M4 Max, 128 GB)",
+      "group": "Apple unified memory",
+      "memoryGB": 128,
+      "bandwidthGBs": 546,
+      "devices": 1,
+      "unified": true,
+      "note": null
+    },
+    {
+      "id": "mac-m3-ultra-512",
+      "label": "Mac Studio (M3 Ultra, 512 GB)",
+      "group": "Apple unified memory",
+      "memoryGB": 512,
+      "bandwidthGBs": 819,
+      "devices": 1,
+      "unified": true,
+      "note": "The most memory you can put behind one consumer-buyable chip"
+    },
+    {
+      "id": "ryzen-ai-max-395",
+      "label": "Ryzen AI Max+ 395 (128 GB)",
+      "group": "AMD",
+      "memoryGB": 128,
+      "bandwidthGBs": 256,
+      "devices": 1,
+      "unified": true,
+      "note": "Strix Halo, LPDDR5X shared with the CPU"
+    },
+    {
+      "id": "mi300x",
+      "label": "Instinct MI300X",
+      "group": "AMD",
+      "memoryGB": 192,
+      "bandwidthGBs": 5300,
+      "devices": 1,
+      "unified": false,
+      "note": "HBM3"
+    },
+    {
+      "id": "cpu-ddr5-32",
+      "label": "CPU only, 32 GB DDR5",
+      "group": "CPU + system RAM",
+      "memoryGB": 32,
+      "bandwidthGBs": 83,
+      "devices": 1,
+      "unified": true,
+      "note": "Dual-channel DDR5-5200"
+    },
+    {
+      "id": "cpu-ddr5-64",
+      "label": "CPU only, 64 GB DDR5",
+      "group": "CPU + system RAM",
+      "memoryGB": 64,
+      "bandwidthGBs": 89,
+      "devices": 1,
+      "unified": true,
+      "note": "Dual-channel DDR5-5600"
+    },
+    {
+      "id": "cpu-ddr5-128",
+      "label": "CPU only, 128 GB DDR5",
+      "group": "CPU + system RAM",
+      "memoryGB": 128,
+      "bandwidthGBs": 102,
+      "devices": 1,
+      "unified": true,
+      "note": "Dual-channel DDR5-6400"
+    }
+  ]
+}

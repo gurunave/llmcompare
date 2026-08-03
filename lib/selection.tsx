@@ -110,6 +110,12 @@ export function SelectionProvider({ children }: { children: ReactNode }) {
     // commas — legal, but it makes a shared link far uglier than it needs to be.
     const parts = ids.length ? [`m=${ids.join(",")}`] : [];
     if (ids.length && hiddenIds.length) parts.push(`hide=${hiddenIds.join(",")}`);
+    // Anything the selection does not own — the hardware page's rig and context,
+    // say — rides along untouched, or this replaceState would drop it.
+    const existing = new URLSearchParams(window.location.search);
+    existing.forEach((value, key) => {
+      if (key !== "m" && key !== "hide") parts.push(`${key}=${value}`);
+    });
     const query = parts.length ? `?${parts.join("&")}` : "";
     window.history.replaceState(
       null,

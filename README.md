@@ -15,6 +15,7 @@ keys, no backend and no network calls at runtime.
 | `/compare` | The selection side by side: capability radar, benchmark bars with a leaderboard mode, and a spec table marking the best value per row. |
 | `/models/[id]` | One page per model — headline stats, its own radar and benchmark bars, full specs, and the closest alternatives by price and capability. 97 statically generated pages. |
 | `/recommend` | Four questions about task, budget, deployment target and context; hard constraints filter, cost and speed preferences rank. |
+| `/hardware` | Pick a GPU, Mac or custom rig and a context length; every open-weight model is sized against it — weights, KV cache and overhead — showing what fits, at which quantization, and an estimated decode speed. |
 | `/methodology` | Where the numbers come from, how blended price and the mean score are computed, what each radar axis means. |
 
 A left rail carries the navigation and the selection tray, so models can be added
@@ -91,9 +92,32 @@ no other file needs to change.
     "mmluPro": 70, "gpqa": 56, "swebench": 30, "aime": 72, "mmmu": null
   },
   "tags": ["open-weights", "self-host"],
-  "url": "https://example.com/docs"
+  "url": "https://example.com/docs",
+
+  // Open-weight entries only — what it takes to size the model in memory.
+  "arch": {
+    "layers": 64,
+    "kvLayers": 64,          // blocks holding a KV cache; fewer for SSM hybrids
+    "kvHeads": 8,            // after GQA grouping; null on MLA
+    "headDim": 128,
+    "attn": "gqa",           // mha | gqa | mla | hybrid
+    "kvLatentDim": null,     // MLA's compressed cache width, when it applies
+    "activeParams": null,    // billions per token; null means dense
+    "slidingWindow": null,   // local-attention window, when layers interleave
+    "globalEvery": null,     // 1 in N layers is full-attention
+    "source": "config"       // "config" | "estimated"
+  }
 }
 ```
+
+`arch` comes from each model's published `config.json`; where no config exists it
+is scaled from the nearest sibling and marked `"estimated"`, which the hardware
+page surfaces as `est.` rather than passing off as measured. A hosted model has no
+`arch` — nothing is published to size — so it shows as *hosted only* instead of as
+a model that does not fit.
+
+`data/hardware.json` is the second catalog: GPUs, Macs and CPU tiers with their
+memory, bandwidth and device count. Adding a card is one entry, no code change.
 
 Two derived values are computed from that, never stored:
 
@@ -136,6 +160,11 @@ comparably measured" — it is never a zero.
 - The cost-vs-capability cloud is split by licence in those same two hues. They clear
   the all-pairs CVD and normal-vision gates in both modes; the cloud sits at partial
   opacity so the labeled selection still reads on top of it.
+- Fit state on `/hardware` is a four-way encoding — fits, tight, too big, hosted-only — and
+  every cell carries a glyph and a screen-reader label as well as a status hue, so the
+  quantization ladder survives greyscale and CVD. "Too big" is drawn hollow on the scatter as
+  well as dim. Hosted models are labelled *hosted only*, never *won't fit*: they are not too
+  large, they are undownloadable, and the distinction is the reader's whole question.
 - Readability: table text at 15px with zebra striping, a sticky header and a hover
   wash; the mean and SWE-bench columns carry a length bar under the number; light-mode
   muted ink is stepped down from the palette default to clear 4.5:1 on the page plane;
@@ -161,5 +190,7 @@ app/models/[id]/     statically generated model pages (generateStaticParams)
 components/          app shell, browser, recommender, spec table, selection tray
 components/charts/   radar, cost-vs-capability scatter, benchmark bars
 lib/                 typed catalog, derived metrics, selection state, scoring
+lib/hardware.ts      memory and throughput model — pure functions, no React
 data/models.json     the catalog
+data/hardware.json   GPUs, Macs and CPU tiers: memory, bandwidth, device count
 ```
