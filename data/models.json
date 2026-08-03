@@ -165,7 +165,8 @@
       "maxOutput": 32768,
       "modalities": [
         "text",
-        "image"
+        "image",
+        "video"
       ],
       "reasoning": true,
       "pricing": {
@@ -423,7 +424,7 @@
         "mmluPro": 74,
         "gpqa": 87,
         "swebench": 78,
-        "aime": null,
+        "aime": 97,
         "mmmu": null
       },
       "tags": [
@@ -457,10 +458,10 @@
       "cutoff": "2025-01",
       "speed": 72,
       "scores": {
-        "mmluPro": null,
+        "mmluPro": 91,
         "gpqa": 94,
         "swebench": 81,
-        "aime": null,
+        "aime": 91,
         "mmmu": null
       },
       "tags": [
@@ -1482,7 +1483,7 @@
       "provider": "Mistral",
       "released": "2025-12",
       "license": "open",
-      "params": null,
+      "params": 675,
       "localTier": "cluster",
       "context": 256000,
       "maxOutput": 32000,
@@ -2657,7 +2658,7 @@
       "reasoning": true,
       "pricing": {
         "input": 0.25,
-        "output": 1.0
+        "output": 1
       },
       "cutoff": "2025-01",
       "speed": 90,
@@ -3218,7 +3219,7 @@
       "scores": {
         "mmluPro": 68,
         "gpqa": 62,
-        "swebench": null,
+        "swebench": 56,
         "aime": 80,
         "mmmu": null
       },
