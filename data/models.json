@@ -59,10 +59,10 @@
         "tier": "headline",
         "range": [
           20,
-          90
+          95
         ],
         "inIndex": true,
-        "source": "Sierra τ-bench, mean of the retail and airline pass^1 rates"
+        "source": "Sierra tau-bench, mean of the retail and airline pass^1 rates; the original task set is frozen and superseded by tau2/tau3"
       },
       {
         "id": "tau3Banking",
@@ -148,7 +148,7 @@
         "scale": "pct",
         "tier": "floor",
         "range": [
-          5,
+          0,
           120
         ],
         "inIndex": true,
@@ -253,7 +253,7 @@
         "scale": "pct",
         "tier": "floor",
         "range": [
-          30,
+          15,
           105
         ],
         "inIndex": true,
@@ -360,7 +360,11 @@
       "cutoff": "2026-05",
       "speed": 85,
       "scores": {
-        "osworld": 86.1
+        "osworld": 86.1,
+        "terminalBench2": 86.6,
+        "swebenchPro": 67.7,
+        "gpqa": 92.6,
+        "mmluPro": 82.3
       },
       "tags": [
         "frontier",
@@ -439,7 +443,10 @@
       },
       "cutoff": "2025-11",
       "speed": 140,
-      "scores": {},
+      "scores": {
+        "terminalBench2": 70.2,
+        "swebenchPro": 59.4
+      },
       "tags": [
         "open-weights",
         "self-host",
@@ -752,7 +759,8 @@
         "gdpval": 1684,
         "terminalBench2": 80.9,
         "scicode": 58.7,
-        "tau3Banking": 33.4
+        "tau3Banking": 33.4,
+        "swebench": 93.4
       },
       "tags": [
         "open-weights",
@@ -933,7 +941,10 @@
       },
       "cutoff": "2026-05",
       "speed": 55,
-      "scores": {},
+      "scores": {
+        "terminalBench2": 80,
+        "swebenchPro": 61.5
+      },
       "tags": [
         "agentic-coding",
         "multimodal"
@@ -1119,7 +1130,8 @@
         "gpqa": 79,
         "swebench": 77,
         "aime": 88,
-        "mmmu": 76
+        "mmmu": 76,
+        "tauBench": 78.1
       },
       "tags": [
         "workhorse",
