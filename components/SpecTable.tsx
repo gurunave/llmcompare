@@ -2,8 +2,9 @@
 
 import { useState } from "react";
 import { ChartCard } from "@/components/ChartCard";
+import { InfoHint } from "@/components/InfoHint";
 import { SeriesBadge } from "@/components/SeriesLegend";
-import { CATEGORY_LABELS, FLOOR, HEADLINE, scoreOf } from "@/lib/benchmarks";
+import { CATEGORY_BLURBS, CATEGORY_LABELS, FLOOR, HEADLINE, scoreOf } from "@/lib/benchmarks";
 import {
   formatElo,
   formatHours,
@@ -22,6 +23,9 @@ interface Row {
   dir: Dir;
   value: (m: DerivedModel) => number | null;
   render: (m: DerivedModel) => string;
+  /** Shown behind an info icon beside the row label. */
+  hint?: string;
+  source?: string;
 }
 
 /** Registry order, so adding a benchmark adds its row without editing this file. */
@@ -32,6 +36,8 @@ function benchmarkRow(b: Benchmark): Row {
     dir: "high",
     value: (m) => scoreOf(m, b.id),
     render: (m) => format(scoreOf(m, b.id)),
+    hint: `${b.blurb}.`,
+    source: b.source,
   };
 }
 
@@ -109,6 +115,8 @@ const CATEGORY_ROWS: Row[] = (Object.keys(CATEGORY_LABELS) as (keyof typeof CATE
     dir: "high" as Dir,
     value: (m: DerivedModel) => m.categories[c] ?? null,
     render: (m: DerivedModel) => formatScore(m.categories[c] ?? null),
+    hint: `${CATEGORY_BLURBS[c]}. Averages the benchmarks a model published in this category, each placed against its own useful range first.`,
+    source: `Built from: ${HEADLINE.concat(FLOOR).filter((b) => b.category === c && b.inIndex).map((b) => b.label).join(", ")}`,
   }));
 
 const HEADLINE_ROWS: Row[] = HEADLINE.map(benchmarkRow);
@@ -181,7 +189,17 @@ export function SpecTable({ models }: { models: DerivedModel[] }) {
                     scope="row"
                     className="sticky left-0 z-10 whitespace-nowrap bg-surface py-2 pr-4 text-left font-normal text-ink-secondary"
                   >
-                    {row.label}
+                    <span className="inline-flex items-center gap-1.5">
+                      {row.label}
+                      {row.hint && (
+                        <InfoHint
+                          label={row.label}
+                          title={row.label}
+                          body={row.hint}
+                          source={row.source}
+                        />
+                      )}
+                    </span>
                   </th>
                   {models.map((m, i) => {
                     const isBest = best !== null && values[i] === best;

@@ -1,4 +1,11 @@
-import { BENCHMARKS, CATEGORY_LABELS, INDEX_CATEGORIES, scoreOf } from "./benchmarks";
+import {
+  BENCHMARKS,
+  CATEGORY_BLURBS,
+  CATEGORY_LABELS,
+  INDEX_CATEGORIES,
+  benchmarksIn,
+  scoreOf,
+} from "./benchmarks";
 import { formatElo, formatHours, formatPrice, formatScore, formatTokens } from "./format";
 import type { Benchmark, DerivedModel } from "./types";
 
@@ -20,6 +27,10 @@ export interface Metric {
   bounded?: boolean;
   /** Set on the metrics that stand for "how good is it" — see SCORE_METRICS. */
   capabilityLike?: boolean;
+  /** What the quantity is, for the info hint next to a picker. */
+  hint?: string;
+  /** Where the figures come from. Only benchmarks carry one. */
+  source?: string;
 }
 
 /** One metric per benchmark in the registry, on whatever scale it reports in. */
@@ -28,6 +39,8 @@ function benchmarkMetric(b: Benchmark): Metric {
     key: b.id,
     label: b.label,
     value: (m: DerivedModel) => scoreOf(m, b.id),
+    hint: `${b.blurb}.`,
+    source: b.source,
   };
   if (b.scale === "elo") {
     return { ...common, axisLabel: `${b.label} rating`, format: formatElo };
@@ -46,6 +59,10 @@ function benchmarkMetric(b: Benchmark): Metric {
 
 /** One metric per benchmark category — the aggregate the radar axes plot. */
 function categoryMetric(category: (typeof INDEX_CATEGORIES)[number]): Metric {
+  const behind = benchmarksIn(category)
+    .filter((b) => b.inIndex)
+    .map((b) => b.label)
+    .join(", ");
   return {
     key: `cat:${category}`,
     label: `${CATEGORY_LABELS[category]} score`,
@@ -54,12 +71,15 @@ function categoryMetric(category: (typeof INDEX_CATEGORIES)[number]): Metric {
     format: formatScore,
     bounded: true,
     capabilityLike: true,
+    hint: `${CATEGORY_BLURBS[category]}. Averages the benchmarks a model published in this category, each placed against its own useful range first.`,
+    source: `Built from: ${behind}`,
   };
 }
 
 export const METRICS: Metric[] = [
   {
     key: "price",
+    hint: "Input and output list rates blended at a 3:1 token mix, roughly the shape of a typical API workload.",
     label: "Blended price",
     axisLabel: "Blended $ / 1M tokens",
     value: (m) => m.blendedPrice,
@@ -68,6 +88,7 @@ export const METRICS: Metric[] = [
   },
   {
     key: "inputPrice",
+    hint: "List rate for prompt tokens, per million.",
     label: "Input price",
     axisLabel: "Input $ / 1M tokens",
     value: (m) => m.pricing.input,
@@ -76,6 +97,7 @@ export const METRICS: Metric[] = [
   },
   {
     key: "outputPrice",
+    hint: "List rate for generated tokens, per million. Usually several times the input rate.",
     label: "Output price",
     axisLabel: "Output $ / 1M tokens",
     value: (m) => m.pricing.output,
@@ -84,6 +106,7 @@ export const METRICS: Metric[] = [
   },
   {
     key: "capability",
+    hint: "Each published score placed against its own benchmark's useful range, averaged within its category, then averaged across categories with equal weight. Thin records are nudged down so a single result cannot top the catalog.",
     label: "Capability index",
     axisLabel: "Capability index",
     value: (m) => m.capability,
@@ -95,6 +118,7 @@ export const METRICS: Metric[] = [
   ...BENCHMARKS.map(benchmarkMetric),
   {
     key: "speed",
+    hint: "Output tokens per second at the provider's standard tier, excluding time to first token.",
     label: "Output speed",
     axisLabel: "Output tokens / sec",
     value: (m) => m.speed,
@@ -103,6 +127,7 @@ export const METRICS: Metric[] = [
   },
   {
     key: "context",
+    hint: "How many tokens of prompt and history the model can attend to at once.",
     label: "Context window",
     axisLabel: "Context window (tokens)",
     value: (m) => m.context,
@@ -111,6 +136,7 @@ export const METRICS: Metric[] = [
   },
   {
     key: "maxOutput",
+    hint: "The longest single response the model will generate.",
     label: "Max output",
     axisLabel: "Max output (tokens)",
     value: (m) => m.maxOutput,
@@ -119,6 +145,7 @@ export const METRICS: Metric[] = [
   },
   {
     key: "params",
+    hint: "Total parameter count. Published only for open-weight models; a mixture-of-experts runs far fewer per token.",
     label: "Parameters",
     axisLabel: "Parameters (B)",
     value: (m) => m.params,

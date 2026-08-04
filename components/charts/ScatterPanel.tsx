@@ -12,6 +12,7 @@ import {
   YAxis,
   ZAxis,
 } from "recharts";
+import { InfoHint } from "@/components/InfoHint";
 import { ChartCard } from "@/components/ChartCard";
 import { SeriesLegend } from "@/components/SeriesLegend";
 import { formatTokens } from "@/lib/format";
@@ -20,6 +21,7 @@ import {
   DEFAULT_X,
   DEFAULT_Y,
   METRICS,
+  METRIC_BY_KEY,
   metricOf,
   type AxisScale,
   type Metric,
@@ -306,22 +308,36 @@ function AxisPicker({
   value: string;
   onChange: (key: string) => void;
 }) {
+  // A native select cannot carry an icon per option, so the hint describes
+  // whatever is currently chosen and updates as the reader changes it.
+  const current = METRIC_BY_KEY.get(value);
+
   return (
-    <label className="inline-flex items-center gap-1.5 text-xs text-ink-secondary">
-      <span className="font-medium">{label}</span>
-      <select
-        value={value}
-        onChange={(e) => onChange(e.target.value)}
-        aria-label={`${label} axis metric`}
-        className="field w-auto py-1.5 text-xs"
-      >
-        {METRICS.map((m) => (
-          <option key={m.key} value={m.key}>
-            {m.label}
-          </option>
-        ))}
-      </select>
-    </label>
+    <span className="inline-flex items-center gap-1.5">
+      <label className="inline-flex items-center gap-1.5 text-xs text-ink-secondary">
+        <span className="font-medium">{label}</span>
+        <select
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          aria-label={`${label} axis metric`}
+          className="field w-auto py-1.5 text-xs"
+        >
+          {METRICS.map((m) => (
+            <option key={m.key} value={m.key}>
+              {m.label}
+            </option>
+          ))}
+        </select>
+      </label>
+      {current?.hint && (
+        <InfoHint
+          label={current.label}
+          title={current.label}
+          body={current.hint}
+          source={current.source}
+        />
+      )}
+    </span>
   );
 }
 
