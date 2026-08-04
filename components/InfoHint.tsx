@@ -132,7 +132,11 @@ export function InfoHint({
             id={id}
             role="tooltip"
             style={{ top: placement.top, left: placement.left, width: placement.width }}
-            className="card fixed z-50 p-2.5 text-left shadow-lg"
+            // whitespace-normal is not redundant: the spec table's row headers
+            // set whitespace-nowrap, and a panel that inherited it ran off as
+            // one unbroken line. Portalling escapes that today, but the panel
+            // should not depend on where it happens to be mounted.
+            className="card fixed z-50 whitespace-normal p-2.5 text-left shadow-lg"
           >
             {title && <p className="text-xs font-semibold text-ink">{title}</p>}
             <p className="mt-0.5 text-xs leading-relaxed text-ink-secondary">{body}</p>
