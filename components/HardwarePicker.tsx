@@ -1,9 +1,10 @@
 "use client";
 
+import { DeviceSelect } from "@/components/DeviceSelect";
 import {
   CONTEXT_CHOICES,
   CONTEXT_LABELS,
-  DEVICE_GROUPS,
+  CUSTOM_ID,
   KV_QUANTS,
   QUANTS,
   formatGiB,
@@ -19,8 +20,6 @@ export interface CustomRig {
   devices: number;
   unified: boolean;
 }
-
-export const CUSTOM_ID = "custom";
 
 interface Props {
   deviceId: string;
@@ -55,27 +54,10 @@ export function HardwarePicker({
     <section className="card p-4 sm:p-5">
       <div className="space-y-4">
         <Field label="What are you running it on?">
-          {/* A grouped select rather than 24 chips — it works on touch and by
-              keyboard, and the groups are how people actually think about it. */}
-          <select
-            value={deviceId}
-            onChange={(e) => onDevice(e.target.value)}
-            aria-label="Hardware"
-            className="field w-auto max-w-full py-1.5"
-          >
-            {DEVICE_GROUPS.map((g) => (
-              <optgroup key={g.group} label={g.group}>
-                {g.devices.map((d) => (
-                  <option key={d.id} value={d.id}>
-                    {d.label} — {d.memoryGB} GB
-                  </option>
-                ))}
-              </optgroup>
-            ))}
-            <optgroup label="Something else">
-              <option value={CUSTOM_ID}>Custom…</option>
-            </optgroup>
-          </select>
+          {/* A searchable list rather than chips or a bare select — the catalog
+              is past the point where scrolling to your card is reasonable, and
+              the groups are still how people think about it. */}
+          <DeviceSelect value={deviceId} onChange={onDevice} />
         </Field>
 
         {isCustom && (
