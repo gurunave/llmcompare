@@ -128,8 +128,16 @@ export const METRICS: Metric[] = [
 
 export const METRIC_BY_KEY = new Map(METRICS.map((m) => [m.key, m]));
 
+/**
+ * The 0-100 capability metrics: the mean, plus each benchmark behind it. These
+ * are the quantities that can stand in for "how good is it" on an axis, which
+ * is what makes them interchangeable in a picker.
+ */
+export const SCORE_METRICS: Metric[] = METRICS.filter((m) => m.bounded);
+
 export const DEFAULT_X = "price";
 export const DEFAULT_Y = "capability";
+export const DEFAULT_SCORE = "capability";
 
 export function metricOf(key: string, fallback: string): Metric {
   return METRIC_BY_KEY.get(key) ?? (METRIC_BY_KEY.get(fallback) as Metric);

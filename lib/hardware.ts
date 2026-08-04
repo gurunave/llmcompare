@@ -37,6 +37,9 @@ export const DEVICE_GROUPS: { group: string; devices: Device[] }[] = DEVICES.red
 
 export const DEFAULT_DEVICE_ID = "rtx-4090";
 
+/** The one picker entry that is not a preset — whatever the user types in. */
+export const CUSTOM_ID = "custom";
+
 /* ------------------------------------------------------------------ quants */
 
 export type QuantKey = "fp16" | "q8" | "q6" | "q5" | "q4" | "q3";

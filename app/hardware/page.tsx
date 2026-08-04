@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { HardwarePicker, CUSTOM_ID, type CustomRig } from "@/components/HardwarePicker";
+import { HardwarePicker, type CustomRig } from "@/components/HardwarePicker";
 import { HardwareFit } from "@/components/HardwareFit";
 import { PageHeader } from "@/components/PageHeader";
 import { FitPanel } from "@/components/charts/FitPanel";
 import {
   CONTEXT_CHOICES,
+  CUSTOM_ID,
   DEFAULT_CONTEXT,
   DEFAULT_DEVICE_ID,
   DEFAULT_FLOOR,

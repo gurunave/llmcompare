@@ -16,13 +16,21 @@ export const viewport: Viewport = {
   ],
 };
 
-/** Stamps the saved theme before first paint so the page never flashes. */
-const themeScript = `
+/**
+ * Stamps the saved theme and navigation layout before first paint. Both are
+ * root attributes that CSS reads, so the page never flashes the wrong one —
+ * and neither is React state, so the prerendered markup stays valid.
+ */
+const preferenceScript = `
 (function () {
   try {
-    var saved = localStorage.getItem("llmcompare-theme");
-    if (saved === "light" || saved === "dark") {
-      document.documentElement.setAttribute("data-theme", saved);
+    var theme = localStorage.getItem("llmcompare-theme");
+    if (theme === "light" || theme === "dark") {
+      document.documentElement.setAttribute("data-theme", theme);
+    }
+    var nav = localStorage.getItem("llmcompare-nav");
+    if (nav === "rail" || nav === "top") {
+      document.documentElement.setAttribute("data-nav", nav);
     }
   } catch (e) {}
 })();
@@ -30,9 +38,9 @@ const themeScript = `
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" data-theme="dark" suppressHydrationWarning>
+    <html lang="en" data-theme="dark" data-nav="rail" suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+        <script dangerouslySetInnerHTML={{ __html: preferenceScript }} />
       </head>
       <body>
         <SelectionProvider>
