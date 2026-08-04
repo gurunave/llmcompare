@@ -107,7 +107,7 @@
           85
         ],
         "inIndex": true,
-        "source": "Scale AI SWE-bench Pro, held-out split"
+        "source": "Scale AI SWE-bench Pro. Figures here are drawn from both the public split and vendor tables and are not one controlled run - the public and commercial splits differ by more than the spread of this column, so read a gap of a few points as noise"
       },
       {
         "id": "livecodebench",
