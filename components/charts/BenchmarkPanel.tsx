@@ -15,17 +15,22 @@ import {
 } from "recharts";
 import { ChartCard } from "@/components/ChartCard";
 import { AllHidden, SeriesBadge, SeriesLegend } from "@/components/SeriesLegend";
+import { BENCHMARKS, scoreOf } from "@/lib/benchmarks";
 import { MODELS } from "@/lib/models";
 import { seriesBadge, seriesColor } from "@/lib/series";
-import type { DerivedModel, ScoreKey } from "@/lib/types";
+import type { Benchmark, BenchmarkId, DerivedModel } from "@/lib/types";
 
-const BENCHMARKS: { key: ScoreKey; label: string; blurb: string }[] = [
-  { key: "mmluPro", label: "MMLU-Pro", blurb: "broad knowledge" },
-  { key: "gpqa", label: "GPQA", blurb: "science reasoning" },
-  { key: "swebench", label: "SWE-bench", blurb: "real code fixes" },
-  { key: "aime", label: "AIME", blurb: "competition math" },
-  { key: "mmmu", label: "MMMU", blurb: "multimodal" },
-];
+/**
+ * Only the percentage benchmarks are chartable here — the bars share a 0-100
+ * axis, which an Elo rating and a task length in hours do not belong on. Those
+ * two live in the spec table and the scatter's axis pickers instead.
+ */
+const PCT = BENCHMARKS.filter((b) => b.scale === "pct");
+const FRONTIER = PCT.filter((b) => b.tier === "headline");
+const RETIRED = PCT.filter((b) => b.tier === "floor");
+
+/** Which half of the registry the panel is charting. */
+type Tier = "frontier" | "retired";
 
 type Mode = "selected" | "leaderboard";
 /** Which way the bars run: columns off a bottom axis, or rows off a left axis. */
@@ -58,9 +63,13 @@ interface Props {
 
 export function BenchmarkPanel({ selected, hidden, onToggle, onSolo, onShowAll }: Props) {
   const [mode, setMode] = useState<Mode>("selected");
-  const [board, setBoard] = useState<ScoreKey>("swebench");
+  const [tier, setTier] = useState<Tier>("frontier");
+  const [board, setBoard] = useState<BenchmarkId>(FRONTIER[0]?.id ?? RETIRED[0]?.id ?? "");
   const [orientation, setOrientation] = useState<Orientation | null>(null);
   const [density, setDensity] = useState<Density>("comfortable");
+
+  const benchmarks = tier === "frontier" ? FRONTIER : RETIRED;
+  const boardBenchmark = PCT.find((b) => b.id === board) ?? benchmarks[0];
 
   const series = selected.map((m, i) => ({ model: m, index: i, off: Boolean(hidden?.has(m.id)) }));
   const shown = series.filter((s) => !s.off);
@@ -74,10 +83,12 @@ export function BenchmarkPanel({ selected, hidden, onToggle, onSolo, onShowAll }
       title={mode === "selected" ? "Benchmark scores" : "Leaderboard"}
       subtitle={
         mode === "selected"
-          ? "Head-to-head on each published benchmark. Higher is better."
-          : `Top 12 of ${MODELS.length} models on ${BENCHMARKS.find((b) => b.key === board)!.label}. Your selection stays colored.`
+          ? tier === "frontier"
+            ? "Head-to-head on the benchmarks that still separate frontier models. Higher is better."
+            : "The retired benchmarks. Read these as a capability floor, not a ranking."
+          : `Top 12 of ${MODELS.length} models on ${boardBenchmark?.label ?? "—"}. Your selection stays colored.`
       }
-      note="A missing bar means the score is not published or not comparably measured — it is not a zero."
+      note="A missing bar means the score is not published or not comparably measured — it is not a zero. Coverage on the newer benchmarks is thin."
       actions={
         <div className="flex flex-wrap items-center gap-1.5">
           <ModeChip active={mode === "selected"} onClick={() => setMode("selected")}>
@@ -91,11 +102,24 @@ export function BenchmarkPanel({ selected, hidden, onToggle, onSolo, onShowAll }
     >
       {mode === "leaderboard" && (
         <div className="mb-4 flex flex-wrap gap-1.5">
-          {BENCHMARKS.map((b) => (
-            <ModeChip key={b.key} active={board === b.key} onClick={() => setBoard(b.key)}>
-              {b.label}
+          {PCT.map((b) => (
+            <ModeChip key={b.id} active={board === b.id} onClick={() => setBoard(b.id)}>
+              {b.short}
             </ModeChip>
           ))}
+        </div>
+      )}
+
+      {mode === "selected" && (
+        <div className="mb-3 flex flex-wrap items-center gap-x-4 gap-y-2">
+          <ControlGroup label="Benchmarks">
+            <ModeChip active={tier === "frontier"} onClick={() => setTier("frontier")}>
+              Frontier
+            </ModeChip>
+            <ModeChip active={tier === "retired"} onClick={() => setTier("retired")}>
+              Retired
+            </ModeChip>
+          </ControlGroup>
         </div>
       )}
 
@@ -123,11 +147,11 @@ export function BenchmarkPanel({ selected, hidden, onToggle, onSolo, onShowAll }
         shown.length === 0 ? (
           <AllHidden onShowAll={onShowAll} />
         ) : (
-          <GroupedBars shown={shown} layout={layout} density={density} />
+          <GroupedBars shown={shown} layout={layout} density={density} benchmarks={benchmarks} />
         )
-      ) : (
-        <Leaderboard metric={board} series={series} />
-      )}
+      ) : boardBenchmark ? (
+        <Leaderboard benchmark={boardBenchmark} series={series} />
+      ) : null}
 
       {mode === "selected" && selected.length > 1 && (
         <div className="mt-3 border-t border-hairline pt-3">
@@ -159,20 +183,22 @@ function GroupedBars({
   shown,
   layout,
   density,
+  benchmarks,
 }: {
   shown: Shown[];
   layout: Orientation;
   density: Density;
+  benchmarks: Benchmark[];
 }) {
-  const data = BENCHMARKS.map((b) => {
-    const row: Record<string, string | number | null> = { name: b.label, blurb: b.blurb };
-    for (const { model } of shown) row[model.id] = model.scores[b.key];
+  const data = benchmarks.map((b) => {
+    const row: Record<string, string | number | null> = { name: b.short, blurb: b.blurb };
+    for (const { model } of shown) row[model.id] = scoreOf(model, b.id);
     return row;
   });
 
   const size = BAR_SIZE[density][layout];
   const group = shown.length * (size + BAR_GAP) + GROUP_PAD[layout];
-  const extent = BENCHMARKS.length * group;
+  const extent = benchmarks.length * group;
   const labelBadges = size >= 14;
 
   const bars = shown.map(({ model, index }) => (
@@ -350,12 +376,29 @@ function BadgeLabel({ x, y, width, height, value, index }: BadgeLabelProps) {
   );
 }
 
-function Leaderboard({ metric, series }: { metric: ScoreKey; series: Array<Shown & { off: boolean }> }) {
+function Leaderboard({
+  benchmark,
+  series,
+}: {
+  benchmark: Benchmark;
+  series: Array<Shown & { off: boolean }>;
+}) {
   const rank = new Map(series.filter((s) => !s.off).map((s) => [s.model.id, s.index]));
-  const data = MODELS.filter((m) => typeof m.scores[metric] === "number")
-    .sort((a, b) => (b.scores[metric] as number) - (a.scores[metric] as number))
+  const ranked = MODELS.map((m) => ({ m, v: scoreOf(m, benchmark.id) })).filter(
+    (r): r is { m: DerivedModel; v: number } => r.v !== null
+  );
+  const data = ranked
+    .sort((a, b) => b.v - a.v)
     .slice(0, 12)
-    .map((m) => ({ id: m.id, name: m.name, value: m.scores[metric] as number }));
+    .map(({ m, v }) => ({ id: m.id, name: m.name, value: v }));
+
+  if (!data.length) {
+    return (
+      <p className="py-12 text-center text-sm text-ink-muted">
+        No model in the catalog has a published {benchmark.label} result yet.
+      </p>
+    );
+  }
 
   return (
     <div className="h-[420px] w-full">

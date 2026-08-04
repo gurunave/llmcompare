@@ -8,7 +8,7 @@ import { MAX_SELECTION, MODELS, PROVIDERS } from "@/lib/models";
 import { withSelection } from "@/lib/selection";
 import type { DerivedModel } from "@/lib/types";
 
-type SortKey = "name" | "provider" | "context" | "price" | "speed" | "capability" | "swebench";
+type SortKey = "name" | "provider" | "context" | "price" | "speed" | "capability" | "agentic";
 type SortDir = "asc" | "desc";
 type LicenseFilter = "all" | "open" | "proprietary";
 
@@ -18,8 +18,8 @@ const COLUMNS: { key: SortKey; label: string; numeric: boolean }[] = [
   { key: "context", label: "Context", numeric: true },
   { key: "price", label: "$ / 1M", numeric: true },
   { key: "speed", label: "tok/s", numeric: true },
-  { key: "capability", label: "Mean", numeric: true },
-  { key: "swebench", label: "SWE-b", numeric: true },
+  { key: "capability", label: "Index", numeric: true },
+  { key: "agentic", label: "Agentic", numeric: true },
 ];
 
 function sortValue(m: DerivedModel, key: SortKey): string | number {
@@ -36,8 +36,8 @@ function sortValue(m: DerivedModel, key: SortKey): string | number {
       return m.speed;
     case "capability":
       return m.capability ?? -1;
-    case "swebench":
-      return m.scores.swebench ?? -1;
+    case "agentic":
+      return m.categories.agentic ?? -1;
   }
 }
 
@@ -228,7 +228,7 @@ export function ModelBrowser({
                     <ScoreCell value={m.capability} />
                   </td>
                   <td className="num py-2.5 pr-4 text-right">
-                    <ScoreCell value={m.scores.swebench} />
+                    <ScoreCell value={m.categories.agentic ?? null} />
                   </td>
                 </tr>
               );

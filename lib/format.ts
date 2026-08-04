@@ -33,3 +33,21 @@ export function formatMonth(ym: string): string {
 export function formatScore(v: number | null | undefined): string {
   return typeof v === "number" ? v.toFixed(0) : "—";
 }
+
+/** Elo is a rating, not a percentage — no unit, no decimals. */
+export function formatElo(v: number | null | undefined): string {
+  return typeof v === "number" ? String(Math.round(v)) : "—";
+}
+
+/** A task length, read the way a person would say it: 40s, 12m, 1h 25m, 6.5h. */
+export function formatHours(v: number | null | undefined): string {
+  if (typeof v !== "number") return "—";
+  if (v < 1 / 60) return `${Math.round(v * 3600)}s`;
+  if (v < 1) return `${Math.round(v * 60)}m`;
+  if (v < 10) {
+    const h = Math.floor(v);
+    const m = Math.round((v - h) * 60);
+    return m === 0 ? `${h}h` : `${h}h ${m}m`;
+  }
+  return `${Math.round(v)}h`;
+}

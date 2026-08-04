@@ -1,8 +1,17 @@
 import type { Metadata } from "next";
 import { PageHeader } from "@/components/PageHeader";
+import {
+  BENCHMARKS,
+  CATEGORIES_PRESENT,
+  CATEGORY_BLURBS,
+  CATEGORY_LABELS,
+  INDEX_CATEGORIES,
+  benchmarksIn,
+  scoreOf,
+} from "@/lib/benchmarks";
 import { formatMonth } from "@/lib/format";
 import { AXIS_HELP, AXIS_LABELS, MODELS, catalog } from "@/lib/models";
-import type { AxisKey, ScoreKey } from "@/lib/types";
+import type { AxisKey } from "@/lib/types";
 
 export const metadata: Metadata = {
   title: "Methodology — LLM Compare",
@@ -11,18 +20,23 @@ export const metadata: Metadata = {
 };
 
 const AXES: AxisKey[] = [
-  "knowledge",
-  "reasoning",
+  "agentic",
   "coding",
+  "reasoning",
   "math",
+  "knowledge",
+  "tooluse",
   "speed",
   "value",
   "context",
 ];
 
-export default function MethodologyPage() {
-  const benchmarks = Object.entries(catalog.meta.benchmarks) as [ScoreKey, string][];
+/** How many models carry a published figure for each benchmark. */
+function coverageOf(id: string): number {
+  return MODELS.filter((m) => scoreOf(m, id) !== null).length;
+}
 
+export default function MethodologyPage() {
   return (
     <main className="mx-auto max-w-3xl space-y-4 px-4 py-6 lg:py-8">
       <PageHeader
@@ -46,20 +60,44 @@ export default function MethodologyPage() {
 
       <section className="card p-4 sm:p-5">
         <h2 className="text-base font-semibold text-ink">Benchmarks</h2>
-        <dl className="mt-3 space-y-3">
-          {benchmarks.map(([key, description]) => (
-            <div key={key}>
-              <dt className="text-sm font-medium text-ink">{description.split(" - ")[0]}</dt>
-              <dd className="mt-0.5 text-sm text-ink-secondary">
-                {description.split(" - ")[1] ?? description}
-              </dd>
-            </div>
-          ))}
-        </dl>
+        <p className="mt-2 text-sm leading-relaxed text-ink-secondary">
+          {BENCHMARKS.length} benchmarks in {CATEGORIES_PRESENT.length} categories. The ones marked{" "}
+          <em>retired</em> — MMLU-Pro, GPQA Diamond, SWE-bench Verified, AIME, MMMU — are at or near
+          their ceiling and no longer separate frontier models. They are kept because they are by
+          far the densest data in the catalog and a floor is more useful than a blank, but they are
+          collapsed by default and never lead a picker. The count after each name is how many of the{" "}
+          {MODELS.length} models carry a published figure for it.
+        </p>
+
+        {CATEGORIES_PRESENT.map((category) => (
+          <div key={category} className="mt-4">
+            <h3 className="text-sm font-semibold text-ink">{CATEGORY_LABELS[category]}</h3>
+            <p className="text-xs text-ink-muted">{CATEGORY_BLURBS[category]}</p>
+            <dl className="mt-2 space-y-2.5">
+              {benchmarksIn(category).map((b) => (
+                <div key={b.id}>
+                  <dt className="flex flex-wrap items-baseline gap-2 text-sm font-medium text-ink">
+                    {b.label}
+                    {b.tier === "floor" && (
+                      <span className="text-xs font-normal text-ink-muted">retired</span>
+                    )}
+                    <span className="num text-xs font-normal text-ink-muted">
+                      {coverageOf(b.id)}/{MODELS.length}
+                    </span>
+                  </dt>
+                  <dd className="mt-0.5 text-sm text-ink-secondary">{b.blurb}.</dd>
+                  <dd className="text-xs text-ink-muted">Source: {b.source}.</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        ))}
+
         <p className="mt-4 text-sm leading-relaxed text-ink-secondary">
           A blank cell means the score is not published or not comparably measured. It is never
-          treated as a zero — a model with fewer published benchmarks is scored on what it does
-          publish, then nudged down slightly so a thin record cannot win on silence.
+          treated as a zero — a model is scored on what it does publish. Coverage on the newer
+          benchmarks is thin and will stay thin: several of them have results for a dozen models or
+          fewer, and an estimate would be worse than a gap.
         </p>
       </section>
 
@@ -75,20 +113,55 @@ export default function MethodologyPage() {
             </dd>
           </div>
           <div>
-            <dt className="font-medium text-ink">Mean score</dt>
+            <dt className="font-medium text-ink">Capability index</dt>
             <dd className="mt-0.5 text-ink-secondary">
-              The average of MMLU-Pro, GPQA, SWE-bench and AIME across the ones a model actually
-              publishes. This is the y-axis of the cost-vs-capability chart.
+              Built in three steps. Each published score is first placed on a 0–100 scale by where
+              it sits in <em>its own</em> benchmark&apos;s useful range — the range is listed with
+              each benchmark and is fixed rather than taken from the catalog&apos;s current min and
+              max, so a ninth published result does not move the other eight. Those normalized
+              scores are then averaged within their category, and the categories are averaged with
+              equal weight to give the index. This is the y-axis of the cost-vs-capability chart.
+            </dd>
+          </div>
+          <div>
+            <dt className="font-medium text-ink">Why not a plain mean of the scores</dt>
+            <dd className="mt-0.5 text-ink-secondary">
+              Because the benchmarks are no longer in the same difficulty band. Top models score
+              around 35% on Humanity&apos;s Last Exam and under 1% on ARC-AGI-3, against 85%+ on
+              MMLU-Pro. Averaged raw, a frontier model that reports the hard evaluations would land
+              below a mid-tier model that only reports the easy ones — the headline number would
+              reward not publishing. Normalizing per benchmark, then averaging per category, removes
+              both effects: one benchmark in a category counts as much as six, so the index tracks
+              how broadly a model is good rather than how much its vendor chose to disclose.
+            </dd>
+          </div>
+          <div>
+            <dt className="font-medium text-ink">Category scores</dt>
+            <dd className="mt-0.5 text-ink-secondary">
+              The {INDEX_CATEGORIES.length} categories the index averages are{" "}
+              {INDEX_CATEGORIES.map((c) => CATEGORY_LABELS[c].toLowerCase()).join(", ")}. Multimodal
+              is measured and shown but left out of the index, since a text-only model should not be
+              marked down for a modality it never claimed. The Artificial Analysis Intelligence
+              Index is also excluded — it is itself a composite of benchmarks already counted here,
+              so including it would weight them twice.
             </dd>
           </div>
           <div>
             <dt className="font-medium text-ink">Value</dt>
             <dd className="mt-0.5 text-ink-secondary">
-              Mean score divided by blended price, then log-scaled and normalized across the
+              Capability index divided by blended price, then log-scaled and normalized across the
               catalog.
             </dd>
           </div>
         </dl>
+
+        <p className="mt-4 text-sm leading-relaxed text-ink-secondary">
+          Two measures deliberately sit outside all of this. <strong>METR time horizons</strong> are
+          a task length in human-hours, not a percentage, and <strong>LMArena Elo</strong> is a
+          relative rating with no fixed ceiling that measures which answer people prefer rather than
+          which is correct. Neither can share an axis with a pass rate or be averaged into an index,
+          so both are shown on their own scale in the spec table and the axis pickers.
+        </p>
       </section>
 
       <section className="card p-4 sm:p-5">

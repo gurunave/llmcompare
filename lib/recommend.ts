@@ -1,7 +1,8 @@
+import { BENCHMARK_BY_ID, scoreOf } from "./benchmarks";
 import { MODELS } from "./models";
-import type { DerivedModel, ScoreKey } from "./types";
+import type { BenchmarkCategory, BenchmarkId, DerivedModel } from "./types";
 
-export type TaskKey = "coding" | "research" | "general" | "multimodal" | "volume";
+export type TaskKey = "agentic" | "coding" | "research" | "general" | "multimodal" | "volume";
 export type BudgetKey = "any" | "moderate" | "cheap";
 export type DeployKey = "any" | "open" | "local";
 export type ContextKey = "any" | "long" | "huge";
@@ -23,16 +24,25 @@ export const DEFAULT_ANSWERS: Answers = {
   latency: "any",
 };
 
-/** Per-task benchmark weights. Keys not listed contribute nothing. */
-const TASK_WEIGHTS: Record<TaskKey, Partial<Record<ScoreKey, number>>> = {
-  coding: { swebench: 0.6, mmluPro: 0.2, gpqa: 0.2 },
-  research: { gpqa: 0.5, aime: 0.25, mmluPro: 0.25 },
-  general: { mmluPro: 0.6, gpqa: 0.2, swebench: 0.2 },
-  multimodal: { mmmu: 0.6, mmluPro: 0.25, gpqa: 0.15 },
-  volume: { mmluPro: 0.7, swebench: 0.3 },
+/**
+ * Per-task weights over benchmark *categories*, not individual benchmarks. A
+ * category score already blends whatever a model published in it and falls back
+ * to the retired benchmarks when there is no newer data, so weighting here
+ * keeps the recommender working for the bulk of the catalog — which has no
+ * GDPval or Terminal-Bench result at all. Categories not listed contribute
+ * nothing.
+ */
+const TASK_WEIGHTS: Record<TaskKey, Partial<Record<BenchmarkCategory, number>>> = {
+  agentic: { agentic: 0.5, tooluse: 0.2, coding: 0.3 },
+  coding: { coding: 0.6, agentic: 0.2, reasoning: 0.2 },
+  research: { reasoning: 0.5, math: 0.25, knowledge: 0.25 },
+  general: { knowledge: 0.5, reasoning: 0.3, coding: 0.2 },
+  multimodal: { multimodal: 0.6, knowledge: 0.25, reasoning: 0.15 },
+  volume: { knowledge: 0.7, coding: 0.3 },
 };
 
 export const TASK_LABELS: Record<TaskKey, string> = {
+  agentic: "Agentic / real work",
   coding: "Writing & fixing code",
   research: "Hard reasoning / research",
   general: "General chat & writing",
@@ -80,8 +90,8 @@ export function recommend(a: Answers, limit = 5): Recommendation[] {
     .map((m) => {
       let quality = 0;
       let weightUsed = 0;
-      for (const [key, w] of Object.entries(weights) as [ScoreKey, number][]) {
-        const v = m.scores[key];
+      for (const [key, w] of Object.entries(weights) as [BenchmarkCategory, number][]) {
+        const v = m.categories[key];
         if (typeof v === "number") {
           quality += v * w;
           weightUsed += w;
@@ -96,7 +106,7 @@ export function recommend(a: Answers, limit = 5): Recommendation[] {
       const speedBonus = a.latency === "fast" ? (m.axes.speed ?? 0) * 0.1 : 0;
 
       const reasons: string[] = [];
-      const head = HEADLINE[a.task](m);
+      const head = headline(a.task, m);
       if (head) reasons.push(head);
       if (m.blendedPrice <= 1) reasons.push(`Cheap to run — $${m.blendedPrice.toFixed(2)}/1M blended`);
       if (m.license === "open") reasons.push(`Open weights (${m.localTier ?? "self-host"})`);
@@ -111,10 +121,26 @@ export function recommend(a: Answers, limit = 5): Recommendation[] {
   return ranked.slice(0, limit);
 }
 
-const HEADLINE: Record<TaskKey, (m: DerivedModel) => string | null> = {
-  coding: (m) => (m.scores.swebench ? `${m.scores.swebench} on SWE-bench Verified` : null),
-  research: (m) => (m.scores.gpqa ? `${m.scores.gpqa} on GPQA Diamond` : null),
-  general: (m) => (m.scores.mmluPro ? `${m.scores.mmluPro} on MMLU-Pro` : null),
-  multimodal: (m) => (m.scores.mmmu ? `${m.scores.mmmu} on MMMU` : null),
-  volume: (m) => (m.scores.mmluPro ? `${m.scores.mmluPro} on MMLU-Pro` : null),
+/**
+ * Benchmarks worth quoting for each task, best evidence first. The headline
+ * falls through to an older benchmark when the model has no newer result, so a
+ * recommendation always says what it is based on.
+ */
+const HEADLINE_BENCHMARKS: Record<TaskKey, BenchmarkId[]> = {
+  agentic: ["gdpval", "terminalBench2", "tauBench", "osworld", "bfclV4", "swebench"],
+  coding: ["swebenchPro", "livecodebench", "terminalBench2", "swebench"],
+  research: ["hle", "arcAgi2", "frontierMath", "gpqa"],
+  general: ["aaIndex", "lmarenaElo", "mmluPro"],
+  multimodal: ["mmmu", "osworld"],
+  volume: ["mmluPro", "livecodebench"],
 };
+
+function headline(task: TaskKey, m: DerivedModel): string | null {
+  for (const id of HEADLINE_BENCHMARKS[task]) {
+    const v = scoreOf(m, id);
+    const b = BENCHMARK_BY_ID.get(id);
+    if (v === null || !b) continue;
+    return b.scale === "pct" ? `${v} on ${b.label}` : `${v} ${b.label}`;
+  }
+  return null;
+}
