@@ -16,10 +16,12 @@ import { seriesColor, seriesDash } from "@/lib/series";
 import type { AxisKey, DerivedModel } from "@/lib/types";
 
 const AXES: AxisKey[] = [
-  "knowledge",
-  "reasoning",
+  "agentic",
   "coding",
+  "reasoning",
   "math",
+  "knowledge",
+  "tooluse",
   "speed",
   "value",
   "context",
@@ -56,8 +58,8 @@ export function RadarPanel({ models, hidden, onToggle, onSolo, onShowAll }: Prop
   return (
     <ChartCard
       title="Capability profile"
-      subtitle="Every axis normalized 0-100 across the whole catalog. Bigger shape, broader model."
-      note={`Speed, value and context are log-scaled before normalizing, so a 10× lead reads as a step rather than swallowing the axis. A missing benchmark leaves a gap in the shape rather than plotting as zero.${
+      subtitle="Six benchmark categories plus speed, value and context, each normalized 0-100. Bigger shape, broader model."
+      note={`A category axis averages the benchmarks behind it after placing each one against its own useful range, so a hard benchmark and an easy one can share an axis. Speed, value and context are log-scaled before normalizing. A category with no published result leaves a gap rather than plotting as zero.${
         dense ? " Above four series the shapes are drawn as outlines so they stay separable." : ""
       }`}
     >

@@ -1,9 +1,19 @@
 "use client";
 
+import { useState } from "react";
 import { ChartCard } from "@/components/ChartCard";
 import { SeriesBadge } from "@/components/SeriesLegend";
-import { formatMonth, formatParams, formatPrice, formatScore, formatTokens } from "@/lib/format";
-import type { DerivedModel } from "@/lib/types";
+import { CATEGORY_LABELS, FLOOR, HEADLINE, scoreOf } from "@/lib/benchmarks";
+import {
+  formatElo,
+  formatHours,
+  formatMonth,
+  formatParams,
+  formatPrice,
+  formatScore,
+  formatTokens,
+} from "@/lib/format";
+import type { Benchmark, DerivedModel } from "@/lib/types";
 
 type Dir = "high" | "low" | null;
 
@@ -14,7 +24,18 @@ interface Row {
   render: (m: DerivedModel) => string;
 }
 
-const ROWS: Row[] = [
+/** Registry order, so adding a benchmark adds its row without editing this file. */
+function benchmarkRow(b: Benchmark): Row {
+  const format = b.scale === "elo" ? formatElo : b.scale === "hours" ? formatHours : formatScore;
+  return {
+    label: b.label,
+    dir: "high",
+    value: (m) => scoreOf(m, b.id),
+    render: (m) => format(scoreOf(m, b.id)),
+  };
+}
+
+const SPEC_ROWS: Row[] = [
   { label: "Provider", dir: null, value: () => null, render: (m) => m.provider },
   { label: "Released", dir: null, value: () => null, render: (m) => formatMonth(m.released) },
   {
@@ -74,43 +95,47 @@ const ROWS: Row[] = [
   },
   { label: "Knowledge cutoff", dir: null, value: () => null, render: (m) => formatMonth(m.cutoff) },
   {
-    label: "MMLU-Pro",
+    label: "Capability index",
     dir: "high",
-    value: (m) => m.scores.mmluPro,
-    render: (m) => formatScore(m.scores.mmluPro),
-  },
-  {
-    label: "GPQA Diamond",
-    dir: "high",
-    value: (m) => m.scores.gpqa,
-    render: (m) => formatScore(m.scores.gpqa),
-  },
-  {
-    label: "SWE-bench Verified",
-    dir: "high",
-    value: (m) => m.scores.swebench,
-    render: (m) => formatScore(m.scores.swebench),
-  },
-  {
-    label: "AIME math",
-    dir: "high",
-    value: (m) => m.scores.aime,
-    render: (m) => formatScore(m.scores.aime),
-  },
-  {
-    label: "MMMU",
-    dir: "high",
-    value: (m) => m.scores.mmmu,
-    render: (m) => formatScore(m.scores.mmmu),
+    value: (m) => m.capability,
+    render: (m) => formatScore(m.capability),
   },
 ];
 
+const CATEGORY_ROWS: Row[] = (Object.keys(CATEGORY_LABELS) as (keyof typeof CATEGORY_LABELS)[])
+  .filter((c) => HEADLINE.concat(FLOOR).some((b) => b.category === c && b.inIndex))
+  .map((c) => ({
+    label: `${CATEGORY_LABELS[c]} score`,
+    dir: "high" as Dir,
+    value: (m: DerivedModel) => m.categories[c] ?? null,
+    render: (m: DerivedModel) => formatScore(m.categories[c] ?? null),
+  }));
+
+const HEADLINE_ROWS: Row[] = HEADLINE.map(benchmarkRow);
+const FLOOR_ROWS: Row[] = FLOOR.map(benchmarkRow);
+
 export function SpecTable({ models }: { models: DerivedModel[] }) {
+  // The retired benchmarks are still the densest data in the catalog, so they
+  // stay one click away rather than being dropped — but they no longer sit
+  // between the reader and the numbers that still separate models.
+  const [showFloor, setShowFloor] = useState(false);
+  const rows = [
+    ...SPEC_ROWS,
+    ...CATEGORY_ROWS,
+    ...HEADLINE_ROWS,
+    ...(showFloor ? FLOOR_ROWS : []),
+  ];
+
   return (
     <ChartCard
       title="Full specification"
       subtitle="A bold value is the best in its row. Rows where every model ties are not marked."
       note="Prices are list rates for the standard tier; batch, cached-input and volume discounts are not reflected."
+      actions={
+        <button type="button" className="chip" onClick={() => setShowFloor((v) => !v)}>
+          {showFloor ? "Hide" : "Show"} retired benchmarks
+        </button>
+      }
     >
       {/* The spec column is pinned: with ten models the value columns scroll
           sideways, and a value is meaningless once its row label has left. */}
@@ -139,7 +164,7 @@ export function SpecTable({ models }: { models: DerivedModel[] }) {
             </tr>
           </thead>
           <tbody>
-            {ROWS.map((row) => {
+            {rows.map((row) => {
               const values = models.map(row.value);
               const numeric = values.filter((v): v is number => typeof v === "number");
               const allTied = new Set(numeric).size <= 1;

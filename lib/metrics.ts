@@ -1,5 +1,6 @@
-import { formatPrice, formatScore, formatTokens } from "./format";
-import type { DerivedModel } from "./types";
+import { BENCHMARKS, CATEGORY_LABELS, INDEX_CATEGORIES, scoreOf } from "./benchmarks";
+import { formatElo, formatHours, formatPrice, formatScore, formatTokens } from "./format";
+import type { Benchmark, DerivedModel } from "./types";
 
 /**
  * A quantity either axis of the cost/capability scatter can plot. Log metrics
@@ -17,6 +18,43 @@ export interface Metric {
   log?: boolean;
   /** Benchmark-style 0-100 scores, so the domain never leaves that range. */
   bounded?: boolean;
+  /** Set on the metrics that stand for "how good is it" — see SCORE_METRICS. */
+  capabilityLike?: boolean;
+}
+
+/** One metric per benchmark in the registry, on whatever scale it reports in. */
+function benchmarkMetric(b: Benchmark): Metric {
+  const common = {
+    key: b.id,
+    label: b.label,
+    value: (m: DerivedModel) => scoreOf(m, b.id),
+  };
+  if (b.scale === "elo") {
+    return { ...common, axisLabel: `${b.label} rating`, format: formatElo };
+  }
+  if (b.scale === "hours") {
+    return { ...common, axisLabel: `${b.label} (hours)`, format: formatHours, log: true };
+  }
+  return {
+    ...common,
+    axisLabel: `${b.label} score`,
+    format: formatScore,
+    bounded: true,
+    capabilityLike: true,
+  };
+}
+
+/** One metric per benchmark category — the aggregate the radar axes plot. */
+function categoryMetric(category: (typeof INDEX_CATEGORIES)[number]): Metric {
+  return {
+    key: `cat:${category}`,
+    label: `${CATEGORY_LABELS[category]} score`,
+    axisLabel: `${CATEGORY_LABELS[category]} score`,
+    value: (m) => m.categories[category] ?? null,
+    format: formatScore,
+    bounded: true,
+    capabilityLike: true,
+  };
 }
 
 export const METRICS: Metric[] = [
@@ -46,52 +84,15 @@ export const METRICS: Metric[] = [
   },
   {
     key: "capability",
-    label: "Mean benchmark score",
-    axisLabel: "Mean benchmark score",
+    label: "Capability index",
+    axisLabel: "Capability index",
     value: (m) => m.capability,
     format: formatScore,
     bounded: true,
+    capabilityLike: true,
   },
-  {
-    key: "mmluPro",
-    label: "MMLU-Pro",
-    axisLabel: "MMLU-Pro score",
-    value: (m) => m.scores.mmluPro,
-    format: formatScore,
-    bounded: true,
-  },
-  {
-    key: "gpqa",
-    label: "GPQA Diamond",
-    axisLabel: "GPQA Diamond score",
-    value: (m) => m.scores.gpqa,
-    format: formatScore,
-    bounded: true,
-  },
-  {
-    key: "swebench",
-    label: "SWE-bench Verified",
-    axisLabel: "SWE-bench Verified score",
-    value: (m) => m.scores.swebench,
-    format: formatScore,
-    bounded: true,
-  },
-  {
-    key: "aime",
-    label: "AIME-class math",
-    axisLabel: "AIME-class math score",
-    value: (m) => m.scores.aime,
-    format: formatScore,
-    bounded: true,
-  },
-  {
-    key: "mmmu",
-    label: "MMMU (multimodal)",
-    axisLabel: "MMMU score",
-    value: (m) => m.scores.mmmu,
-    format: formatScore,
-    bounded: true,
-  },
+  ...INDEX_CATEGORIES.map(categoryMetric),
+  ...BENCHMARKS.map(benchmarkMetric),
   {
     key: "speed",
     label: "Output speed",
@@ -129,11 +130,12 @@ export const METRICS: Metric[] = [
 export const METRIC_BY_KEY = new Map(METRICS.map((m) => [m.key, m]));
 
 /**
- * The 0-100 capability metrics: the mean, plus each benchmark behind it. These
- * are the quantities that can stand in for "how good is it" on an axis, which
- * is what makes them interchangeable in a picker.
+ * The 0-100 capability metrics: the index, each category, and each benchmark
+ * behind them. These are the quantities that can stand in for "how good is it"
+ * on an axis, which is what makes them interchangeable in a picker. Elo and
+ * time horizons are excluded — they are not on this scale and cannot share it.
  */
-export const SCORE_METRICS: Metric[] = METRICS.filter((m) => m.bounded);
+export const SCORE_METRICS: Metric[] = METRICS.filter((m) => m.capabilityLike);
 
 export const DEFAULT_X = "price";
 export const DEFAULT_Y = "capability";

@@ -2,14 +2,339 @@
   "meta": {
     "lastReviewed": "2026-08-04",
     "priceUnit": "USD per 1M tokens",
-    "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. A null score means 'not published or not comparably measured', not zero.",
-    "benchmarks": {
-      "mmluPro": "MMLU-Pro - broad knowledge and reasoning",
-      "gpqa": "GPQA Diamond - graduate-level science reasoning",
-      "swebench": "SWE-bench Verified - real GitHub issue resolution",
-      "aime": "AIME-class competition math",
-      "mmmu": "MMMU - multimodal college-level understanding"
-    }
+    "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
+    "benchmarks": [
+      {
+        "id": "gdpval",
+        "label": "GDPval (GDPval-AA v2)",
+        "short": "GDPval",
+        "blurb": "1,320 paid-work tasks across 44 occupations, blind-graded against human professionals",
+        "category": "agentic",
+        "scale": "elo",
+        "tier": "headline",
+        "range": [
+          1000,
+          1900
+        ],
+        "inIndex": true,
+        "source": "Artificial Analysis GDPval-AA v2, Elo re-baselined so human work scores 1000"
+      },
+      {
+        "id": "terminalBench2",
+        "label": "Terminal-Bench 2.1",
+        "short": "Terminal-B",
+        "blurb": "89 tasks in a real shell — software engineering, sysadmin, data and security",
+        "category": "agentic",
+        "scale": "pct",
+        "tier": "headline",
+        "range": [
+          10,
+          90
+        ],
+        "inIndex": true,
+        "source": "Terminal-Bench 2.1 leaderboard - a harder revision of the 89-task 2.0 set, and not directly comparable to it"
+      },
+      {
+        "id": "osworld",
+        "label": "OSWorld-Verified",
+        "short": "OSWorld",
+        "blurb": "Live desktop control across real applications, graded on the resulting machine state",
+        "category": "agentic",
+        "scale": "pct",
+        "tier": "headline",
+        "range": [
+          5,
+          70
+        ],
+        "inIndex": true,
+        "source": "OSWorld-Verified leaderboard"
+      },
+      {
+        "id": "tauBench",
+        "label": "τ-bench",
+        "short": "τ-bench",
+        "blurb": "Multi-step tool calls against an unstructured knowledge base, retail and airline domains",
+        "category": "agentic",
+        "scale": "pct",
+        "tier": "headline",
+        "range": [
+          20,
+          90
+        ],
+        "inIndex": true,
+        "source": "Sierra τ-bench, mean of the retail and airline pass^1 rates"
+      },
+      {
+        "id": "tau3Banking",
+        "label": "τ³-Banking",
+        "short": "τ³-Bank",
+        "blurb": "The banking domain of τ³, with adversarial users and a policy the agent must hold to",
+        "category": "agentic",
+        "scale": "pct",
+        "tier": "headline",
+        "range": [
+          5,
+          40
+        ],
+        "inIndex": true,
+        "source": "Sierra τ³-bench, banking domain"
+      },
+      {
+        "id": "enterpriseOps",
+        "label": "EnterpriseOps-Gym",
+        "short": "EntOps",
+        "blurb": "Stateful business workflows, graded on the final database state rather than the transcript",
+        "category": "agentic",
+        "scale": "pct",
+        "tier": "headline",
+        "range": [
+          5,
+          65
+        ],
+        "inIndex": true,
+        "source": "EnterpriseOps-Gym public leaderboard"
+      },
+      {
+        "id": "swebenchPro",
+        "label": "SWE-bench Pro",
+        "short": "SWE-Pro",
+        "blurb": "Harder repository issues on a held-out split, so a fix cannot be recalled from training",
+        "category": "coding",
+        "scale": "pct",
+        "tier": "headline",
+        "range": [
+          10,
+          85
+        ],
+        "inIndex": true,
+        "source": "Scale AI SWE-bench Pro, held-out split"
+      },
+      {
+        "id": "livecodebench",
+        "label": "LiveCodeBench",
+        "short": "LiveCode",
+        "blurb": "Competitive-programming problems published after each model's training cutoff",
+        "category": "coding",
+        "scale": "pct",
+        "tier": "headline",
+        "range": [
+          10,
+          95
+        ],
+        "inIndex": true,
+        "source": "LiveCodeBench rolling window, contamination-free split"
+      },
+      {
+        "id": "scicode",
+        "label": "SciCode",
+        "short": "SciCode",
+        "blurb": "Research-grade scientific programming drawn from published computational papers",
+        "category": "coding",
+        "scale": "pct",
+        "tier": "headline",
+        "range": [
+          0,
+          65
+        ],
+        "inIndex": true,
+        "source": "SciCode main problem accuracy"
+      },
+      {
+        "id": "swebench",
+        "label": "SWE-bench Verified",
+        "short": "SWE-b V",
+        "blurb": "Human-validated GitHub issues. Near its ceiling at the frontier — read it as a floor",
+        "category": "coding",
+        "scale": "pct",
+        "tier": "floor",
+        "range": [
+          5,
+          120
+        ],
+        "inIndex": true,
+        "source": "Provider-reported, SWE-bench Verified 500-issue split"
+      },
+      {
+        "id": "hle",
+        "label": "Humanity's Last Exam",
+        "short": "HLE",
+        "blurb": "Expert-written questions across every discipline; top models sit near 35%, humans near 90%",
+        "category": "reasoning",
+        "scale": "pct",
+        "tier": "headline",
+        "range": [
+          2,
+          60
+        ],
+        "inIndex": true,
+        "source": "CAIS / Scale AI Humanity's Last Exam, text-only subset, no tools"
+      },
+      {
+        "id": "arcAgi2",
+        "label": "ARC-AGI-2",
+        "short": "ARC-2",
+        "blurb": "Abstraction puzzles built to resist memorization. Still nowhere near saturated",
+        "category": "reasoning",
+        "scale": "pct",
+        "tier": "headline",
+        "range": [
+          0,
+          50
+        ],
+        "inIndex": true,
+        "source": "ARC Prize semi-private evaluation set"
+      },
+      {
+        "id": "arcAgi3",
+        "label": "ARC-AGI-3",
+        "short": "ARC-3",
+        "blurb": "Interactive games with hidden rules the agent has to infer by playing. LLMs are under 1%",
+        "category": "reasoning",
+        "scale": "pct",
+        "tier": "headline",
+        "range": [
+          0,
+          20
+        ],
+        "inIndex": true,
+        "source": "ARC Prize interactive-reasoning preview"
+      },
+      {
+        "id": "gpqa",
+        "label": "GPQA Diamond",
+        "short": "GPQA",
+        "blurb": "Graduate-level science questions. Nearing its ceiling — a floor rather than a ranking",
+        "category": "reasoning",
+        "scale": "pct",
+        "tier": "floor",
+        "range": [
+          20,
+          110
+        ],
+        "inIndex": true,
+        "source": "Provider-reported, GPQA Diamond 198-question split"
+      },
+      {
+        "id": "frontierMath",
+        "label": "FrontierMath",
+        "short": "FrontierM",
+        "blurb": "Unpublished research-level problems, held back specifically to resist contamination",
+        "category": "math",
+        "scale": "pct",
+        "tier": "headline",
+        "range": [
+          0,
+          50
+        ],
+        "inIndex": true,
+        "source": "Epoch AI FrontierMath, tiers 1-3"
+      },
+      {
+        "id": "aime",
+        "label": "AIME-class math",
+        "short": "AIME",
+        "blurb": "Competition math. Saturated at the frontier once tools are allowed",
+        "category": "math",
+        "scale": "pct",
+        "tier": "floor",
+        "range": [
+          5,
+          120
+        ],
+        "inIndex": true,
+        "source": "Provider-reported, AIME-class competition sets"
+      },
+      {
+        "id": "mmluPro",
+        "label": "MMLU-Pro",
+        "short": "MMLU-Pro",
+        "blurb": "Broad multiple-choice knowledge. Retired as a differentiator; useful as a floor",
+        "category": "knowledge",
+        "scale": "pct",
+        "tier": "floor",
+        "range": [
+          30,
+          105
+        ],
+        "inIndex": true,
+        "source": "Provider-reported and TIGER-Lab MMLU-Pro leaderboard"
+      },
+      {
+        "id": "bfclV4",
+        "label": "BFCL v4",
+        "short": "BFCL v4",
+        "blurb": "Function calling scored end-to-end, including the agentic and multi-turn tracks",
+        "category": "tooluse",
+        "scale": "pct",
+        "tier": "headline",
+        "range": [
+          20,
+          90
+        ],
+        "inIndex": true,
+        "source": "Berkeley Function-Calling Leaderboard v4, overall accuracy"
+      },
+      {
+        "id": "mmmu",
+        "label": "MMMU",
+        "short": "MMMU",
+        "blurb": "College-level understanding across images, diagrams and documents",
+        "category": "multimodal",
+        "scale": "pct",
+        "tier": "floor",
+        "range": [
+          25,
+          100
+        ],
+        "inIndex": true,
+        "source": "Provider-reported, MMMU validation split"
+      },
+      {
+        "id": "aaIndex",
+        "label": "Artificial Analysis Intelligence Index v4.1",
+        "short": "AA Index",
+        "blurb": "Weighted composite — agents 34%, coding 24%, scientific reasoning 24%, general 18%",
+        "category": "composite",
+        "scale": "pct",
+        "tier": "headline",
+        "range": [
+          10,
+          70
+        ],
+        "inIndex": false,
+        "source": "Artificial Analysis Intelligence Index v4.1"
+      },
+      {
+        "id": "metrHorizon",
+        "label": "METR time horizon",
+        "short": "METR",
+        "blurb": "The task length, in human-hours, a model completes with 50% reliability",
+        "category": "scale",
+        "scale": "hours",
+        "tier": "headline",
+        "range": [
+          0.02,
+          40
+        ],
+        "inIndex": false,
+        "source": "METR time-horizon evaluations, 50% success threshold"
+      },
+      {
+        "id": "lmarenaElo",
+        "label": "LMArena Elo",
+        "short": "Arena",
+        "blurb": "Human preference in blind pairwise votes. Measures what people like, not what is correct",
+        "category": "scale",
+        "scale": "elo",
+        "tier": "headline",
+        "range": [
+          1000,
+          1600
+        ],
+        "inIndex": false,
+        "source": "LMArena text leaderboard, overall Elo"
+      }
+    ]
   },
   "models": [
     {
@@ -34,13 +359,7 @@
       },
       "cutoff": "2026-05",
       "speed": 85,
-      "scores": {
-        "mmluPro": null,
-        "gpqa": null,
-        "swebench": null,
-        "aime": null,
-        "mmmu": null
-      },
+      "scores": {},
       "tags": [
         "frontier",
         "multimodal",
@@ -76,7 +395,8 @@
         "gpqa": 93,
         "swebench": 73,
         "aime": 93,
-        "mmmu": 65
+        "mmmu": 65,
+        "aaIndex": 50
       },
       "tags": [
         "fast",
@@ -117,13 +437,7 @@
       },
       "cutoff": "2025-11",
       "speed": 140,
-      "scores": {
-        "mmluPro": null,
-        "gpqa": null,
-        "swebench": null,
-        "aime": null,
-        "mmmu": null
-      },
+      "scores": {},
       "tags": [
         "open-weights",
         "self-host",
@@ -168,11 +482,7 @@
       "cutoff": "2025-11",
       "speed": 180,
       "scores": {
-        "mmluPro": null,
-        "gpqa": null,
-        "swebench": 71,
-        "aime": null,
-        "mmmu": null
+        "swebench": 71
       },
       "tags": [
         "open-weights",
@@ -221,8 +531,7 @@
         "mmluPro": 86,
         "gpqa": 91,
         "swebench": 74,
-        "aime": 97,
-        "mmmu": null
+        "aime": 97
       },
       "tags": [
         "open-weights",
@@ -259,7 +568,12 @@
         "gpqa": 84,
         "swebench": 80,
         "aime": 94,
-        "mmmu": 80
+        "mmmu": 80,
+        "aaIndex": 61,
+        "gdpval": 1858,
+        "terminalBench2": 84.6,
+        "hle": 52.6,
+        "swebenchPro": 79.2
       },
       "tags": [
         "frontier",
@@ -294,7 +608,10 @@
         "gpqa": 81,
         "swebench": 77,
         "aime": 91,
-        "mmmu": 77
+        "mmmu": 77,
+        "aaIndex": 53,
+        "gdpval": 1607,
+        "terminalBench2": 74.5
       },
       "tags": [
         "workhorse",
@@ -328,7 +645,14 @@
         "gpqa": 93,
         "swebench": 95,
         "aime": 90,
-        "mmmu": 89
+        "mmmu": 89,
+        "aaIndex": 60,
+        "gdpval": 1760,
+        "terminalBench2": 80.5,
+        "hle": 53.3,
+        "scicode": 60.2,
+        "swebenchPro": 80.3,
+        "lmarenaElo": 1509
       },
       "tags": [
         "frontier",
@@ -372,13 +696,7 @@
       },
       "cutoff": "2026-04",
       "speed": 190,
-      "scores": {
-        "mmluPro": null,
-        "gpqa": null,
-        "swebench": null,
-        "aime": null,
-        "mmmu": null
-      },
+      "scores": {},
       "tags": [
         "open-weights",
         "cheap",
@@ -423,9 +741,11 @@
       "scores": {
         "mmluPro": 78,
         "gpqa": 94,
-        "swebench": null,
-        "aime": null,
-        "mmmu": null
+        "aaIndex": 57,
+        "gdpval": 1684,
+        "terminalBench2": 80.9,
+        "scicode": 58.7,
+        "tau3Banking": 33.4
       },
       "tags": [
         "open-weights",
@@ -457,11 +777,12 @@
       "cutoff": "2026-02",
       "speed": 55,
       "scores": {
-        "mmluPro": null,
         "gpqa": 94,
-        "swebench": null,
-        "aime": null,
-        "mmmu": null
+        "aaIndex": 59,
+        "gdpval": 1743,
+        "terminalBench2": 85.8,
+        "hle": 47.2,
+        "tau3Banking": 33
       },
       "tags": [
         "frontier",
@@ -492,11 +813,7 @@
       "cutoff": "2026-02",
       "speed": 90,
       "scores": {
-        "mmluPro": null,
-        "gpqa": null,
-        "swebench": null,
-        "aime": null,
-        "mmmu": null
+        "gdpval": 1593
       },
       "tags": [
         "workhorse",
@@ -526,11 +843,10 @@
       "cutoff": "2026-02",
       "speed": 180,
       "scores": {
-        "mmluPro": null,
-        "gpqa": null,
         "swebench": 93,
-        "aime": null,
-        "mmmu": null
+        "aaIndex": 51,
+        "gdpval": 1592,
+        "terminalBench2": 79
       },
       "tags": [
         "cheap",
@@ -575,8 +891,7 @@
         "mmluPro": 88,
         "gpqa": 90,
         "swebench": 81,
-        "aime": null,
-        "mmmu": null
+        "aaIndex": 44
       },
       "tags": [
         "open-weights",
@@ -606,13 +921,7 @@
       },
       "cutoff": "2026-05",
       "speed": 55,
-      "scores": {
-        "mmluPro": null,
-        "gpqa": null,
-        "swebench": null,
-        "aime": null,
-        "mmmu": null
-      },
+      "scores": {},
       "tags": [
         "agentic-coding",
         "multimodal"
@@ -657,8 +966,7 @@
         "mmluPro": 74,
         "gpqa": 87,
         "swebench": 78,
-        "aime": 97,
-        "mmmu": null
+        "aime": 97
       },
       "tags": [
         "open-weights",
@@ -695,7 +1003,9 @@
         "gpqa": 94,
         "swebench": 81,
         "aime": 91,
-        "mmmu": null
+        "aaIndex": 46.5,
+        "hle": 46.4,
+        "scicode": 58.9
       },
       "tags": [
         "frontier",
@@ -726,11 +1036,9 @@
       "cutoff": "2025-09",
       "speed": 75,
       "scores": {
-        "mmluPro": null,
         "gpqa": 93,
-        "swebench": null,
-        "aime": null,
-        "mmmu": null
+        "aaIndex": 54,
+        "gdpval": 1535
       },
       "tags": [
         "agentic-coding",
@@ -1113,8 +1421,7 @@
         "mmluPro": 76,
         "gpqa": 72,
         "swebench": 55,
-        "aime": 88,
-        "mmmu": null
+        "aime": 88
       },
       "tags": [
         "open-weights",
@@ -1159,8 +1466,7 @@
         "mmluPro": 66,
         "gpqa": 62,
         "swebench": 40,
-        "aime": 80,
-        "mmmu": null
+        "aime": 80
       },
       "tags": [
         "open-weights",
@@ -1196,7 +1502,8 @@
         "gpqa": 88,
         "swebench": 76,
         "aime": 95,
-        "mmmu": 81
+        "mmmu": 81,
+        "livecodebench": 91.7
       },
       "tags": [
         "frontier",
@@ -1233,7 +1540,8 @@
         "gpqa": 78,
         "swebench": 62,
         "aime": 90,
-        "mmmu": 76
+        "mmmu": 76,
+        "livecodebench": 90.8
       },
       "tags": [
         "fast",
@@ -1529,8 +1837,6 @@
       "scores": {
         "mmluPro": 40,
         "gpqa": 30,
-        "swebench": null,
-        "aime": null,
         "mmmu": 45
       },
       "tags": [
@@ -1576,10 +1882,7 @@
       "speed": 300,
       "scores": {
         "mmluPro": 20,
-        "gpqa": 22,
-        "swebench": null,
-        "aime": null,
-        "mmmu": null
+        "gpqa": 22
       },
       "tags": [
         "open-weights",
@@ -1718,8 +2021,7 @@
         "mmluPro": 63,
         "gpqa": 48,
         "swebench": 20,
-        "aime": 28,
-        "mmmu": null
+        "aime": 28
       },
       "tags": [
         "open-weights",
@@ -1763,8 +2065,7 @@
         "mmluPro": 44,
         "gpqa": 28,
         "swebench": 4,
-        "aime": 10,
-        "mmmu": null
+        "aime": 10
       },
       "tags": [
         "open-weights",
@@ -1809,8 +2110,6 @@
       "scores": {
         "mmluPro": 40,
         "gpqa": 33,
-        "swebench": null,
-        "aime": null,
         "mmmu": 50
       },
       "tags": [
@@ -1854,10 +2153,7 @@
       "speed": 250,
       "scores": {
         "mmluPro": 33,
-        "gpqa": 28,
-        "swebench": null,
-        "aime": null,
-        "mmmu": null
+        "gpqa": 28
       },
       "tags": [
         "open-weights",
@@ -1970,8 +2266,7 @@
         "mmluPro": 72,
         "gpqa": 62,
         "swebench": 40,
-        "aime": 73,
-        "mmmu": null
+        "aime": 73
       },
       "tags": [
         "reasoning",
@@ -2046,11 +2341,7 @@
       "cutoff": "2024-12",
       "speed": 130,
       "scores": {
-        "mmluPro": null,
-        "gpqa": null,
-        "swebench": 62,
-        "aime": null,
-        "mmmu": null
+        "swebench": 62
       },
       "tags": [
         "coding",
@@ -2094,8 +2385,7 @@
         "mmluPro": 45,
         "gpqa": 29,
         "swebench": 4,
-        "aime": 10,
-        "mmmu": null
+        "aime": 10
       },
       "tags": [
         "open-weights",
@@ -2140,7 +2430,6 @@
       "scores": {
         "mmluPro": 66,
         "gpqa": 62,
-        "swebench": null,
         "aime": 86,
         "mmmu": 62
       },
@@ -2187,9 +2476,7 @@
       "scores": {
         "mmluPro": 58,
         "gpqa": 42,
-        "swebench": 53,
-        "aime": null,
-        "mmmu": null
+        "swebench": 53
       },
       "tags": [
         "open-weights",
@@ -2235,8 +2522,6 @@
       "scores": {
         "mmluPro": 45,
         "gpqa": 35,
-        "swebench": null,
-        "aime": null,
         "mmmu": 52
       },
       "tags": [
@@ -2281,10 +2566,7 @@
       "speed": 150,
       "scores": {
         "mmluPro": 44,
-        "gpqa": 32,
-        "swebench": null,
-        "aime": null,
-        "mmmu": null
+        "gpqa": 32
       },
       "tags": [
         "open-weights",
@@ -2330,7 +2612,7 @@
         "gpqa": 76,
         "swebench": 66,
         "aime": 89,
-        "mmmu": null
+        "livecodebench": 89.6
       },
       "tags": [
         "open-weights",
@@ -2375,8 +2657,7 @@
         "mmluPro": 81,
         "gpqa": 71,
         "swebench": 57,
-        "aime": 87,
-        "mmmu": null
+        "aime": 87
       },
       "tags": [
         "open-weights",
@@ -2420,8 +2701,7 @@
         "mmluPro": 80,
         "gpqa": 74,
         "swebench": 62,
-        "aime": 88,
-        "mmmu": null
+        "aime": 88
       },
       "tags": [
         "open-weights",
@@ -2465,8 +2745,7 @@
         "mmluPro": 68,
         "gpqa": 65,
         "swebench": 20,
-        "aime": 70,
-        "mmmu": null
+        "aime": 70
       },
       "tags": [
         "open-weights",
@@ -2512,8 +2791,7 @@
         "mmluPro": 80,
         "gpqa": 71,
         "swebench": 55,
-        "aime": 87,
-        "mmmu": null
+        "aime": 87
       },
       "tags": [
         "open-weights",
@@ -2558,8 +2836,7 @@
         "mmluPro": 76,
         "gpqa": 63,
         "swebench": 68,
-        "aime": 60,
-        "mmmu": null
+        "aime": 60
       },
       "tags": [
         "open-weights",
@@ -2604,8 +2881,7 @@
         "mmluPro": 70,
         "gpqa": 56,
         "swebench": 30,
-        "aime": 72,
-        "mmmu": null
+        "aime": 72
       },
       "tags": [
         "open-weights",
@@ -2650,8 +2926,7 @@
         "mmluPro": 56,
         "gpqa": 42,
         "swebench": 15,
-        "aime": 55,
-        "mmmu": null
+        "aime": 55
       },
       "tags": [
         "open-weights",
@@ -2744,8 +3019,7 @@
         "mmluPro": 80,
         "gpqa": 72,
         "swebench": 40,
-        "aime": 87,
-        "mmmu": null
+        "aime": 87
       },
       "tags": [
         "open-weights",
@@ -2791,8 +3065,7 @@
         "mmluPro": 78,
         "gpqa": 68,
         "swebench": 35,
-        "aime": 85,
-        "mmmu": null
+        "aime": 85
       },
       "tags": [
         "open-weights",
@@ -2837,8 +3110,7 @@
         "mmluPro": 71,
         "gpqa": 60,
         "swebench": 25,
-        "aime": 79,
-        "mmmu": null
+        "aime": 79
       },
       "tags": [
         "open-weights",
@@ -2882,8 +3154,7 @@
         "mmluPro": 65,
         "gpqa": 52,
         "swebench": 15,
-        "aime": 70,
-        "mmmu": null
+        "aime": 70
       },
       "tags": [
         "open-weights",
@@ -2976,9 +3247,7 @@
       "scores": {
         "mmluPro": 55,
         "gpqa": 40,
-        "swebench": 31,
-        "aime": null,
-        "mmmu": null
+        "swebench": 31
       },
       "tags": [
         "open-weights",
@@ -3012,8 +3281,7 @@
         "mmluPro": 86,
         "gpqa": 87,
         "swebench": 72,
-        "aime": 93,
-        "mmmu": null
+        "aime": 93
       },
       "tags": [
         "frontier",
@@ -3046,8 +3314,7 @@
         "mmluPro": 82,
         "gpqa": 80,
         "swebench": 60,
-        "aime": 90,
-        "mmmu": null
+        "aime": 90
       },
       "tags": [
         "fast",
@@ -3080,8 +3347,7 @@
         "mmluPro": 72,
         "gpqa": 66,
         "swebench": 40,
-        "aime": 80,
-        "mmmu": null
+        "aime": 80
       },
       "tags": [
         "cheap",
@@ -3125,8 +3391,7 @@
         "mmluPro": 83,
         "gpqa": 78,
         "swebench": 71,
-        "aime": 90,
-        "mmmu": null
+        "aime": 90
       },
       "tags": [
         "open-weights",
@@ -3171,8 +3436,7 @@
         "mmluPro": 84,
         "gpqa": 78,
         "swebench": 71,
-        "aime": 94,
-        "mmmu": null
+        "aime": 94
       },
       "tags": [
         "open-weights",
@@ -3218,8 +3482,7 @@
         "mmluPro": 79,
         "gpqa": 72,
         "swebench": 68,
-        "aime": 85,
-        "mmmu": null
+        "aime": 85
       },
       "tags": [
         "open-weights",
@@ -3264,8 +3527,7 @@
         "mmluPro": 78,
         "gpqa": 70,
         "swebench": 57,
-        "aime": 85,
-        "mmmu": null
+        "aime": 85
       },
       "tags": [
         "open-weights",
@@ -3311,8 +3573,7 @@
         "mmluPro": 78,
         "gpqa": 70,
         "swebench": 65,
-        "aime": 84,
-        "mmmu": null
+        "aime": 84
       },
       "tags": [
         "open-weights",
@@ -3357,8 +3618,7 @@
         "mmluPro": 65,
         "gpqa": 50,
         "swebench": 22,
-        "aime": 30,
-        "mmmu": null
+        "aime": 30
       },
       "tags": [
         "open-weights",
@@ -3403,8 +3663,7 @@
         "mmluPro": 72,
         "gpqa": 62,
         "swebench": 30,
-        "aime": 80,
-        "mmmu": null
+        "aime": 80
       },
       "tags": [
         "open-weights",
@@ -3447,10 +3706,7 @@
       "speed": 200,
       "scores": {
         "mmluPro": 40,
-        "gpqa": 30,
-        "swebench": null,
-        "aime": null,
-        "mmmu": null
+        "gpqa": 30
       },
       "tags": [
         "open-weights",
@@ -3520,8 +3776,6 @@
       "scores": {
         "mmluPro": 45,
         "gpqa": 42,
-        "swebench": null,
-        "aime": null,
         "mmmu": 52
       },
       "tags": [
@@ -3553,10 +3807,7 @@
       "speed": 250,
       "scores": {
         "mmluPro": 40,
-        "gpqa": 35,
-        "swebench": null,
-        "aime": null,
-        "mmmu": null
+        "gpqa": 35
       },
       "tags": [
         "cheap",
@@ -3601,8 +3852,7 @@
         "mmluPro": 56,
         "gpqa": 42,
         "swebench": 12,
-        "aime": 25,
-        "mmmu": null
+        "aime": 25
       },
       "tags": [
         "open-weights",
@@ -3647,8 +3897,7 @@
         "mmluPro": 45,
         "gpqa": 30,
         "swebench": 6,
-        "aime": 12,
-        "mmmu": null
+        "aime": 12
       },
       "tags": [
         "open-weights",
@@ -3692,9 +3941,7 @@
       "scores": {
         "mmluPro": 62,
         "gpqa": 68,
-        "swebench": null,
-        "aime": 81,
-        "mmmu": null
+        "aime": 81
       },
       "tags": [
         "open-weights",
@@ -3740,8 +3987,7 @@
         "mmluPro": 70,
         "gpqa": 64,
         "swebench": 25,
-        "aime": 82,
-        "mmmu": null
+        "aime": 82
       },
       "tags": [
         "open-weights",
@@ -3786,9 +4032,7 @@
       "scores": {
         "mmluPro": 62,
         "gpqa": 55,
-        "swebench": null,
-        "aime": 72,
-        "mmmu": null
+        "aime": 72
       },
       "tags": [
         "open-weights",
@@ -3833,9 +4077,7 @@
       "scores": {
         "mmluPro": 60,
         "gpqa": 50,
-        "swebench": null,
-        "aime": 68,
-        "mmmu": null
+        "aime": 68
       },
       "tags": [
         "open-weights",
@@ -3880,9 +4122,7 @@
       "scores": {
         "mmluPro": 48,
         "gpqa": 38,
-        "swebench": null,
-        "aime": 52,
-        "mmmu": null
+        "aime": 52
       },
       "tags": [
         "open-weights",
@@ -3927,9 +4167,7 @@
       "scores": {
         "mmluPro": 55,
         "gpqa": 42,
-        "swebench": 20,
-        "aime": null,
-        "mmmu": null
+        "swebench": 20
       },
       "tags": [
         "open-weights",
@@ -3973,10 +4211,7 @@
       "speed": 260,
       "scores": {
         "mmluPro": 38,
-        "gpqa": 28,
-        "swebench": null,
-        "aime": null,
-        "mmmu": null
+        "gpqa": 28
       },
       "tags": [
         "open-weights",
@@ -4021,9 +4256,7 @@
       "scores": {
         "mmluPro": 65,
         "gpqa": 60,
-        "swebench": null,
-        "aime": 78,
-        "mmmu": null
+        "aime": 78
       },
       "tags": [
         "open-weights",
@@ -4066,10 +4299,7 @@
       "speed": 80,
       "scores": {
         "mmluPro": 72,
-        "gpqa": 62,
-        "swebench": null,
-        "aime": null,
-        "mmmu": null
+        "gpqa": 62
       },
       "tags": [
         "open-weights",
@@ -4113,8 +4343,7 @@
         "mmluPro": 68,
         "gpqa": 62,
         "swebench": 56,
-        "aime": 80,
-        "mmmu": null
+        "aime": 80
       },
       "tags": [
         "open-weights",
@@ -4158,10 +4387,7 @@
       "speed": 150,
       "scores": {
         "mmluPro": 42,
-        "gpqa": 33,
-        "swebench": null,
-        "aime": null,
-        "mmmu": null
+        "gpqa": 33
       },
       "tags": [
         "open-weights",
@@ -4203,10 +4429,7 @@
       "speed": 260,
       "scores": {
         "mmluPro": 38,
-        "gpqa": 30,
-        "swebench": null,
-        "aime": null,
-        "mmmu": null
+        "gpqa": 30
       },
       "tags": [
         "open-weights",
@@ -4250,10 +4473,7 @@
       "speed": 150,
       "scores": {
         "mmluPro": 45,
-        "gpqa": 35,
-        "swebench": null,
-        "aime": null,
-        "mmmu": null
+        "gpqa": 35
       },
       "tags": [
         "open-weights",
@@ -4296,10 +4516,7 @@
       "speed": 80,
       "scores": {
         "mmluPro": 45,
-        "gpqa": 33,
-        "swebench": null,
-        "aime": null,
-        "mmmu": null
+        "gpqa": 33
       },
       "tags": [
         "open-weights",

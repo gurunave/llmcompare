@@ -1,25 +1,52 @@
 import catalogJson from "@/data/models.json";
-import type { AxisKey, Catalog, DerivedModel, Model, ScoreKey } from "./types";
+import {
+  BENCHMARKS,
+  CATEGORY_LABELS,
+  benchmarksIn,
+  capabilityIndex,
+  categoryScores,
+} from "./benchmarks";
+import type { AxisKey, BenchmarkCategory, Catalog, DerivedModel, Model } from "./types";
 
 export const catalog = catalogJson as unknown as Catalog;
 
-export const CAPABILITY_KEYS: ScoreKey[] = ["mmluPro", "gpqa", "swebench", "aime"];
+/** The radar axes that are a benchmark category rather than a derived quantity. */
+const CATEGORY_AXES: Record<string, BenchmarkCategory> = {
+  agentic: "agentic",
+  coding: "coding",
+  reasoning: "reasoning",
+  math: "math",
+  knowledge: "knowledge",
+  tooluse: "tooluse",
+};
 
 export const AXIS_LABELS: Record<AxisKey, string> = {
-  knowledge: "Knowledge",
-  reasoning: "Reasoning",
-  coding: "Coding",
-  math: "Math",
+  agentic: CATEGORY_LABELS.agentic,
+  coding: CATEGORY_LABELS.coding,
+  reasoning: CATEGORY_LABELS.reasoning,
+  math: CATEGORY_LABELS.math,
+  knowledge: CATEGORY_LABELS.knowledge,
+  tooluse: CATEGORY_LABELS.tooluse,
   speed: "Speed",
   value: "Value",
   context: "Context",
 };
 
+/** Each category axis names the benchmarks behind it, so the shape is auditable. */
+function axisHelp(category: BenchmarkCategory): string {
+  return benchmarksIn(category)
+    .filter((b) => b.inIndex)
+    .map((b) => b.short)
+    .join(", ");
+}
+
 export const AXIS_HELP: Record<AxisKey, string> = {
-  knowledge: "MMLU-Pro",
-  reasoning: "GPQA Diamond",
-  coding: "SWE-bench Verified",
-  math: "AIME-class math",
+  agentic: axisHelp("agentic"),
+  coding: axisHelp("coding"),
+  reasoning: axisHelp("reasoning"),
+  math: axisHelp("math"),
+  knowledge: axisHelp("knowledge"),
+  tooluse: axisHelp("tooluse"),
   speed: "Output tokens/sec, log-scaled",
   value: "Capability per blended dollar, log-scaled",
   context: "Context window, log-scaled",
@@ -30,13 +57,14 @@ export function blendedPrice(m: Model): number {
   return (m.pricing.input * 3 + m.pricing.output) / 4;
 }
 
-/** Mean of the capability benchmarks a model actually publishes. */
+/**
+ * The capability index: each published score placed on a common scale against
+ * its own benchmark's useful span, averaged within its category, then averaged
+ * across categories. Deliberately not a mean of raw scores — those are not
+ * commensurable once a 35%-at-the-frontier benchmark sits next to a 90% one.
+ */
 export function capabilityOf(m: Model): number | null {
-  const vals = CAPABILITY_KEYS.map((k) => m.scores[k]).filter(
-    (v): v is number => typeof v === "number"
-  );
-  if (!vals.length) return null;
-  return vals.reduce((a, b) => a + b, 0) / vals.length;
+  return capabilityIndex(categoryScores(m));
 }
 
 function logNormalize(value: number, min: number, max: number): number {
@@ -49,8 +77,10 @@ function derive(models: Model[]): DerivedModel[] {
   const speeds = models.map((m) => m.speed);
   const contexts = models.map((m) => m.context);
 
-  const valueRaw = models.map((m) => {
-    const cap = capabilityOf(m);
+  const cats = models.map(categoryScores);
+
+  const valueRaw = models.map((m, i) => {
+    const cap = capabilityIndex(cats[i]);
     return cap === null ? null : cap / Math.max(blendedPrice(m), 0.01);
   });
   const valueVals = valueRaw.filter((v): v is number => v !== null);
@@ -63,19 +93,22 @@ function derive(models: Model[]): DerivedModel[] {
 
   return models.map((m, i) => {
     const raw = valueRaw[i];
+    const categories = cats[i];
+    const axes = {
+      speed: logNormalize(m.speed, bounds.speed[0], bounds.speed[1]),
+      context: logNormalize(m.context, bounds.context[0], bounds.context[1]),
+      value: raw === null ? null : logNormalize(raw, bounds.value[0], bounds.value[1]),
+    } as Record<AxisKey, number | null>;
+    for (const [axis, category] of Object.entries(CATEGORY_AXES)) {
+      axes[axis as AxisKey] = categories[category] ?? null;
+    }
+
     return {
       ...m,
-      capability: capabilityOf(m),
+      capability: capabilityIndex(categories),
+      categories,
       blendedPrice: blendedPrice(m),
-      axes: {
-        knowledge: m.scores.mmluPro,
-        reasoning: m.scores.gpqa,
-        coding: m.scores.swebench,
-        math: m.scores.aime,
-        speed: logNormalize(m.speed, bounds.speed[0], bounds.speed[1]),
-        context: logNormalize(m.context, bounds.context[0], bounds.context[1]),
-        value: raw === null ? null : logNormalize(raw, bounds.value[0], bounds.value[1]),
-      },
+      axes,
     };
   });
 }
