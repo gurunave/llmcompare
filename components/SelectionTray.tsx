@@ -7,7 +7,11 @@ import { SeriesBadge } from "@/components/SeriesLegend";
 import { MAX_SELECTION } from "@/lib/models";
 import { useSelection, withSelection } from "@/lib/selection";
 
-export function SelectionTray() {
+/**
+ * `heading` is off when the tray sits in the top bar's popover, where the
+ * button that opened it already carries the same count.
+ */
+export function SelectionTray({ heading = true }: { heading?: boolean }) {
   const { ids, models, hidden, toggle, clear, toggleVisible, showAll, move } = useSelection();
   const pathname = usePathname();
   const [copied, setCopied] = useState(false);
@@ -26,9 +30,11 @@ export function SelectionTray() {
 
   return (
     <section aria-label="Selected models">
-      <h2 className="mb-2 text-xs font-medium uppercase tracking-wide text-ink-muted">
-        Selection · {models.length}/{MAX_SELECTION}
-      </h2>
+      {heading && (
+        <h2 className="mb-2 text-xs font-medium uppercase tracking-wide text-ink-muted">
+          Selection · {models.length}/{MAX_SELECTION}
+        </h2>
+      )}
 
       {models.length === 0 ? (
         <p className="text-sm text-ink-secondary">

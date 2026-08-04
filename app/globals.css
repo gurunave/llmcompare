@@ -93,6 +93,31 @@ body {
   overflow-x: hidden;
 }
 
+/**
+ * Navigation layout — a side rail or a top bar, chosen by the reader and stamped
+ * on the root before first paint. Both chromes are in the markup and CSS hides
+ * one, so the choice survives a reload without a flash and without React having
+ * to know about it during hydration.
+ *
+ * Below lg the rail is already a drawer behind a button, which is what a narrow
+ * screen wants either way, so the preference only takes effect on wide ones.
+ * These rules sit outside @layer deliberately: unlayered declarations outrank
+ * every Tailwind layer, so `display` here beats the `lg:flex` on the same node.
+ */
+@media (min-width: 1024px) {
+  :root[data-nav="top"] .nav-rail {
+    display: none;
+  }
+
+  :root[data-nav="top"] .shell {
+    display: block;
+  }
+
+  :root[data-nav="rail"] .nav-top {
+    display: none;
+  }
+}
+
 /* One visible focus treatment everywhere, in the accent hue. */
 :where(a, button, input, select, summary, [tabindex]):focus-visible {
   outline: 2px solid var(--accent);

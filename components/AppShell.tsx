@@ -3,6 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useState, type CSSProperties, type ReactNode } from "react";
+import { NavLayoutToggle } from "@/components/NavLayoutToggle";
+import { SelectionPopover } from "@/components/SelectionPopover";
 import { SelectionTray } from "@/components/SelectionTray";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { MODELS } from "@/lib/models";
@@ -48,7 +50,30 @@ export function AppShell({ children }: { children: ReactNode }) {
   }, [pathname]);
 
   return (
-    <div className="min-h-screen lg:flex">
+    // Both chromes are rendered and CSS shows one, keyed off `data-nav` on the
+    // root. The alternative — branching in React — cannot know the reader's
+    // choice until hydration, which is a visible jump on every load.
+    <div className="shell min-h-screen lg:flex">
+      {/* Top-bar layout. Hidden below lg, where the drawer is the better answer
+          regardless of which layout was chosen. */}
+      <header className="nav-top sticky top-0 z-30 hidden items-center gap-4 border-b border-hairline bg-surface/90 px-4 py-2.5 backdrop-blur lg:flex">
+        <Link href={withSelection("/", ids)} className="shrink-0">
+          <span className="block bg-gradient-to-r from-series-1 via-series-3 to-series-4 bg-clip-text font-bold tracking-tight text-transparent">
+            LLM Compare
+          </span>
+        </Link>
+
+        <nav aria-label="Sections">
+          <NavList pathname={pathname} ids={ids} row />
+        </nav>
+
+        <div className="ml-auto flex shrink-0 items-center gap-1.5">
+          <SelectionPopover />
+          <NavLayoutToggle />
+          <ThemeToggle />
+        </div>
+      </header>
+
       {/* Mobile header — the rail collapses behind this button below lg. */}
       <header className="sticky top-0 z-30 flex items-center gap-3 border-b border-hairline bg-plane/90 px-4 py-3 backdrop-blur lg:hidden">
         <button
@@ -80,7 +105,7 @@ export function AppShell({ children }: { children: ReactNode }) {
       )}
 
       <aside
-        className={`fixed inset-y-0 left-0 z-50 w-72 shrink-0 overflow-y-auto border-r border-hairline bg-surface p-4 transition-transform lg:sticky lg:top-0 lg:z-auto lg:h-screen lg:translate-x-0 ${
+        className={`nav-rail fixed inset-y-0 left-0 z-50 w-72 shrink-0 overflow-y-auto border-r border-hairline bg-surface p-4 transition-transform lg:sticky lg:top-0 lg:z-auto lg:h-screen lg:translate-x-0 ${
           drawerOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
@@ -93,7 +118,10 @@ export function AppShell({ children }: { children: ReactNode }) {
               {MODELS.length} models · {new Set(MODELS.map((m) => m.provider)).size} providers
             </span>
           </Link>
-          <ThemeToggle />
+          <div className="flex shrink-0 items-center gap-1">
+            <NavLayoutToggle />
+            <ThemeToggle />
+          </div>
         </div>
 
         <div className="mb-4 flex items-center justify-between lg:hidden">
@@ -108,34 +136,7 @@ export function AppShell({ children }: { children: ReactNode }) {
         </div>
 
         <nav aria-label="Sections">
-          <ul className="space-y-0.5">
-            {NAV.map((item) => {
-              const active = item.match(pathname);
-              return (
-                <li key={item.href}>
-                  <Link
-                    href={withSelection(item.href, ids)}
-                    aria-current={active ? "page" : undefined}
-                    style={{ "--tint": item.tint } as CSSProperties}
-                    className={`flex items-center gap-2.5 rounded-lg px-3 py-2 text-sm transition-colors ${
-                      active
-                        ? "bg-[color-mix(in_srgb,var(--tint)_14%,transparent)] font-semibold text-ink"
-                        : "text-ink-secondary hover:bg-[var(--wash)] hover:text-ink"
-                    }`}
-                  >
-                    <span
-                      aria-hidden
-                      className={`h-2 w-2 shrink-0 rounded-full transition-opacity ${
-                        active ? "opacity-100" : "opacity-40"
-                      }`}
-                      style={{ background: "var(--tint)" }}
-                    />
-                    {item.label}
-                  </Link>
-                </li>
-              );
-            })}
-          </ul>
+          <NavList pathname={pathname} ids={ids} />
         </nav>
 
         <div className="mt-6 border-t border-hairline pt-4">
@@ -145,6 +146,54 @@ export function AppShell({ children }: { children: ReactNode }) {
 
       <div className="min-w-0 flex-1">{children}</div>
     </div>
+  );
+}
+
+/**
+ * The section links, in a column for the rail or a row for the top bar. One
+ * list rendered twice rather than two lists to keep in step — only the spacing
+ * and padding differ between them.
+ */
+function NavList({
+  pathname,
+  ids,
+  row,
+}: {
+  pathname: string;
+  ids: string[];
+  row?: boolean;
+}) {
+  return (
+    <ul className={row ? "flex items-center gap-0.5" : "space-y-0.5"}>
+      {NAV.map((item) => {
+        const active = item.match(pathname);
+        return (
+          <li key={item.href}>
+            <Link
+              href={withSelection(item.href, ids)}
+              aria-current={active ? "page" : undefined}
+              style={{ "--tint": item.tint } as CSSProperties}
+              className={`flex items-center gap-2.5 rounded-lg text-sm transition-colors ${
+                row ? "px-2.5 py-1.5" : "px-3 py-2"
+              } ${
+                active
+                  ? "bg-[color-mix(in_srgb,var(--tint)_14%,transparent)] font-semibold text-ink"
+                  : "text-ink-secondary hover:bg-[var(--wash)] hover:text-ink"
+              }`}
+            >
+              <span
+                aria-hidden
+                className={`h-2 w-2 shrink-0 rounded-full transition-opacity ${
+                  active ? "opacity-100" : "opacity-40"
+                }`}
+                style={{ background: "var(--tint)" }}
+              />
+              {item.label}
+            </Link>
+          </li>
+        );
+      })}
+    </ul>
   );
 }
 

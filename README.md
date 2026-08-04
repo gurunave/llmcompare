@@ -19,7 +19,13 @@ keys, no backend and no network calls at runtime.
 | `/methodology` | Where the numbers come from, how blended price and the mean score are computed, what each radar axis means. |
 
 A left rail carries the navigation and the selection tray, so models can be added
-or dropped from any page; below `lg` it collapses into a drawer.
+or dropped from any page; below `lg` it collapses into a drawer. A toggle in the
+rail moves the navigation to a top bar instead, where the tray moves behind a
+`Selection` button — it keeps every control it has in the rail rather than being
+cut down to a row of chips. The choice persists in `localStorage` and is stamped
+on the root as `data-nav` before first paint, so a reload never flashes the other
+layout. It applies from `lg` up; below that the drawer is the better answer
+either way.
 
 ### Selection state
 
