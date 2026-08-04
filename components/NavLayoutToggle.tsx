@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useRootPreference } from "@/lib/rootPreference";
 
 export type NavLayout = "rail" | "top";
 const STORAGE_KEY = "llmcompare-nav";
+const LAYOUTS = ["rail", "top"] as const;
 
 /**
  * Moves the navigation between the side rail and a top bar. The layout itself
@@ -11,22 +12,12 @@ const STORAGE_KEY = "llmcompare-nav";
  * flips the attribute and remembers it, exactly as the theme toggle does.
  */
 export function NavLayoutToggle() {
-  const [layout, setLayout] = useState<NavLayout>("rail");
-
-  useEffect(() => {
-    const current = document.documentElement.getAttribute("data-nav");
-    if (current === "rail" || current === "top") setLayout(current);
-  }, []);
-
-  function apply(next: NavLayout) {
-    setLayout(next);
-    document.documentElement.setAttribute("data-nav", next);
-    try {
-      localStorage.setItem(STORAGE_KEY, next);
-    } catch {
-      /* storage unavailable — the toggle still works for this session */
-    }
-  }
+  const [layout, setLayout] = useRootPreference<NavLayout>(
+    "data-nav",
+    STORAGE_KEY,
+    LAYOUTS,
+    "rail"
+  );
 
   const next: NavLayout = layout === "rail" ? "top" : "rail";
   const label = next === "top" ? "Move navigation to the top" : "Move navigation to the side";
@@ -35,7 +26,7 @@ export function NavLayoutToggle() {
     <button
       type="button"
       className="btn px-2.5"
-      onClick={() => apply(next)}
+      onClick={() => setLayout(next)}
       aria-label={label}
       title={label}
     >
