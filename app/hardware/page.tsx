@@ -20,7 +20,7 @@ import {
   type QuantKey,
   type Rig,
 } from "@/lib/hardware";
-import { MODELS } from "@/lib/models";
+import { MODELS_WITH_ARCH } from "@/lib/arch";
 import { useSelection, withSelection } from "@/lib/selection";
 
 const DEFAULT_CUSTOM: CustomRig = {
@@ -122,7 +122,7 @@ export default function HardwarePage() {
   }, [deviceId, custom]);
 
   const fits = useMemo(
-    () => fitCatalog(MODELS, rig, context, kvQuant, floor),
+    () => fitCatalog(MODELS_WITH_ARCH, rig, context, kvQuant, floor),
     [rig, context, kvQuant, floor]
   );
 
