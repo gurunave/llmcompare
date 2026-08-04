@@ -4,6 +4,7 @@ import Link from "next/link";
 import type { CSSProperties } from "react";
 import { licenceColor, licenceLabel, providerColor, tagColor } from "@/lib/accent";
 import { ChartCard } from "@/components/ChartCard";
+import { InfoHint } from "@/components/InfoHint";
 import { PageHeader } from "@/components/PageHeader";
 import { SpecTable } from "@/components/SpecTable";
 import { BenchmarkPanel } from "@/components/charts/BenchmarkPanel";
@@ -88,9 +89,10 @@ export function ModelProfile({
         />
         <Stat label="Output speed" value={`${model.speed} tok/s`} tint="var(--series-4)" />
         <Stat
-          label="Mean score"
+          label="Capability index"
           value={model.capability === null ? "—" : model.capability.toFixed(0)}
           tint="var(--series-2)"
+          hint="Each published score placed against its own benchmark's useful range, averaged within its category, then averaged across categories with equal weight. A model measured in only one or two categories is nudged down, so a thin record cannot win on silence."
         />
       </div>
 
@@ -100,8 +102,8 @@ export function ModelProfile({
 
       <ChartCard
         title="Closest alternatives"
-        subtitle="Nearest neighbours by blended price and mean benchmark score — the models this one actually competes with."
-        note="Distance is measured on log price and mean score, the same two axes as the cost-vs-capability chart."
+        subtitle="Nearest neighbours by blended price and capability index — the models this one actually competes with."
+        note="Distance is measured on log price and the capability index, the same two axes as the cost-vs-capability chart."
       >
         <ul className="divide-y divide-[var(--border)]">
           {peers.map((p) => (
@@ -151,13 +153,26 @@ export function ModelProfile({
 }
 
 /** Stat tile: the value stays in ink; the tint is a left rule that groups it. */
-function Stat({ label, value, tint }: { label: string; value: string; tint: string }) {
+function Stat({
+  label,
+  value,
+  tint,
+  hint,
+}: {
+  label: string;
+  value: string;
+  tint: string;
+  hint?: string;
+}) {
   return (
     <div
       className="card border-l-4 p-4"
       style={{ borderLeftColor: tint, background: `color-mix(in srgb, ${tint} 7%, var(--surface-1))` }}
     >
-      <p className="text-xs font-medium uppercase tracking-wide text-ink-muted">{label}</p>
+      <p className="flex items-center gap-1.5 text-xs font-medium uppercase tracking-wide text-ink-muted">
+        {label}
+        {hint && <InfoHint label={label} title={label} body={hint} />}
+      </p>
       <p className="mt-1.5 text-2xl font-bold text-ink">{value}</p>
     </div>
   );

@@ -175,7 +175,7 @@ export function ScatterPanel({
             }}
             disabled={isDefault}
             className="chip disabled:opacity-40 disabled:hover:border-hairline"
-            title="Back to blended price vs mean benchmark score"
+            title="Back to blended price vs capability index"
           >
             Reset
           </button>
