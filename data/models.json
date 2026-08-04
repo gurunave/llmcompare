@@ -38,13 +38,13 @@
         "id": "osworld",
         "label": "OSWorld-Verified",
         "short": "OSWorld",
-        "blurb": "Live desktop control across real applications, graded on the resulting machine state",
+        "blurb": "Live desktop control across real applications, graded on the resulting machine state. Nearing saturation at the frontier",
         "category": "agentic",
         "scale": "pct",
         "tier": "headline",
         "range": [
           5,
-          70
+          90
         ],
         "inIndex": true,
         "source": "OSWorld-Verified leaderboard"
@@ -59,10 +59,10 @@
         "tier": "headline",
         "range": [
           20,
-          90
+          95
         ],
         "inIndex": true,
-        "source": "Sierra τ-bench, mean of the retail and airline pass^1 rates"
+        "source": "Sierra tau-bench, mean of the retail and airline pass^1 rates; the original task set is frozen and superseded by tau2/tau3"
       },
       {
         "id": "tau3Banking",
@@ -89,10 +89,10 @@
         "tier": "headline",
         "range": [
           5,
-          65
+          60
         ],
         "inIndex": true,
-        "source": "EnterpriseOps-Gym public leaderboard"
+        "source": "EnterpriseOps-Gym-AA, the Artificial Analysis leaderboard for ServiceNow EnterpriseOps-Gym, oracle tool mode"
       },
       {
         "id": "swebenchPro",
@@ -107,7 +107,7 @@
           85
         ],
         "inIndex": true,
-        "source": "Scale AI SWE-bench Pro, held-out split"
+        "source": "Scale AI SWE-bench Pro. Figures here are drawn from both the public split and vendor tables and are not one controlled run - the public and commercial splits differ by more than the spread of this column, so read a gap of a few points as noise"
       },
       {
         "id": "livecodebench",
@@ -148,7 +148,7 @@
         "scale": "pct",
         "tier": "floor",
         "range": [
-          5,
+          0,
           120
         ],
         "inIndex": true,
@@ -173,31 +173,31 @@
         "id": "arcAgi2",
         "label": "ARC-AGI-2",
         "short": "ARC-2",
-        "blurb": "Abstraction puzzles built to resist memorization. Still nowhere near saturated",
+        "blurb": "Abstraction puzzles built to resist memorization. Sat near 3% through 2025; the frontier cleared 90% during 2026",
         "category": "reasoning",
         "scale": "pct",
         "tier": "headline",
         "range": [
           0,
-          50
+          95
         ],
         "inIndex": true,
-        "source": "ARC Prize semi-private evaluation set"
+        "source": "ARC Prize semi-private evaluation set, as reported by the public aggregators"
       },
       {
         "id": "arcAgi3",
         "label": "ARC-AGI-3",
         "short": "ARC-3",
-        "blurb": "Interactive games with hidden rules the agent has to infer by playing. LLMs are under 1%",
+        "blurb": "Interactive games with hidden rules the agent has to infer by playing. Launched with every frontier model under 1%",
         "category": "reasoning",
         "scale": "pct",
         "tier": "headline",
         "range": [
           0,
-          20
+          35
         ],
         "inIndex": true,
-        "source": "ARC Prize interactive-reasoning preview"
+        "source": "ARC Prize interactive-reasoning leaderboard, July 2026 snapshot of 4 evaluated models"
       },
       {
         "id": "gpqa",
@@ -216,18 +216,18 @@
       },
       {
         "id": "frontierMath",
-        "label": "FrontierMath",
+        "label": "FrontierMath Tier 4 (v2)",
         "short": "FrontierM",
-        "blurb": "Unpublished research-level problems, held back specifically to resist contamination",
+        "blurb": "Unpublished research-level problems, held back specifically to resist contamination. Tier 4 is the hardest of the four",
         "category": "math",
         "scale": "pct",
         "tier": "headline",
         "range": [
           0,
-          50
+          95
         ],
         "inIndex": true,
-        "source": "Epoch AI FrontierMath, tiers 1-3"
+        "source": "Epoch AI FrontierMath Tier 4, v2 - the June 2026 revision that corrected errors in 42% of the original problems"
       },
       {
         "id": "aime",
@@ -253,7 +253,7 @@
         "scale": "pct",
         "tier": "floor",
         "range": [
-          30,
+          15,
           105
         ],
         "inIndex": true,
@@ -359,7 +359,13 @@
       },
       "cutoff": "2026-05",
       "speed": 85,
-      "scores": {},
+      "scores": {
+        "osworld": 86.1,
+        "terminalBench2": 86.6,
+        "swebenchPro": 67.7,
+        "gpqa": 92.6,
+        "mmluPro": 82.3
+      },
       "tags": [
         "frontier",
         "multimodal",
@@ -437,7 +443,10 @@
       },
       "cutoff": "2025-11",
       "speed": 140,
-      "scores": {},
+      "scores": {
+        "terminalBench2": 70.2,
+        "swebenchPro": 59.4
+      },
       "tags": [
         "open-weights",
         "self-host",
@@ -573,7 +582,9 @@
         "gdpval": 1858,
         "terminalBench2": 84.6,
         "hle": 52.6,
-        "swebenchPro": 79.2
+        "swebenchPro": 79.2,
+        "arcAgi2": 90.4,
+        "arcAgi3": 30.2
       },
       "tags": [
         "frontier",
@@ -652,7 +663,10 @@
         "hle": 53.3,
         "scicode": 60.2,
         "swebenchPro": 80.3,
-        "lmarenaElo": 1509
+        "lmarenaElo": 1509,
+        "frontierMath": 88,
+        "osworld": 85,
+        "enterpriseOps": 51.1
       },
       "tags": [
         "frontier",
@@ -745,7 +759,8 @@
         "gdpval": 1684,
         "terminalBench2": 80.9,
         "scicode": 58.7,
-        "tau3Banking": 33.4
+        "tau3Banking": 33.4,
+        "swebench": 93.4
       },
       "tags": [
         "open-weights",
@@ -782,7 +797,10 @@
         "gdpval": 1743,
         "terminalBench2": 85.8,
         "hle": 47.2,
-        "tau3Banking": 33
+        "tau3Banking": 33,
+        "arcAgi2": 92.5,
+        "arcAgi3": 7.8,
+        "frontierMath": 83
       },
       "tags": [
         "frontier",
@@ -813,7 +831,8 @@
       "cutoff": "2026-02",
       "speed": 90,
       "scores": {
-        "gdpval": 1593
+        "gdpval": 1593,
+        "frontierMath": 68.3
       },
       "tags": [
         "workhorse",
@@ -846,7 +865,8 @@
         "swebench": 93,
         "aaIndex": 51,
         "gdpval": 1592,
-        "terminalBench2": 79
+        "terminalBench2": 79,
+        "frontierMath": 58.5
       },
       "tags": [
         "cheap",
@@ -921,7 +941,10 @@
       },
       "cutoff": "2026-05",
       "speed": 55,
-      "scores": {},
+      "scores": {
+        "terminalBench2": 80,
+        "swebenchPro": 61.5
+      },
       "tags": [
         "agentic-coding",
         "multimodal"
@@ -1005,7 +1028,8 @@
         "aime": 91,
         "aaIndex": 46.5,
         "hle": 46.4,
-        "scicode": 58.9
+        "scicode": 58.9,
+        "lmarenaElo": 1500
       },
       "tags": [
         "frontier",
@@ -1106,7 +1130,8 @@
         "gpqa": 79,
         "swebench": 77,
         "aime": 88,
-        "mmmu": 76
+        "mmmu": 76,
+        "tauBench": 78.1
       },
       "tags": [
         "workhorse",

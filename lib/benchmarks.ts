@@ -141,10 +141,13 @@ export function capabilityIndex(cats: Partial<Record<BenchmarkCategory, number>>
   const vals = INDEX_CATEGORIES.map((c) => cats[c]).filter((v): v is number => v !== undefined);
   if (!vals.length) return null;
   const mean = vals.reduce((a, v) => a + v, 0) / vals.length;
-  // A model measured in one category is not thereby a broad model, so a thin
-  // record is nudged down rather than being allowed to win on silence. Mild by
-  // design: this is missing evidence, not evidence of weakness.
-  return mean * (0.85 + 0.15 * coverage(cats));
+  // A model measured in one category is not thereby a broad model. Coverage on
+  // the newer benchmarks is thin enough that a single strong agentic result
+  // would otherwise top the catalog, so the mean is discounted by how much of
+  // the field a model has actually been measured on. This reads as missing
+  // evidence, not as evidence of weakness — which is why the index is shown
+  // next to the per-category scores rather than on its own.
+  return mean * (0.6 + 0.4 * coverage(cats));
 }
 
 /** How many of the indexed categories a model actually has data for, 0-1. */
