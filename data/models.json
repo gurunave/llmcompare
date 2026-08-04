@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-08-03",
+    "lastReviewed": "2026-08-04",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. A null score means 'not published or not comparably measured', not zero.",
     "benchmarks": {
@@ -84,6 +84,106 @@
         "multimodal"
       ],
       "url": "https://ai.google.dev/gemini-api/docs/models"
+    },
+    {
+      "id": "laguna-s-2-1",
+      "name": "Laguna S 2.1",
+      "provider": "Poolside",
+      "released": "2026-07",
+      "license": "open",
+      "params": 118,
+      "localTier": "server",
+      "arch": {
+        "layers": 48,
+        "kvLayers": 48,
+        "kvHeads": 8,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": 8,
+        "slidingWindow": 512,
+        "globalEvery": 4,
+        "source": "config"
+      },
+      "context": 1048576,
+      "maxOutput": 131072,
+      "modalities": [
+        "text"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.1,
+        "output": 0.2
+      },
+      "cutoff": "2025-11",
+      "speed": 140,
+      "scores": {
+        "mmluPro": null,
+        "gpqa": null,
+        "swebench": null,
+        "aime": null,
+        "mmmu": null
+      },
+      "tags": [
+        "open-weights",
+        "self-host",
+        "agentic-coding",
+        "long-horizon",
+        "long-context",
+        "reasoning",
+        "cheap"
+      ],
+      "url": "https://huggingface.co/poolside/Laguna-S-2.1"
+    },
+    {
+      "id": "laguna-xs-2-1",
+      "name": "Laguna XS 2.1",
+      "provider": "Poolside",
+      "released": "2026-07",
+      "license": "open",
+      "params": 33,
+      "localTier": "workstation",
+      "arch": {
+        "layers": 40,
+        "kvLayers": 40,
+        "kvHeads": 8,
+        "headDim": 128,
+        "attn": "gqa",
+        "kvLatentDim": null,
+        "activeParams": 3,
+        "slidingWindow": 512,
+        "globalEvery": 4,
+        "source": "estimated"
+      },
+      "context": 262144,
+      "maxOutput": 32768,
+      "modalities": [
+        "text"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.06,
+        "output": 0.12
+      },
+      "cutoff": "2025-11",
+      "speed": 180,
+      "scores": {
+        "mmluPro": null,
+        "gpqa": null,
+        "swebench": 71,
+        "aime": null,
+        "mmmu": null
+      },
+      "tags": [
+        "open-weights",
+        "self-host",
+        "agentic-coding",
+        "long-context",
+        "reasoning",
+        "cheap",
+        "fast"
+      ],
+      "url": "https://huggingface.co/poolside/Laguna-XS-2.1"
     },
     {
       "id": "deepseek-v4-flash",
