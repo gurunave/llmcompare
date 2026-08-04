@@ -9,6 +9,7 @@ import {
   benchmarksIn,
   scoreOf,
 } from "@/lib/benchmarks";
+import { ARCH_BY_ID } from "@/lib/arch";
 import { formatMonth } from "@/lib/format";
 import { AXIS_HELP, AXIS_LABELS, MODELS, catalog } from "@/lib/models";
 import type { AxisKey } from "@/lib/types";
@@ -197,7 +198,7 @@ export default function MethodologyPage() {
         <h2 className="text-base font-semibold text-ink">Sizing a model for hardware</h2>
         <p className="mt-2 text-sm leading-relaxed text-ink-secondary">
           The <a href="/hardware" className="link">hardware page</a> sizes the{" "}
-          {MODELS.filter((m) => m.arch).length} open-weight models against a machine. Each one
+          {ARCH_BY_ID.size} open-weight models against a machine. Each one
           carries an <code>arch</code> block — layers, KV heads, head dimension, active parameters —
           taken from its published <code>config.json</code>, or scaled from the nearest sibling and
           marked <em>est.</em> where no config exists. Nothing is guessed silently.
