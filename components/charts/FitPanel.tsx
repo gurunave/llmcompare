@@ -13,6 +13,7 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { InfoHint } from "@/components/InfoHint";
 import { ChartCard } from "@/components/ChartCard";
 import { SeriesLegend } from "@/components/SeriesLegend";
 import {
@@ -25,7 +26,13 @@ import {
   type QuantKey,
   type Rig,
 } from "@/lib/hardware";
-import { DEFAULT_SCORE, SCORE_METRICS, metricOf, type Metric } from "@/lib/metrics";
+import {
+  DEFAULT_SCORE,
+  METRIC_BY_KEY,
+  SCORE_METRICS,
+  metricOf,
+  type Metric,
+} from "@/lib/metrics";
 import { seriesBadge, seriesColor } from "@/lib/series";
 import type { DerivedModel } from "@/lib/types";
 
@@ -308,6 +315,7 @@ export function FitPanel({
  * behind it. A plain select, so it works on touch and by keyboard.
  */
 function ScorePicker({ value, onChange }: { value: string; onChange: (key: string) => void }) {
+  const current = METRIC_BY_KEY.get(value);
   return (
     <label className="inline-flex items-center gap-1.5 text-xs text-ink-secondary">
       <span className="font-medium">Score</span>
@@ -323,6 +331,14 @@ function ScorePicker({ value, onChange }: { value: string; onChange: (key: strin
           </option>
         ))}
       </select>
+      {current?.hint && (
+        <InfoHint
+          label={current.label}
+          title={current.label}
+          body={current.hint}
+          source={current.source}
+        />
+      )}
     </label>
   );
 }

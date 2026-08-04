@@ -14,6 +14,7 @@ import {
   YAxis,
 } from "recharts";
 import { ChartCard } from "@/components/ChartCard";
+import { InfoHint } from "@/components/InfoHint";
 import { AllHidden, SeriesBadge, SeriesLegend } from "@/components/SeriesLegend";
 import { BENCHMARKS, scoreOf } from "@/lib/benchmarks";
 import { MODELS } from "@/lib/models";
@@ -101,12 +102,34 @@ export function BenchmarkPanel({ selected, hidden, onToggle, onSolo, onShowAll }
       }
     >
       {mode === "leaderboard" && (
-        <div className="mb-4 flex flex-wrap gap-1.5">
-          {PCT.map((b) => (
-            <ModeChip key={b.id} active={board === b.id} onClick={() => setBoard(b.id)}>
-              {b.short}
-            </ModeChip>
-          ))}
+        <div className="mb-4">
+          <div className="flex flex-wrap items-center gap-1.5">
+            {PCT.map((b) => (
+              <ModeChip key={b.id} active={board === b.id} onClick={() => setBoard(b.id)}>
+                {b.short}
+              </ModeChip>
+            ))}
+          </div>
+          {/* The chips are abbreviations by necessity — twenty full benchmark
+              names will not fit on a row — so the active one explains itself
+              here rather than leaving the reader to guess what "τ³-Bank" is. */}
+          {boardBenchmark && (
+            <p className="mt-2 flex items-start gap-1.5 text-xs leading-relaxed text-ink-muted">
+              {/* The line already says what the benchmark is, so the popover
+                  carries what it cannot: how much of the catalog has a figure,
+                  and where those figures came from. */}
+              <InfoHint
+                label={boardBenchmark.label}
+                title={boardBenchmark.label}
+                body={`${MODELS.filter((m) => scoreOf(m, boardBenchmark.id) !== null).length} of ${MODELS.length} models have a published figure. Scores are read against a ${boardBenchmark.range[0]}–${boardBenchmark.range[1]} range when they feed the capability index.`}
+                source={boardBenchmark.source}
+              />
+              <span>
+                <span className="font-medium text-ink-secondary">{boardBenchmark.label}</span> —{" "}
+                {boardBenchmark.blurb}.
+              </span>
+            </p>
+          )}
         </div>
       )}
 
