@@ -1,13 +1,13 @@
 {
   "meta": {
-    "lastReviewed": "2026-08-03",
-    "note": "Memory is the usable frame buffer or installed system RAM; bandwidth is the peak theoretical figure the vendor publishes, which is what bounds single-stream decoding. Unified devices share one pool between CPU and GPU, so only part of it can be handed to a model."
+    "lastReviewed": "2026-08-04",
+    "note": "Memory is the usable frame buffer or installed system RAM; bandwidth is the peak theoretical figure the vendor publishes, which is what bounds single-stream decoding. Unified devices share one pool between CPU and GPU, so only part of it can be handed to a model. Multi-device entries pool their memory — over NVLink inside a server, over PCIe in a desktop build — but each device still reads at the single-device bandwidth, which is why capacity scales with the device count and speed does not."
   },
   "devices": [
     {
       "id": "rtx-5090",
       "label": "RTX 5090",
-      "group": "NVIDIA consumer",
+      "group": "NVIDIA GeForce RTX",
       "memoryGB": 32,
       "bandwidthGBs": 1792,
       "devices": 1,
@@ -15,9 +15,29 @@
       "note": "GDDR7"
     },
     {
+      "id": "rtx-5090-x2",
+      "label": "2 × RTX 5090",
+      "group": "NVIDIA GeForce RTX",
+      "memoryGB": 64,
+      "bandwidthGBs": 1792,
+      "devices": 2,
+      "unified": false,
+      "note": "64 GB without leaving consumer parts — two slots and about 1.2 kW"
+    },
+    {
+      "id": "rtx-5090-laptop",
+      "label": "RTX 5090 Laptop",
+      "group": "NVIDIA GeForce RTX",
+      "memoryGB": 24,
+      "bandwidthGBs": 896,
+      "devices": 1,
+      "unified": false,
+      "note": "A different chip from the desktop 5090 — 24 GB on a narrower bus"
+    },
+    {
       "id": "rtx-4090",
       "label": "RTX 4090",
-      "group": "NVIDIA consumer",
+      "group": "NVIDIA GeForce RTX",
       "memoryGB": 24,
       "bandwidthGBs": 1008,
       "devices": 1,
@@ -27,7 +47,7 @@
     {
       "id": "rtx-4090-x2",
       "label": "2 × RTX 4090",
-      "group": "NVIDIA consumer",
+      "group": "NVIDIA GeForce RTX",
       "memoryGB": 48,
       "bandwidthGBs": 1008,
       "devices": 2,
@@ -37,7 +57,7 @@
     {
       "id": "rtx-3090",
       "label": "RTX 3090",
-      "group": "NVIDIA consumer",
+      "group": "NVIDIA GeForce RTX",
       "memoryGB": 24,
       "bandwidthGBs": 936,
       "devices": 1,
@@ -45,9 +65,19 @@
       "note": "The cheapest 24 GB card on the used market"
     },
     {
+      "id": "rtx-3090-x4",
+      "label": "4 × RTX 3090",
+      "group": "NVIDIA GeForce RTX",
+      "memoryGB": 96,
+      "bandwidthGBs": 936,
+      "devices": 4,
+      "unified": false,
+      "note": "The used-card build: 96 GB for less than one workstation card"
+    },
+    {
       "id": "rtx-5080",
       "label": "RTX 5080",
-      "group": "NVIDIA consumer",
+      "group": "NVIDIA GeForce RTX",
       "memoryGB": 16,
       "bandwidthGBs": 960,
       "devices": 1,
@@ -55,9 +85,49 @@
       "note": null
     },
     {
+      "id": "rtx-5070-ti",
+      "label": "RTX 5070 Ti",
+      "group": "NVIDIA GeForce RTX",
+      "memoryGB": 16,
+      "bandwidthGBs": 896,
+      "devices": 1,
+      "unified": false,
+      "note": null
+    },
+    {
+      "id": "rtx-5070",
+      "label": "RTX 5070",
+      "group": "NVIDIA GeForce RTX",
+      "memoryGB": 12,
+      "bandwidthGBs": 672,
+      "devices": 1,
+      "unified": false,
+      "note": null
+    },
+    {
+      "id": "rtx-5060-ti-16",
+      "label": "RTX 5060 Ti 16 GB",
+      "group": "NVIDIA GeForce RTX",
+      "memoryGB": 16,
+      "bandwidthGBs": 448,
+      "devices": 1,
+      "unified": false,
+      "note": "The cheapest new 16 GB card — capacity well ahead of its bandwidth"
+    },
+    {
+      "id": "rtx-4080-super",
+      "label": "RTX 4080 Super",
+      "group": "NVIDIA GeForce RTX",
+      "memoryGB": 16,
+      "bandwidthGBs": 736,
+      "devices": 1,
+      "unified": false,
+      "note": null
+    },
+    {
       "id": "rtx-4070-ti-super",
       "label": "RTX 4070 Ti Super",
-      "group": "NVIDIA consumer",
+      "group": "NVIDIA GeForce RTX",
       "memoryGB": 16,
       "bandwidthGBs": 672,
       "devices": 1,
@@ -65,9 +135,19 @@
       "note": null
     },
     {
+      "id": "rtx-4060-ti-16",
+      "label": "RTX 4060 Ti 16 GB",
+      "group": "NVIDIA GeForce RTX",
+      "memoryGB": 16,
+      "bandwidthGBs": 288,
+      "devices": 1,
+      "unified": false,
+      "note": "Fits what a 4080 fits, and decodes at a third of the speed"
+    },
+    {
       "id": "rtx-3060-12",
       "label": "RTX 3060 12 GB",
-      "group": "NVIDIA consumer",
+      "group": "NVIDIA GeForce RTX",
       "memoryGB": 12,
       "bandwidthGBs": 360,
       "devices": 1,
@@ -77,7 +157,7 @@
     {
       "id": "rtx-pro-6000",
       "label": "RTX PRO 6000 Blackwell",
-      "group": "NVIDIA pro & datacenter",
+      "group": "NVIDIA RTX workstation",
       "memoryGB": 96,
       "bandwidthGBs": 1792,
       "devices": 1,
@@ -85,9 +165,39 @@
       "note": "Workstation card, single slot of 96 GB"
     },
     {
+      "id": "rtx-pro-6000-x2",
+      "label": "2 × RTX PRO 6000 Blackwell",
+      "group": "NVIDIA RTX workstation",
+      "memoryGB": 192,
+      "bandwidthGBs": 1792,
+      "devices": 2,
+      "unified": false,
+      "note": "192 GB in a tower — the cheapest way to hold a frontier MoE outside a server"
+    },
+    {
+      "id": "rtx-pro-5000",
+      "label": "RTX PRO 5000 Blackwell",
+      "group": "NVIDIA RTX workstation",
+      "memoryGB": 48,
+      "bandwidthGBs": 1344,
+      "devices": 1,
+      "unified": false,
+      "note": "GDDR7"
+    },
+    {
+      "id": "rtx-pro-4500",
+      "label": "RTX PRO 4500 Blackwell",
+      "group": "NVIDIA RTX workstation",
+      "memoryGB": 32,
+      "bandwidthGBs": 896,
+      "devices": 1,
+      "unified": false,
+      "note": null
+    },
+    {
       "id": "rtx-6000-ada",
       "label": "RTX 6000 Ada",
-      "group": "NVIDIA pro & datacenter",
+      "group": "NVIDIA RTX workstation",
       "memoryGB": 48,
       "bandwidthGBs": 960,
       "devices": 1,
@@ -95,39 +205,59 @@
       "note": null
     },
     {
-      "id": "l40s",
-      "label": "L40S",
-      "group": "NVIDIA pro & datacenter",
-      "memoryGB": 48,
-      "bandwidthGBs": 864,
+      "id": "rtx-5000-ada",
+      "label": "RTX 5000 Ada",
+      "group": "NVIDIA RTX workstation",
+      "memoryGB": 32,
+      "bandwidthGBs": 576,
       "devices": 1,
       "unified": false,
       "note": null
     },
     {
-      "id": "a100-80",
-      "label": "A100 80 GB",
-      "group": "NVIDIA pro & datacenter",
-      "memoryGB": 80,
-      "bandwidthGBs": 2039,
+      "id": "rtx-a6000",
+      "label": "RTX A6000",
+      "group": "NVIDIA RTX workstation",
+      "memoryGB": 48,
+      "bandwidthGBs": 768,
       "devices": 1,
       "unified": false,
-      "note": "HBM2e"
+      "note": "Ampere — the used 48 GB card"
     },
     {
-      "id": "h100-80",
-      "label": "H100 80 GB",
-      "group": "NVIDIA pro & datacenter",
-      "memoryGB": 80,
-      "bandwidthGBs": 3350,
+      "id": "gb200",
+      "label": "GB200 Grace Blackwell Superchip",
+      "group": "NVIDIA datacenter",
+      "memoryGB": 384,
+      "bandwidthGBs": 8000,
+      "devices": 2,
+      "unified": false,
+      "note": "Two Blackwell GPUs and a Grace CPU on one board, NVLink-coherent"
+    },
+    {
+      "id": "b200",
+      "label": "B200 180 GB",
+      "group": "NVIDIA datacenter",
+      "memoryGB": 180,
+      "bandwidthGBs": 8000,
       "devices": 1,
       "unified": false,
-      "note": "SXM, HBM3"
+      "note": "HBM3e"
+    },
+    {
+      "id": "gh200",
+      "label": "GH200 141 GB",
+      "group": "NVIDIA datacenter",
+      "memoryGB": 141,
+      "bandwidthGBs": 4900,
+      "devices": 1,
+      "unified": false,
+      "note": "Grace Hopper superchip; the LPDDR5X behind it is coherent but far slower, so only the HBM3e is counted"
     },
     {
       "id": "h200",
       "label": "H200 141 GB",
-      "group": "NVIDIA pro & datacenter",
+      "group": "NVIDIA datacenter",
       "memoryGB": 141,
       "bandwidthGBs": 4800,
       "devices": 1,
@@ -135,14 +265,164 @@
       "note": "HBM3e"
     },
     {
+      "id": "h100-80",
+      "label": "H100 80 GB",
+      "group": "NVIDIA datacenter",
+      "memoryGB": 80,
+      "bandwidthGBs": 3350,
+      "devices": 1,
+      "unified": false,
+      "note": "SXM, HBM3"
+    },
+    {
+      "id": "h100-nvl",
+      "label": "H100 NVL 94 GB",
+      "group": "NVIDIA datacenter",
+      "memoryGB": 94,
+      "bandwidthGBs": 3900,
+      "devices": 1,
+      "unified": false,
+      "note": "The PCIe part with the most memory per card"
+    },
+    {
+      "id": "h100-pcie",
+      "label": "H100 PCIe 80 GB",
+      "group": "NVIDIA datacenter",
+      "memoryGB": 80,
+      "bandwidthGBs": 2000,
+      "devices": 1,
+      "unified": false,
+      "note": "Same memory as the SXM part at well under its bandwidth"
+    },
+    {
+      "id": "a100-80",
+      "label": "A100 80 GB",
+      "group": "NVIDIA datacenter",
+      "memoryGB": 80,
+      "bandwidthGBs": 2039,
+      "devices": 1,
+      "unified": false,
+      "note": "HBM2e"
+    },
+    {
+      "id": "a100-40",
+      "label": "A100 40 GB",
+      "group": "NVIDIA datacenter",
+      "memoryGB": 40,
+      "bandwidthGBs": 1555,
+      "devices": 1,
+      "unified": false,
+      "note": "HBM2"
+    },
+    {
+      "id": "l40s",
+      "label": "L40S",
+      "group": "NVIDIA datacenter",
+      "memoryGB": 48,
+      "bandwidthGBs": 864,
+      "devices": 1,
+      "unified": false,
+      "note": null
+    },
+    {
+      "id": "a40",
+      "label": "A40",
+      "group": "NVIDIA datacenter",
+      "memoryGB": 48,
+      "bandwidthGBs": 696,
+      "devices": 1,
+      "unified": false,
+      "note": null
+    },
+    {
+      "id": "a10",
+      "label": "A10",
+      "group": "NVIDIA datacenter",
+      "memoryGB": 24,
+      "bandwidthGBs": 600,
+      "devices": 1,
+      "unified": false,
+      "note": "The A10G on AWS is the same 24 GB part"
+    },
+    {
+      "id": "l4",
+      "label": "L4",
+      "group": "NVIDIA datacenter",
+      "memoryGB": 24,
+      "bandwidthGBs": 300,
+      "devices": 1,
+      "unified": false,
+      "note": "72 W inference card — cheap to rent, slow to decode"
+    },
+    {
+      "id": "dgx-spark",
+      "label": "DGX Spark (GB10)",
+      "group": "NVIDIA DGX systems",
+      "memoryGB": 128,
+      "bandwidthGBs": 273,
+      "devices": 1,
+      "unified": true,
+      "note": "Desktop box — LPDDR5X shared between the Grace CPU and the Blackwell GPU, so capacity is far ahead of bandwidth"
+    },
+    {
+      "id": "dgx-station",
+      "label": "DGX Station (GB300)",
+      "group": "NVIDIA DGX systems",
+      "memoryGB": 784,
+      "bandwidthGBs": 8000,
+      "devices": 1,
+      "unified": true,
+      "note": "288 GB of HBM3e plus 496 GB of LPDDR5X on the Grace CPU; only the HBM runs at this bandwidth, so anything spilling past it decodes much slower"
+    },
+    {
+      "id": "dgx-a100",
+      "label": "DGX A100 (8 × A100 80 GB)",
+      "group": "NVIDIA DGX systems",
+      "memoryGB": 640,
+      "bandwidthGBs": 2039,
+      "devices": 8,
+      "unified": false,
+      "note": "NVLink-connected"
+    },
+    {
       "id": "h100-x8",
-      "label": "8 × H100 (DGX node)",
-      "group": "NVIDIA pro & datacenter",
+      "label": "DGX H100 (8 × H100)",
+      "group": "NVIDIA DGX systems",
       "memoryGB": 640,
       "bandwidthGBs": 3350,
       "devices": 8,
       "unified": false,
       "note": "NVLink-connected, the usual home for a frontier open model"
+    },
+    {
+      "id": "dgx-h200",
+      "label": "DGX H200 (8 × H200)",
+      "group": "NVIDIA DGX systems",
+      "memoryGB": 1128,
+      "bandwidthGBs": 4800,
+      "devices": 8,
+      "unified": false,
+      "note": "The same node with 141 GB per GPU instead of 80"
+    },
+    {
+      "id": "dgx-b200",
+      "label": "DGX B200 (8 × B200)",
+      "group": "NVIDIA DGX systems",
+      "memoryGB": 1440,
+      "bandwidthGBs": 8000,
+      "devices": 8,
+      "unified": false,
+      "note": "Blackwell generation of the eight-GPU node"
+    },
+    {
+      "id": "gb200-nvl72",
+      "label": "GB200 NVL72 rack",
+      "group": "NVIDIA DGX systems",
+      "memoryGB": 13440,
+      "bandwidthGBs": 8000,
+      "devices": 72,
+      "unified": false,
+      "note": "72 Blackwell GPUs in one NVLink domain — a rack that addresses 13.4 TB as a single pool"
     },
     {
       "id": "mac-m4-24",
@@ -195,9 +475,119 @@
       "note": "The most memory you can put behind one consumer-buyable chip"
     },
     {
+      "id": "rx-7900-xtx",
+      "label": "Radeon RX 7900 XTX",
+      "group": "AMD Radeon",
+      "memoryGB": 24,
+      "bandwidthGBs": 960,
+      "devices": 1,
+      "unified": false,
+      "note": "The 24 GB card that is not an NVIDIA one — ROCm, so check your runtime first"
+    },
+    {
+      "id": "rx-7900-xtx-x2",
+      "label": "2 × Radeon RX 7900 XTX",
+      "group": "AMD Radeon",
+      "memoryGB": 48,
+      "bandwidthGBs": 960,
+      "devices": 2,
+      "unified": false,
+      "note": null
+    },
+    {
+      "id": "rx-7900-xt",
+      "label": "Radeon RX 7900 XT",
+      "group": "AMD Radeon",
+      "memoryGB": 20,
+      "bandwidthGBs": 800,
+      "devices": 1,
+      "unified": false,
+      "note": null
+    },
+    {
+      "id": "rx-9070-xt",
+      "label": "Radeon RX 9070 XT",
+      "group": "AMD Radeon",
+      "memoryGB": 16,
+      "bandwidthGBs": 640,
+      "devices": 1,
+      "unified": false,
+      "note": "RDNA 4"
+    },
+    {
+      "id": "rx-9070",
+      "label": "Radeon RX 9070",
+      "group": "AMD Radeon",
+      "memoryGB": 16,
+      "bandwidthGBs": 640,
+      "devices": 1,
+      "unified": false,
+      "note": null
+    },
+    {
+      "id": "rx-9060-xt-16",
+      "label": "Radeon RX 9060 XT 16 GB",
+      "group": "AMD Radeon",
+      "memoryGB": 16,
+      "bandwidthGBs": 320,
+      "devices": 1,
+      "unified": false,
+      "note": "Half the bus of the 9070 for the same 16 GB"
+    },
+    {
+      "id": "rx-7800-xt",
+      "label": "Radeon RX 7800 XT",
+      "group": "AMD Radeon",
+      "memoryGB": 16,
+      "bandwidthGBs": 624,
+      "devices": 1,
+      "unified": false,
+      "note": null
+    },
+    {
+      "id": "rx-6800",
+      "label": "Radeon RX 6800",
+      "group": "AMD Radeon",
+      "memoryGB": 16,
+      "bandwidthGBs": 512,
+      "devices": 1,
+      "unified": false,
+      "note": "The cheap used 16 GB card"
+    },
+    {
+      "id": "radeon-pro-w7900",
+      "label": "Radeon PRO W7900",
+      "group": "AMD Radeon PRO",
+      "memoryGB": 48,
+      "bandwidthGBs": 864,
+      "devices": 1,
+      "unified": false,
+      "note": null
+    },
+    {
+      "id": "radeon-ai-pro-r9700",
+      "label": "Radeon AI PRO R9700",
+      "group": "AMD Radeon PRO",
+      "memoryGB": 32,
+      "bandwidthGBs": 640,
+      "devices": 1,
+      "unified": false,
+      "note": "RDNA 4 workstation card aimed at local inference"
+    },
+    {
+      "id": "radeon-pro-w7800",
+      "label": "Radeon PRO W7800",
+      "group": "AMD Radeon PRO",
+      "memoryGB": 32,
+      "bandwidthGBs": 576,
+      "devices": 1,
+      "unified": false,
+      "note": null
+    },
+    {
       "id": "ryzen-ai-max-395",
       "label": "Ryzen AI Max+ 395 (128 GB)",
-      "group": "AMD",
+      "group": "AMD Ryzen AI",
       "memoryGB": 128,
       "bandwidthGBs": 256,
       "devices": 1,
@@ -205,14 +595,174 @@
       "note": "Strix Halo, LPDDR5X shared with the CPU"
     },
     {
+      "id": "ryzen-ai-max-395-64",
+      "label": "Ryzen AI Max+ 395 (64 GB)",
+      "group": "AMD Ryzen AI",
+      "memoryGB": 64,
+      "bandwidthGBs": 256,
+      "devices": 1,
+      "unified": true,
+      "note": "The cheaper Strix Halo configuration — same bandwidth, half the pool"
+    },
+    {
+      "id": "mi355x",
+      "label": "Instinct MI355X",
+      "group": "AMD Instinct",
+      "memoryGB": 288,
+      "bandwidthGBs": 8000,
+      "devices": 1,
+      "unified": false,
+      "note": "CDNA 4, HBM3e — more memory per device than anything NVIDIA ships"
+    },
+    {
+      "id": "mi325x",
+      "label": "Instinct MI325X",
+      "group": "AMD Instinct",
+      "memoryGB": 256,
+      "bandwidthGBs": 6000,
+      "devices": 1,
+      "unified": false,
+      "note": "HBM3e"
+    },
+    {
       "id": "mi300x",
       "label": "Instinct MI300X",
-      "group": "AMD",
+      "group": "AMD Instinct",
       "memoryGB": 192,
       "bandwidthGBs": 5300,
       "devices": 1,
       "unified": false,
       "note": "HBM3"
+    },
+    {
+      "id": "mi300x-x8",
+      "label": "8 × Instinct MI300X",
+      "group": "AMD Instinct",
+      "memoryGB": 1536,
+      "bandwidthGBs": 5300,
+      "devices": 8,
+      "unified": false,
+      "note": "The OAM node — Infinity Fabric in place of NVLink"
+    },
+    {
+      "id": "mi355x-x8",
+      "label": "8 × Instinct MI355X",
+      "group": "AMD Instinct",
+      "memoryGB": 2304,
+      "bandwidthGBs": 8000,
+      "devices": 8,
+      "unified": false,
+      "note": "2.3 TB in one node, the most memory per box of any eight-way platform"
+    },
+    {
+      "id": "mi300a",
+      "label": "Instinct MI300A",
+      "group": "AMD Instinct",
+      "memoryGB": 128,
+      "bandwidthGBs": 5300,
+      "devices": 1,
+      "unified": true,
+      "note": "APU — Zen 4 cores and CDNA 3 share one HBM3 pool, so the OS lives in it too"
+    },
+    {
+      "id": "mi210",
+      "label": "Instinct MI210",
+      "group": "AMD Instinct",
+      "memoryGB": 64,
+      "bandwidthGBs": 1638,
+      "devices": 1,
+      "unified": false,
+      "note": "HBM2e, the PCIe part"
+    },
+    {
+      "id": "arc-pro-b60-dual",
+      "label": "Arc Pro B60 Dual 48 GB",
+      "group": "Intel Arc",
+      "memoryGB": 48,
+      "bandwidthGBs": 456,
+      "devices": 2,
+      "unified": false,
+      "note": "Two B60 GPUs on one board — 48 GB for the price of a mid-range card"
+    },
+    {
+      "id": "arc-pro-b60",
+      "label": "Arc Pro B60 24 GB",
+      "group": "Intel Arc",
+      "memoryGB": 24,
+      "bandwidthGBs": 456,
+      "devices": 1,
+      "unified": false,
+      "note": "Battlemage workstation card; runs through SYCL or IPEX-LLM rather than CUDA"
+    },
+    {
+      "id": "arc-pro-b60-x8",
+      "label": "8 × Arc Pro B60 (Battlematrix)",
+      "group": "Intel Arc",
+      "memoryGB": 192,
+      "bandwidthGBs": 456,
+      "devices": 8,
+      "unified": false,
+      "note": "Intel's inference workstation — 192 GB assembled from cheap parts, at a bandwidth to match"
+    },
+    {
+      "id": "arc-a770-16",
+      "label": "Arc A770 16 GB",
+      "group": "Intel Arc",
+      "memoryGB": 16,
+      "bandwidthGBs": 560,
+      "devices": 1,
+      "unified": false,
+      "note": "Alchemist"
+    },
+    {
+      "id": "arc-b580",
+      "label": "Arc B580",
+      "group": "Intel Arc",
+      "memoryGB": 12,
+      "bandwidthGBs": 456,
+      "devices": 1,
+      "unified": false,
+      "note": null
+    },
+    {
+      "id": "arc-b570",
+      "label": "Arc B570",
+      "group": "Intel Arc",
+      "memoryGB": 10,
+      "bandwidthGBs": 380,
+      "devices": 1,
+      "unified": false,
+      "note": null
+    },
+    {
+      "id": "gaudi-3",
+      "label": "Gaudi 3",
+      "group": "Intel datacenter",
+      "memoryGB": 128,
+      "bandwidthGBs": 3700,
+      "devices": 1,
+      "unified": false,
+      "note": "An accelerator rather than a GPU — HBM2e, and the software stack is its own"
+    },
+    {
+      "id": "intel-max-1550",
+      "label": "Data Center GPU Max 1550",
+      "group": "Intel datacenter",
+      "memoryGB": 128,
+      "bandwidthGBs": 3276,
+      "devices": 1,
+      "unified": false,
+      "note": "Ponte Vecchio, HBM2e"
+    },
+    {
+      "id": "intel-max-1100",
+      "label": "Data Center GPU Max 1100",
+      "group": "Intel datacenter",
+      "memoryGB": 48,
+      "bandwidthGBs": 1229,
+      "devices": 1,
+      "unified": false,
+      "note": "The PCIe part"
     },
     {
       "id": "cpu-ddr5-32",
