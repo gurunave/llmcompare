@@ -475,9 +475,119 @@
       "note": "The most memory you can put behind one consumer-buyable chip"
     },
     {
+      "id": "rx-7900-xtx",
+      "label": "Radeon RX 7900 XTX",
+      "group": "AMD Radeon",
+      "memoryGB": 24,
+      "bandwidthGBs": 960,
+      "devices": 1,
+      "unified": false,
+      "note": "The 24 GB card that is not an NVIDIA one — ROCm, so check your runtime first"
+    },
+    {
+      "id": "rx-7900-xtx-x2",
+      "label": "2 × Radeon RX 7900 XTX",
+      "group": "AMD Radeon",
+      "memoryGB": 48,
+      "bandwidthGBs": 960,
+      "devices": 2,
+      "unified": false,
+      "note": null
+    },
+    {
+      "id": "rx-7900-xt",
+      "label": "Radeon RX 7900 XT",
+      "group": "AMD Radeon",
+      "memoryGB": 20,
+      "bandwidthGBs": 800,
+      "devices": 1,
+      "unified": false,
+      "note": null
+    },
+    {
+      "id": "rx-9070-xt",
+      "label": "Radeon RX 9070 XT",
+      "group": "AMD Radeon",
+      "memoryGB": 16,
+      "bandwidthGBs": 640,
+      "devices": 1,
+      "unified": false,
+      "note": "RDNA 4"
+    },
+    {
+      "id": "rx-9070",
+      "label": "Radeon RX 9070",
+      "group": "AMD Radeon",
+      "memoryGB": 16,
+      "bandwidthGBs": 640,
+      "devices": 1,
+      "unified": false,
+      "note": null
+    },
+    {
+      "id": "rx-9060-xt-16",
+      "label": "Radeon RX 9060 XT 16 GB",
+      "group": "AMD Radeon",
+      "memoryGB": 16,
+      "bandwidthGBs": 320,
+      "devices": 1,
+      "unified": false,
+      "note": "Half the bus of the 9070 for the same 16 GB"
+    },
+    {
+      "id": "rx-7800-xt",
+      "label": "Radeon RX 7800 XT",
+      "group": "AMD Radeon",
+      "memoryGB": 16,
+      "bandwidthGBs": 624,
+      "devices": 1,
+      "unified": false,
+      "note": null
+    },
+    {
+      "id": "rx-6800",
+      "label": "Radeon RX 6800",
+      "group": "AMD Radeon",
+      "memoryGB": 16,
+      "bandwidthGBs": 512,
+      "devices": 1,
+      "unified": false,
+      "note": "The cheap used 16 GB card"
+    },
+    {
+      "id": "radeon-pro-w7900",
+      "label": "Radeon PRO W7900",
+      "group": "AMD Radeon PRO",
+      "memoryGB": 48,
+      "bandwidthGBs": 864,
+      "devices": 1,
+      "unified": false,
+      "note": null
+    },
+    {
+      "id": "radeon-ai-pro-r9700",
+      "label": "Radeon AI PRO R9700",
+      "group": "AMD Radeon PRO",
+      "memoryGB": 32,
+      "bandwidthGBs": 640,
+      "devices": 1,
+      "unified": false,
+      "note": "RDNA 4 workstation card aimed at local inference"
+    },
+    {
+      "id": "radeon-pro-w7800",
+      "label": "Radeon PRO W7800",
+      "group": "AMD Radeon PRO",
+      "memoryGB": 32,
+      "bandwidthGBs": 576,
+      "devices": 1,
+      "unified": false,
+      "note": null
+    },
+    {
       "id": "ryzen-ai-max-395",
       "label": "Ryzen AI Max+ 395 (128 GB)",
-      "group": "AMD",
+      "group": "AMD Ryzen AI",
       "memoryGB": 128,
       "bandwidthGBs": 256,
       "devices": 1,
@@ -485,14 +595,174 @@
       "note": "Strix Halo, LPDDR5X shared with the CPU"
     },
     {
+      "id": "ryzen-ai-max-395-64",
+      "label": "Ryzen AI Max+ 395 (64 GB)",
+      "group": "AMD Ryzen AI",
+      "memoryGB": 64,
+      "bandwidthGBs": 256,
+      "devices": 1,
+      "unified": true,
+      "note": "The cheaper Strix Halo configuration — same bandwidth, half the pool"
+    },
+    {
+      "id": "mi355x",
+      "label": "Instinct MI355X",
+      "group": "AMD Instinct",
+      "memoryGB": 288,
+      "bandwidthGBs": 8000,
+      "devices": 1,
+      "unified": false,
+      "note": "CDNA 4, HBM3e — more memory per device than anything NVIDIA ships"
+    },
+    {
+      "id": "mi325x",
+      "label": "Instinct MI325X",
+      "group": "AMD Instinct",
+      "memoryGB": 256,
+      "bandwidthGBs": 6000,
+      "devices": 1,
+      "unified": false,
+      "note": "HBM3e"
+    },
+    {
       "id": "mi300x",
       "label": "Instinct MI300X",
-      "group": "AMD",
+      "group": "AMD Instinct",
       "memoryGB": 192,
       "bandwidthGBs": 5300,
       "devices": 1,
       "unified": false,
       "note": "HBM3"
+    },
+    {
+      "id": "mi300x-x8",
+      "label": "8 × Instinct MI300X",
+      "group": "AMD Instinct",
+      "memoryGB": 1536,
+      "bandwidthGBs": 5300,
+      "devices": 8,
+      "unified": false,
+      "note": "The OAM node — Infinity Fabric in place of NVLink"
+    },
+    {
+      "id": "mi355x-x8",
+      "label": "8 × Instinct MI355X",
+      "group": "AMD Instinct",
+      "memoryGB": 2304,
+      "bandwidthGBs": 8000,
+      "devices": 8,
+      "unified": false,
+      "note": "2.3 TB in one node, the most memory per box of any eight-way platform"
+    },
+    {
+      "id": "mi300a",
+      "label": "Instinct MI300A",
+      "group": "AMD Instinct",
+      "memoryGB": 128,
+      "bandwidthGBs": 5300,
+      "devices": 1,
+      "unified": true,
+      "note": "APU — Zen 4 cores and CDNA 3 share one HBM3 pool, so the OS lives in it too"
+    },
+    {
+      "id": "mi210",
+      "label": "Instinct MI210",
+      "group": "AMD Instinct",
+      "memoryGB": 64,
+      "bandwidthGBs": 1638,
+      "devices": 1,
+      "unified": false,
+      "note": "HBM2e, the PCIe part"
+    },
+    {
+      "id": "arc-pro-b60-dual",
+      "label": "Arc Pro B60 Dual 48 GB",
+      "group": "Intel Arc",
+      "memoryGB": 48,
+      "bandwidthGBs": 456,
+      "devices": 2,
+      "unified": false,
+      "note": "Two B60 GPUs on one board — 48 GB for the price of a mid-range card"
+    },
+    {
+      "id": "arc-pro-b60",
+      "label": "Arc Pro B60 24 GB",
+      "group": "Intel Arc",
+      "memoryGB": 24,
+      "bandwidthGBs": 456,
+      "devices": 1,
+      "unified": false,
+      "note": "Battlemage workstation card; runs through SYCL or IPEX-LLM rather than CUDA"
+    },
+    {
+      "id": "arc-pro-b60-x8",
+      "label": "8 × Arc Pro B60 (Battlematrix)",
+      "group": "Intel Arc",
+      "memoryGB": 192,
+      "bandwidthGBs": 456,
+      "devices": 8,
+      "unified": false,
+      "note": "Intel's inference workstation — 192 GB assembled from cheap parts, at a bandwidth to match"
+    },
+    {
+      "id": "arc-a770-16",
+      "label": "Arc A770 16 GB",
+      "group": "Intel Arc",
+      "memoryGB": 16,
+      "bandwidthGBs": 560,
+      "devices": 1,
+      "unified": false,
+      "note": "Alchemist"
+    },
+    {
+      "id": "arc-b580",
+      "label": "Arc B580",
+      "group": "Intel Arc",
+      "memoryGB": 12,
+      "bandwidthGBs": 456,
+      "devices": 1,
+      "unified": false,
+      "note": null
+    },
+    {
+      "id": "arc-b570",
+      "label": "Arc B570",
+      "group": "Intel Arc",
+      "memoryGB": 10,
+      "bandwidthGBs": 380,
+      "devices": 1,
+      "unified": false,
+      "note": null
+    },
+    {
+      "id": "gaudi-3",
+      "label": "Gaudi 3",
+      "group": "Intel datacenter",
+      "memoryGB": 128,
+      "bandwidthGBs": 3700,
+      "devices": 1,
+      "unified": false,
+      "note": "An accelerator rather than a GPU — HBM2e, and the software stack is its own"
+    },
+    {
+      "id": "intel-max-1550",
+      "label": "Data Center GPU Max 1550",
+      "group": "Intel datacenter",
+      "memoryGB": 128,
+      "bandwidthGBs": 3276,
+      "devices": 1,
+      "unified": false,
+      "note": "Ponte Vecchio, HBM2e"
+    },
+    {
+      "id": "intel-max-1100",
+      "label": "Data Center GPU Max 1100",
+      "group": "Intel datacenter",
+      "memoryGB": 48,
+      "bandwidthGBs": 1229,
+      "devices": 1,
+      "unified": false,
+      "note": "The PCIe part"
     },
     {
       "id": "cpu-ddr5-32",
