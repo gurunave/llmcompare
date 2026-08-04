@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import {
   CartesianGrid,
   LabelList,
@@ -24,6 +25,7 @@ import {
   type QuantKey,
   type Rig,
 } from "@/lib/hardware";
+import { DEFAULT_SCORE, SCORE_METRICS, metricOf, type Metric } from "@/lib/metrics";
 import { seriesBadge, seriesColor } from "@/lib/series";
 import type { DerivedModel } from "@/lib/types";
 
@@ -41,6 +43,14 @@ interface Point {
 
 /** Past this many labeled points the names come off and the badges carry identity. */
 const NAMED_LABEL_LIMIT = 5;
+
+/**
+ * The metric's name as it reads mid-sentence. Benchmark labels are proper nouns
+ * and stay capitalized; the mean is a common noun and takes an article.
+ */
+function scoreNoun(metric: Metric): string {
+  return metric.key === "capability" ? "a mean benchmark score" : metric.label;
+}
 
 export function FitPanel({
   fits,
@@ -61,35 +71,52 @@ export function FitPanel({
   onSolo?: (id: string) => void;
   onShowAll?: () => void;
 }) {
+  const [scoreKey, setScoreKey] = useState(DEFAULT_SCORE);
+  const metric = metricOf(scoreKey, DEFAULT_SCORE);
+
   const budget = usableBytes(rig);
   const floorIndex = QUANTS.findIndex((q) => q.key === floor);
   const GIB = 1024 ** 3;
 
+  // Sizable is the fixed population: everything with weights to measure. What
+  // the chosen benchmark then drops out of it is a separate, reportable number.
+  const sizable = fits.filter((f) => f.verdict !== "unsizable");
+
   // A model that fits is plotted where it actually lands; one that does not is
   // plotted at the smallest size the quality floor allows, which is the honest
   // answer to "how far past my card is it?".
-  const points: Point[] = fits
-    .filter((f) => f.verdict !== "unsizable" && f.model.capability !== null)
+  const points: Point[] = sizable
     .map((f) => {
+      const score = metric.value(f.model);
+      if (score === null || !Number.isFinite(score)) return null;
       const shown = f.best ?? f.ladder[floorIndex] ?? f.ladder[f.ladder.length - 1];
       return {
         id: f.model.id,
         name: f.model.name,
         provider: f.model.provider,
         x: shown.total / GIB,
-        y: f.model.capability as number,
+        y: score,
         quant: shown.quant.label,
         fits: Boolean(f.best),
         detail: `${formatGiB(shown.weights)} weights + ${formatGiB(shown.kv)} cache`,
         speed: f.throughput ? `${formatTokPerSec(f.throughput)} tok/s` : null,
       };
-    });
+    })
+    .filter((p): p is Point => p !== null);
+
+  const picker = <ScorePicker value={metric.key} onChange={setScoreKey} />;
 
   if (!points.length) {
     return (
-      <ChartCard title="Footprint against capability" subtitle="Nothing to plot yet.">
+      <ChartCard
+        title="Footprint against capability"
+        subtitle="Nothing to plot yet."
+        actions={picker}
+      >
         <p className="py-10 text-center text-sm text-ink-secondary">
-          No model in the catalog can be sized against this configuration.
+          {sizable.length
+            ? `No sizable model in the catalog publishes ${scoreNoun(metric)}.`
+            : "No model in the catalog can be sized against this configuration."}
         </p>
       </ChartCard>
     );
@@ -113,13 +140,28 @@ export function FitPanel({
   const hi = Math.max(...xs, budgetGiB) * 1.4;
 
   const fitCount = points.filter((p) => p.fits).length;
-  const unplottable = selected.filter((m) => !points.some((p) => p.id === m.id)).length;
+
+  // A selected model can be missing from the plot for two unrelated reasons, and
+  // conflating them would answer the wrong question: one has no weights to size,
+  // the other has weights but no score on the benchmark now on the y-axis.
+  const sizableIds = new Set(sizable.map((f) => f.model.id));
+  const plottedIds = new Set(points.map((p) => p.id));
+  const hostedSelected = selected.filter((m) => !sizableIds.has(m.id)).length;
+  const unscoredSelected = selected.filter(
+    (m) => sizableIds.has(m.id) && !plottedIds.has(m.id)
+  ).length;
+  const unscored = sizable.length - points.length;
 
   return (
     <ChartCard
       title="Footprint against capability"
       subtitle={`Every open-weight model at the best quantization your floor allows. Everything left of the line fits in ${rig.label}.`}
-      note={`The x-axis is logarithmic — the catalog spans three orders of magnitude in size. Footprint is weights plus KV cache plus runtime overhead. ${fitCount} of ${points.length} sizable models land inside the budget.`}
+      note={`The x-axis is logarithmic — the catalog spans three orders of magnitude in size. Footprint is weights plus KV cache plus runtime overhead. ${fitCount} of ${points.length} plotted models land inside the budget.${
+        unscored > 0
+          ? ` ${unscored} sizable ${unscored === 1 ? "model does" : "models do"} not publish ${scoreNoun(metric)} and ${unscored === 1 ? "is" : "are"} omitted.`
+          : ""
+      }`}
+      actions={picker}
     >
       <div className="h-[380px] w-full sm:h-[440px]">
         <ResponsiveContainer width="100%" height="100%">
@@ -161,7 +203,7 @@ export function FitPanel({
               axisLine={{ stroke: "var(--baseline)" }}
               width={64}
               label={{
-                value: "Mean benchmark score",
+                value: metric.axisLabel,
                 angle: -90,
                 position: "insideLeft",
                 fill: "var(--text-muted)",
@@ -181,7 +223,7 @@ export function FitPanel({
                 fontSize: 11,
               }}
             />
-            <Tooltip content={<FitTooltip />} cursor={{ strokeDasharray: "3 3" }} />
+            <Tooltip content={<FitTooltip metric={metric} />} cursor={{ strokeDasharray: "3 3" }} />
             <Scatter
               name="Fits"
               data={fitting}
@@ -241,15 +283,47 @@ export function FitPanel({
           onSolo={onSolo}
           onShowAll={onShowAll}
         />
-        {unplottable > 0 && (
+        {hostedSelected > 0 && (
           <p className="text-xs text-ink-muted">
-            {unplottable} of the selected {unplottable === 1 ? "model is" : "models are"} hosted
-            only, with no weights to size — {unplottable === 1 ? "it has" : "they have"} no
-            position on this plot.
+            {hostedSelected} of the selected {hostedSelected === 1 ? "model is" : "models are"}{" "}
+            hosted only, with no weights to size — {hostedSelected === 1 ? "it has" : "they have"}{" "}
+            no position on this plot.
+          </p>
+        )}
+        {unscoredSelected > 0 && (
+          <p className="text-xs text-ink-muted">
+            {unscoredSelected} of the selected {unscoredSelected === 1 ? "model" : "models"} can be
+            sized but {unscoredSelected === 1 ? "does" : "do"} not publish {scoreNoun(metric)}, so{" "}
+            {unscoredSelected === 1 ? "it is" : "they are"} off the plot until you pick another
+            score.
           </p>
         )}
       </div>
     </ChartCard>
+  );
+}
+
+/**
+ * Which capability metric the y-axis carries — the mean, or any one benchmark
+ * behind it. A plain select, so it works on touch and by keyboard.
+ */
+function ScorePicker({ value, onChange }: { value: string; onChange: (key: string) => void }) {
+  return (
+    <label className="inline-flex items-center gap-1.5 text-xs text-ink-secondary">
+      <span className="font-medium">Score</span>
+      <select
+        value={value}
+        onChange={(e) => onChange(e.target.value)}
+        aria-label="Benchmark on the vertical axis"
+        className="field w-auto py-1.5 text-xs"
+      >
+        {SCORE_METRICS.map((m) => (
+          <option key={m.key} value={m.key}>
+            {m.label}
+          </option>
+        ))}
+      </select>
+    </label>
   );
 }
 
@@ -308,7 +382,15 @@ function PointLabel({ x, y, width, height, value, index, withName }: PointLabelP
   );
 }
 
-function FitTooltip({ active, payload }: { active?: boolean; payload?: Array<{ payload: Point }> }) {
+function FitTooltip({
+  active,
+  payload,
+  metric,
+}: {
+  active?: boolean;
+  payload?: Array<{ payload: Point }>;
+  metric: Metric;
+}) {
   if (!active || !payload?.length) return null;
   const p = payload[0].payload;
   return (
@@ -320,7 +402,7 @@ function FitTooltip({ active, payload }: { active?: boolean; payload?: Array<{ p
       <dl className="space-y-0.5 text-xs">
         <Row label="Footprint" value={`${p.x.toFixed(1)} GB`} />
         <Row label="Made of" value={p.detail} />
-        <Row label="Mean score" value={p.y.toFixed(1)} />
+        <Row label={metric.label} value={metric.format(p.y)} />
         {p.speed && <Row label="Est. speed" value={p.speed} />}
       </dl>
     </div>
