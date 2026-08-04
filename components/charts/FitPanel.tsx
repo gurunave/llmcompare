@@ -52,11 +52,27 @@ interface Point {
 const NAMED_LABEL_LIMIT = 5;
 
 /**
- * The metric's name as it reads mid-sentence. Benchmark labels are proper nouns
- * and stay capitalized; the mean is a common noun and takes an article.
+ * How to name the y-axis metric mid-sentence, with the verb that goes with it.
+ *
+ * The verb is not decoration: a model *publishes* a benchmark result, but the
+ * capability index and the category scores are derived here from whatever it
+ * published, so saying a model "does not publish a coding score" would describe
+ * the wrong thing. Benchmark labels are proper nouns and keep their capitals;
+ * the derived quantities are common nouns and take an article.
  */
-function scoreNoun(metric: Metric): string {
-  return metric.key === "capability" ? "a mean benchmark score" : metric.label;
+function scoreWording(metric: Metric): { singular: string; plural: string } {
+  if (metric.key === "capability") {
+    return { singular: "has a capability index", plural: "have a capability index" };
+  }
+  if (metric.key.startsWith("cat:")) {
+    const noun = metric.label.toLowerCase();
+    return { singular: `has ${article(noun)} ${noun}`, plural: `have ${article(noun)} ${noun}` };
+  }
+  return { singular: `publishes ${metric.label}`, plural: `publish ${metric.label}` };
+}
+
+function article(noun: string): string {
+  return /^[aeiou]/.test(noun) ? "an" : "a";
 }
 
 export function FitPanel({
@@ -116,13 +132,13 @@ export function FitPanel({
   if (!points.length) {
     return (
       <ChartCard
-        title="Footprint against capability"
+        title={`Footprint against ${metric.label}`}
         subtitle="Nothing to plot yet."
         actions={picker}
       >
         <p className="py-10 text-center text-sm text-ink-secondary">
           {sizable.length
-            ? `No sizable model in the catalog publishes ${scoreNoun(metric)}.`
+            ? `No sizable model in the catalog ${scoreWording(metric).singular}.`
             : "No model in the catalog can be sized against this configuration."}
         </p>
       </ChartCard>
@@ -161,11 +177,11 @@ export function FitPanel({
 
   return (
     <ChartCard
-      title="Footprint against capability"
+      title={`Footprint against ${metric.label}`}
       subtitle={`Every open-weight model at the best quantization your floor allows. Everything left of the line fits in ${rig.label}.`}
       note={`The x-axis is logarithmic — the catalog spans three orders of magnitude in size. Footprint is weights plus KV cache plus runtime overhead. ${fitCount} of ${points.length} plotted models land inside the budget.${
         unscored > 0
-          ? ` ${unscored} sizable ${unscored === 1 ? "model does" : "models do"} not publish ${scoreNoun(metric)} and ${unscored === 1 ? "is" : "are"} omitted.`
+          ? ` ${unscored} sizable ${unscored === 1 ? "model does" : "models do"} not ${scoreWording(metric).plural} and ${unscored === 1 ? "is" : "are"} omitted.`
           : ""
       }`}
       actions={picker}
@@ -300,7 +316,7 @@ export function FitPanel({
         {unscoredSelected > 0 && (
           <p className="text-xs text-ink-muted">
             {unscoredSelected} of the selected {unscoredSelected === 1 ? "model" : "models"} can be
-            sized but {unscoredSelected === 1 ? "does" : "do"} not publish {scoreNoun(metric)}, so{" "}
+            sized but {unscoredSelected === 1 ? "does" : "do"} not {scoreWording(metric).plural}, so{" "}
             {unscoredSelected === 1 ? "it is" : "they are"} off the plot until you pick another
             score.
           </p>

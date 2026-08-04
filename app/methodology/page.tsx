@@ -16,7 +16,7 @@ import type { AxisKey } from "@/lib/types";
 export const metadata: Metadata = {
   title: "Methodology — LLM Compare",
   description:
-    "Where the numbers come from, how blended price and the mean score are computed, and what the radar axes mean.",
+    "Where the numbers come from, how blended price and the capability index are computed, and what the radar axes mean.",
 };
 
 const AXES: AxisKey[] = [
@@ -138,8 +138,8 @@ export default function MethodologyPage() {
           <div>
             <dt className="font-medium text-ink">Why not a plain mean of the scores</dt>
             <dd className="mt-0.5 text-ink-secondary">
-              Because the benchmarks are no longer in the same difficulty band. Top models score
-              around 35% on Humanity&apos;s Last Exam and under 1% on ARC-AGI-3, against 85%+ on
+              Because the benchmarks are no longer in the same difficulty band. The best score in
+              this catalog is 53 on Humanity&apos;s Last Exam and 30 on ARC-AGI-3, against 91 on
               MMLU-Pro. Averaged raw, a frontier model that reports the hard evaluations would land
               below a mid-tier model that only reports the easy ones — the headline number would
               reward not publishing. Normalizing per benchmark, then averaging per category, removes
