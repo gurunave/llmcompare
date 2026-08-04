@@ -6,22 +6,22 @@
     "benchmarks": [
       {
         "id": "gdpval",
-        "label": "GDPval",
+        "label": "GDPval (GDPval-AA v2)",
         "short": "GDPval",
         "blurb": "1,320 paid-work tasks across 44 occupations, blind-graded against human professionals",
         "category": "agentic",
-        "scale": "pct",
+        "scale": "elo",
         "tier": "headline",
         "range": [
-          10,
-          75
+          1000,
+          1900
         ],
         "inIndex": true,
-        "source": "OpenAI GDPval; win-plus-tie rate against the expert deliverable"
+        "source": "Artificial Analysis GDPval-AA v2, Elo re-baselined so human work scores 1000"
       },
       {
         "id": "terminalBench2",
-        "label": "Terminal-Bench 2.0",
+        "label": "Terminal-Bench 2.1",
         "short": "Terminal-B",
         "blurb": "89 tasks in a real shell — software engineering, sysadmin, data and security",
         "category": "agentic",
@@ -29,10 +29,10 @@
         "tier": "headline",
         "range": [
           10,
-          80
+          90
         ],
         "inIndex": true,
-        "source": "tbench.ai leaderboard, Terminal-Bench 2.0 split"
+        "source": "Terminal-Bench 2.1 leaderboard - a harder revision of the 89-task 2.0 set, and not directly comparable to it"
       },
       {
         "id": "osworld",
@@ -73,8 +73,8 @@
         "scale": "pct",
         "tier": "headline",
         "range": [
-          10,
-          75
+          5,
+          40
         ],
         "inIndex": true,
         "source": "Sierra τ³-bench, banking domain"
@@ -103,8 +103,8 @@
         "scale": "pct",
         "tier": "headline",
         "range": [
-          5,
-          60
+          10,
+          85
         ],
         "inIndex": true,
         "source": "Scale AI SWE-bench Pro, held-out split"
@@ -134,7 +134,7 @@
         "tier": "headline",
         "range": [
           0,
-          55
+          65
         ],
         "inIndex": true,
         "source": "SciCode main problem accuracy"
@@ -149,7 +149,7 @@
         "tier": "floor",
         "range": [
           5,
-          95
+          120
         ],
         "inIndex": true,
         "source": "Provider-reported, SWE-bench Verified 500-issue split"
@@ -209,7 +209,7 @@
         "tier": "floor",
         "range": [
           20,
-          92
+          110
         ],
         "inIndex": true,
         "source": "Provider-reported, GPQA Diamond 198-question split"
@@ -239,7 +239,7 @@
         "tier": "floor",
         "range": [
           5,
-          100
+          120
         ],
         "inIndex": true,
         "source": "Provider-reported, AIME-class competition sets"
@@ -254,7 +254,7 @@
         "tier": "floor",
         "range": [
           30,
-          92
+          105
         ],
         "inIndex": true,
         "source": "Provider-reported and TIGER-Lab MMLU-Pro leaderboard"
@@ -284,7 +284,7 @@
         "tier": "floor",
         "range": [
           25,
-          90
+          100
         ],
         "inIndex": true,
         "source": "Provider-reported, MMMU validation split"
@@ -299,7 +299,7 @@
         "tier": "headline",
         "range": [
           10,
-          80
+          70
         ],
         "inIndex": false,
         "source": "Artificial Analysis Intelligence Index v4.1"
@@ -395,7 +395,8 @@
         "gpqa": 93,
         "swebench": 73,
         "aime": 93,
-        "mmmu": 65
+        "mmmu": 65,
+        "aaIndex": 50
       },
       "tags": [
         "fast",
@@ -567,7 +568,12 @@
         "gpqa": 84,
         "swebench": 80,
         "aime": 94,
-        "mmmu": 80
+        "mmmu": 80,
+        "aaIndex": 61,
+        "gdpval": 1858,
+        "terminalBench2": 84.6,
+        "hle": 52.6,
+        "swebenchPro": 79.2
       },
       "tags": [
         "frontier",
@@ -602,7 +608,10 @@
         "gpqa": 81,
         "swebench": 77,
         "aime": 91,
-        "mmmu": 77
+        "mmmu": 77,
+        "aaIndex": 53,
+        "gdpval": 1607,
+        "terminalBench2": 74.5
       },
       "tags": [
         "workhorse",
@@ -636,7 +645,14 @@
         "gpqa": 93,
         "swebench": 95,
         "aime": 90,
-        "mmmu": 89
+        "mmmu": 89,
+        "aaIndex": 60,
+        "gdpval": 1760,
+        "terminalBench2": 80.5,
+        "hle": 53.3,
+        "scicode": 60.2,
+        "swebenchPro": 80.3,
+        "lmarenaElo": 1509
       },
       "tags": [
         "frontier",
@@ -724,7 +740,12 @@
       "speed": 45,
       "scores": {
         "mmluPro": 78,
-        "gpqa": 94
+        "gpqa": 94,
+        "aaIndex": 57,
+        "gdpval": 1684,
+        "terminalBench2": 80.9,
+        "scicode": 58.7,
+        "tau3Banking": 33.4
       },
       "tags": [
         "open-weights",
@@ -756,7 +777,12 @@
       "cutoff": "2026-02",
       "speed": 55,
       "scores": {
-        "gpqa": 94
+        "gpqa": 94,
+        "aaIndex": 59,
+        "gdpval": 1743,
+        "terminalBench2": 85.8,
+        "hle": 47.2,
+        "tau3Banking": 33
       },
       "tags": [
         "frontier",
@@ -786,7 +812,9 @@
       },
       "cutoff": "2026-02",
       "speed": 90,
-      "scores": {},
+      "scores": {
+        "gdpval": 1593
+      },
       "tags": [
         "workhorse",
         "agentic-coding"
@@ -815,7 +843,10 @@
       "cutoff": "2026-02",
       "speed": 180,
       "scores": {
-        "swebench": 93
+        "swebench": 93,
+        "aaIndex": 51,
+        "gdpval": 1592,
+        "terminalBench2": 79
       },
       "tags": [
         "cheap",
@@ -859,7 +890,8 @@
       "scores": {
         "mmluPro": 88,
         "gpqa": 90,
-        "swebench": 81
+        "swebench": 81,
+        "aaIndex": 44
       },
       "tags": [
         "open-weights",
@@ -970,7 +1002,10 @@
         "mmluPro": 91,
         "gpqa": 94,
         "swebench": 81,
-        "aime": 91
+        "aime": 91,
+        "aaIndex": 46.5,
+        "hle": 46.4,
+        "scicode": 58.9
       },
       "tags": [
         "frontier",
@@ -1001,7 +1036,9 @@
       "cutoff": "2025-09",
       "speed": 75,
       "scores": {
-        "gpqa": 93
+        "gpqa": 93,
+        "aaIndex": 54,
+        "gdpval": 1535
       },
       "tags": [
         "agentic-coding",
@@ -1465,7 +1502,8 @@
         "gpqa": 88,
         "swebench": 76,
         "aime": 95,
-        "mmmu": 81
+        "mmmu": 81,
+        "livecodebench": 91.7
       },
       "tags": [
         "frontier",
@@ -1502,7 +1540,8 @@
         "gpqa": 78,
         "swebench": 62,
         "aime": 90,
-        "mmmu": 76
+        "mmmu": 76,
+        "livecodebench": 90.8
       },
       "tags": [
         "fast",
@@ -2572,7 +2611,8 @@
         "mmluPro": 82,
         "gpqa": 76,
         "swebench": 66,
-        "aime": 89
+        "aime": 89,
+        "livecodebench": 89.6
       },
       "tags": [
         "open-weights",

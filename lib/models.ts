@@ -35,7 +35,7 @@ export const AXIS_LABELS: Record<AxisKey, string> = {
 /** Each category axis names the benchmarks behind it, so the shape is auditable. */
 function axisHelp(category: BenchmarkCategory): string {
   return benchmarksIn(category)
-    .filter((b) => b.inIndex && b.scale === "pct")
+    .filter((b) => b.inIndex)
     .map((b) => b.short)
     .join(", ");
 }

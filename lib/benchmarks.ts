@@ -99,6 +99,11 @@ export function scoreOf(m: Model, id: BenchmarkId): number | null {
  * benchmark's own useful span. This is what makes an ARC-AGI-2 result and an
  * MMLU-Pro result addable: without it, publishing a hard benchmark would drag a
  * frontier model's mean below a mid-tier model that only published an easy one.
+ *
+ * The same mechanism is what lets GDPval into the index despite being reported
+ * as an Elo: its range is anchored at the human baseline, so the normalized
+ * value still means "how far above a professional's work", which is the thing
+ * the other agentic benchmarks are measuring too.
  */
 export function normalize(b: Benchmark, raw: number): number {
   const [lo, hi] = b.range;
@@ -110,7 +115,7 @@ export function normalize(b: Benchmark, raw: number): number {
 export function categoryScore(m: Model, category: BenchmarkCategory): number | null {
   const vals: number[] = [];
   for (const b of BENCHMARKS) {
-    if (b.category !== category || !b.inIndex || b.scale !== "pct") continue;
+    if (b.category !== category || !b.inIndex) continue;
     const raw = scoreOf(m, b.id);
     if (raw !== null) vals.push(normalize(b, raw));
   }
@@ -135,7 +140,11 @@ export function categoryScores(m: Model): Partial<Record<BenchmarkCategory, numb
 export function capabilityIndex(cats: Partial<Record<BenchmarkCategory, number>>): number | null {
   const vals = INDEX_CATEGORIES.map((c) => cats[c]).filter((v): v is number => v !== undefined);
   if (!vals.length) return null;
-  return vals.reduce((a, v) => a + v, 0) / vals.length;
+  const mean = vals.reduce((a, v) => a + v, 0) / vals.length;
+  // A model measured in one category is not thereby a broad model, so a thin
+  // record is nudged down rather than being allowed to win on silence. Mild by
+  // design: this is missing evidence, not evidence of weakness.
+  return mean * (0.85 + 0.15 * coverage(cats));
 }
 
 /** How many of the indexed categories a model actually has data for, 0-1. */

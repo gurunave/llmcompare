@@ -120,7 +120,19 @@ export default function MethodologyPage() {
               each benchmark and is fixed rather than taken from the catalog&apos;s current min and
               max, so a ninth published result does not move the other eight. Those normalized
               scores are then averaged within their category, and the categories are averaged with
-              equal weight to give the index. This is the y-axis of the cost-vs-capability chart.
+              equal weight to give the index. A model measured in only one or two categories is
+              nudged down slightly at the end, so a thin record cannot win on silence. This is the
+              y-axis of the cost-vs-capability chart.
+            </dd>
+          </div>
+          <div>
+            <dt className="font-medium text-ink">Why a retired benchmark cannot reach the top</dt>
+            <dd className="mt-0.5 text-ink-secondary">
+              Their ranges run past the maximum score anyone can actually get. Saturating a test
+              that no longer separates models demonstrates the floor, not frontier ability, so a
+              near-perfect GPQA reads as strong rather than best. Without that headroom the index
+              inverted: a model that reported Humanity&apos;s Last Exam scored below one that
+              reported only GPQA, which is the failure this whole scheme exists to avoid.
             </dd>
           </div>
           <div>
