@@ -1,35 +1,22 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useRootPreference } from "@/lib/rootPreference";
 
 type Theme = "light" | "dark";
 const STORAGE_KEY = "llmcompare-theme";
+const THEMES = ["light", "dark"] as const;
 
 export function ThemeToggle() {
-  const [theme, setTheme] = useState<Theme>("dark");
-
-  useEffect(() => {
-    const current = document.documentElement.getAttribute("data-theme");
-    if (current === "light" || current === "dark") setTheme(current);
-  }, []);
-
-  function apply(next: Theme) {
-    setTheme(next);
-    document.documentElement.setAttribute("data-theme", next);
-    try {
-      localStorage.setItem(STORAGE_KEY, next);
-    } catch {
-      /* storage unavailable — the toggle still works for this session */
-    }
-  }
+  const [theme, setTheme] = useRootPreference<Theme>("data-theme", STORAGE_KEY, THEMES, "dark");
+  const next: Theme = theme === "dark" ? "light" : "dark";
 
   return (
     <button
       type="button"
       className="btn px-2.5"
-      onClick={() => apply(theme === "dark" ? "light" : "dark")}
-      aria-label={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
-      title={`Switch to ${theme === "dark" ? "light" : "dark"} theme`}
+      onClick={() => setTheme(next)}
+      aria-label={`Switch to ${next} theme`}
+      title={`Switch to ${next} theme`}
     >
       {theme === "dark" ? <MoonIcon /> : <SunIcon />}
     </button>
