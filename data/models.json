@@ -338,6 +338,41 @@
   },
   "models": [
     {
+      "id": "glm-5-2",
+      "name": "GLM-5.2",
+      "provider": "Zhipu",
+      "released": "2026-06",
+      "license": "open",
+      "params": 744,
+      "localTier": "cluster",
+      "context": 1048576,
+      "maxOutput": 128000,
+      "modalities": [
+        "text"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 1.4,
+        "output": 4.4
+      },
+      "cutoff": "2025-11",
+      "speed": 160,
+      "scores": {
+        "swebenchPro": 62.1,
+        "terminalBench2": 81.0,
+        "gpqa": 91.2,
+        "aime": 99.2,
+        "hle": 54.7
+      },
+      "tags": [
+        "open-weights",
+        "agentic-coding",
+        "long-context",
+        "frontier"
+      ],
+      "url": "https://docs.z.ai/guides/llm/glm-5.2"
+    },
+    {
       "id": "qwen3-8-max",
       "name": "Qwen3.8-Max",
       "provider": "Alibaba",
