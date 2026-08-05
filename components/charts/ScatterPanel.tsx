@@ -14,7 +14,9 @@ import {
 } from "recharts";
 import { InfoHint } from "@/components/InfoHint";
 import { ChartCard } from "@/components/ChartCard";
+import { MultiSelect, type MultiOption } from "@/components/MultiSelect";
 import { SeriesLegend } from "@/components/SeriesLegend";
+import { providerColor } from "@/lib/accent";
 import { formatTokens } from "@/lib/format";
 import {
   axisScale,
@@ -63,14 +65,32 @@ export function ScatterPanel({
 }: ScatterProps) {
   const [xKey, setXKey] = useState(DEFAULT_X);
   const [yKey, setYKey] = useState(DEFAULT_Y);
+  const [providers, setProviders] = useState<string[]>([]);
+  const [modelIds, setModelIds] = useState<string[]>([]);
   const xMetric = metricOf(xKey, DEFAULT_X);
   const yMetric = metricOf(yKey, DEFAULT_Y);
-  const isDefault = xMetric.key === DEFAULT_X && yMetric.key === DEFAULT_Y;
+  const filtering = providers.length > 0 || modelIds.length > 0;
+  const isDefault = xMetric.key === DEFAULT_X && yMetric.key === DEFAULT_Y && !filtering;
 
   // A hidden model is still in the catalog, so it rejoins the anonymous cloud
   // rather than vanishing — toggling a series off stops it being called out, it
   // does not delete a data point.
   const shownIds = new Set(selected.filter((m) => !hidden?.has(m.id)).map((m) => m.id));
+
+  const { providerOptions, modelOptions } = useMemo(() => buildOptions(all), [all]);
+
+  // The two filters are additive rather than intersecting: picking Anthropic
+  // and then naming GPT-5 asks for both, which is what "provider or model"
+  // means to a reader. Intersecting them would empty the plot instead.
+  // Whatever is selected for comparison always stays plotted — a filter is
+  // there to thin the background, not to drop the models under discussion.
+  const pool = useMemo(() => {
+    if (!filtering) return all;
+    const byProvider = new Set(providers);
+    const byId = new Set(modelIds);
+    const kept = new Set(selected.map((m) => m.id));
+    return all.filter((m) => byProvider.has(m.provider) || byId.has(m.id) || kept.has(m.id));
+  }, [all, filtering, providers, modelIds, selected]);
 
   // A model is plottable only when both chosen metrics are published for it —
   // parameter counts and some benchmarks are missing across much of the catalog.
@@ -83,7 +103,7 @@ export function ScatterPanel({
       return v;
     };
 
-    const rows = all
+    const rows = pool
       .map((m) => ({ m, x: readable(xMetric, m), y: readable(yMetric, m) }))
       .filter((r): r is { m: DerivedModel; x: number; y: number } => r.x !== null && r.y !== null);
 
@@ -102,7 +122,7 @@ export function ScatterPanel({
       plottable: rows,
       toPoint: point,
     };
-  }, [all, xMetric, yMetric]);
+  }, [pool, xMetric, yMetric]);
 
   const xScale = axisScale(
     xMetric,
@@ -148,7 +168,7 @@ export function ScatterPanel({
   );
   const withNames = highlights.length <= NAMED_LABEL_LIMIT;
 
-  const omitted = all.length - plottable.length;
+  const omitted = pool.length - plottable.length;
 
   return (
     <ChartCard
@@ -162,7 +182,11 @@ export function ScatterPanel({
         xScale.log || yScale.log
           ? ` The ${logAxisNote(xScale.log, yScale.log)} logarithmic because the values span orders of magnitude.`
           : ""
-      }${omitted > 0 ? ` ${omitted} model${omitted === 1 ? "" : "s"} without both values ${omitted === 1 ? "is" : "are"} omitted.` : ""}`}
+      }${omitted > 0 ? ` ${omitted} model${omitted === 1 ? "" : "s"} without both values ${omitted === 1 ? "is" : "are"} omitted.` : ""}${
+        filtering
+          ? ` Filtered to ${plottable.length} of ${all.length} models; anything you have selected stays plotted.`
+          : ""
+      }`}
       actions={
         <div className="flex flex-wrap items-center gap-1.5">
           <AxisPicker label="X" value={xMetric.key} onChange={setXKey} />
@@ -172,16 +196,52 @@ export function ScatterPanel({
             onClick={() => {
               setXKey(DEFAULT_X);
               setYKey(DEFAULT_Y);
+              setProviders([]);
+              setModelIds([]);
             }}
             disabled={isDefault}
             className="chip disabled:opacity-40 disabled:hover:border-hairline"
-            title="Back to blended price vs capability index"
+            title="Back to blended price vs capability index, unfiltered"
           >
             Reset
           </button>
         </div>
       }
     >
+      {/* Filters sit above the plot rather than in the header: the header row
+          already carries both axis pickers, and these are wider controls. */}
+      <div className="mb-3 flex flex-wrap items-center gap-1.5">
+        <span className="text-xs text-ink-muted">Filter</span>
+        <MultiSelect
+          label="Providers"
+          emptyLabel="All"
+          placeholder="Search providers…"
+          options={providerOptions}
+          value={providers}
+          onChange={setProviders}
+        />
+        <MultiSelect
+          label="Models"
+          emptyLabel="All"
+          placeholder="Search models…"
+          options={modelOptions}
+          value={modelIds}
+          onChange={setModelIds}
+        />
+        {filtering && (
+          <button
+            type="button"
+            onClick={() => {
+              setProviders([]);
+              setModelIds([]);
+            }}
+            className="chip hover:border-[var(--border-strong)]"
+          >
+            Clear filters
+          </button>
+        )}
+      </div>
+
       <div className="h-[380px] w-full sm:h-[440px]">
         <ResponsiveContainer width="100%" height="100%">
           <ScatterChart margin={{ top: 28, right: 40, bottom: 28, left: 4 }}>
@@ -296,6 +356,41 @@ export function ScatterPanel({
       </div>
     </ChartCard>
   );
+}
+
+/**
+ * Filter options, built from whatever catalog this panel was handed rather
+ * than from the module-level list, so the two stay in step. Providers carry
+ * their model count; models carry the provider, which is what tells two
+ * similarly-named entries apart in a search.
+ */
+function buildOptions(all: DerivedModel[]): {
+  providerOptions: MultiOption[];
+  modelOptions: MultiOption[];
+} {
+  const counts = new Map<string, number>();
+  for (const m of all) counts.set(m.provider, (counts.get(m.provider) ?? 0) + 1);
+
+  const providerOptions = Array.from(counts.entries())
+    .sort((a, b) => a[0].localeCompare(b[0]))
+    .map(([provider, count]) => ({
+      id: provider,
+      label: provider,
+      hint: `${count} model${count === 1 ? "" : "s"}`,
+      tint: providerColor(provider),
+    }));
+
+  const modelOptions = [...all]
+    .sort((a, b) => a.name.localeCompare(b.name))
+    .map((m) => ({
+      id: m.id,
+      label: m.name,
+      hint: m.provider,
+      tint: providerColor(m.provider),
+      search: m.tags.join(" "),
+    }));
+
+  return { providerOptions, modelOptions };
 }
 
 /** Axis metric picker — a plain select, so it works on touch and by keyboard. */
