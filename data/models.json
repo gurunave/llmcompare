@@ -338,6 +338,44 @@
   },
   "models": [
     {
+      "id": "nemotron-3-super-120b",
+      "name": "Nemotron 3 Super 120B",
+      "provider": "NVIDIA",
+      "released": "2026-03",
+      "license": "open",
+      "params": 120,
+      "localTier": "server",
+      "context": 1048576,
+      "maxOutput": 16384,
+      "modalities": [
+        "text"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.25,
+        "output": 0.78
+      },
+      "cutoff": "2025-06",
+      "speed": 149,
+      "scores": {
+        "livecodebench": 81.2,
+        "swebench": 60.5,
+        "hle": 18.3,
+        "gpqa": 79.2,
+        "aime": 90.2,
+        "mmluPro": 83.7
+      },
+      "tags": [
+        "open-weights",
+        "reasoning",
+        "agentic-coding",
+        "long-context",
+        "efficient",
+        "self-host"
+      ],
+      "url": "https://build.nvidia.com/nvidia/nemotron-3-super-120b-a12b"
+    },
+    {
       "id": "glm-5-2",
       "name": "GLM-5.2",
       "provider": "Zhipu",
