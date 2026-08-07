@@ -222,7 +222,10 @@ export default function MethodologyPage() {
               instead of a K and a V, which is why a 685B DeepSeek needs less cache than a 70B
               Llama; SSM hybrids hold a cache on only a few of their layers; and models that
               interleave sliding-window attention pay a flat rate on most layers once the context
-              passes the window.
+              passes the window. The context is capped at each model&rsquo;s own published maximum:
+              asking for more tokens than a model can serve is not a configuration it can be run
+              in, so it is sized at its ceiling rather than charged for a cache it would never
+              allocate. The <em>Max</em> setting sizes every model at that ceiling.
             </dd>
           </div>
           <div>

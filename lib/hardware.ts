@@ -75,8 +75,21 @@ export const KV_QUANTS: { key: KvQuantKey; label: string; bytes: number }[] = [
   { key: "q8", label: "8-bit cache", bytes: 1 },
 ];
 
-export const CONTEXT_CHOICES = [4096, 8192, 32768, 131072, 262144] as const;
+export const CONTEXT_CHOICES = [
+  4096, 8192, 32768, 131072, 262144, 524288, 1048576,
+] as const;
 export const DEFAULT_CONTEXT = 8192;
+
+/**
+ * Size every model at its own published ceiling rather than at one shared
+ * number. The rungs above answer "can this rig hold N tokens?"; this answers
+ * "what does this rig do with each model used to its limit?", which is the
+ * question a 1M-context model and a 32K one cannot be asked together.
+ */
+export const MAX_CONTEXT = "max";
+
+/** A rung on the ladder, or the per-model maximum. */
+export type ContextChoice = number | typeof MAX_CONTEXT;
 
 /** Powers of two, so the label says 32K rather than the rounded 33K. */
 export const CONTEXT_LABELS: Record<number, string> = {
@@ -85,7 +98,33 @@ export const CONTEXT_LABELS: Record<number, string> = {
   32768: "32K",
   131072: "128K",
   262144: "256K",
+  524288: "512K",
+  1048576: "1M",
 };
+
+/**
+ * What a model is actually sized at. A context longer than the model's own
+ * maximum is not a configuration it can be asked for, so charging it for that
+ * cache would rule out models on a setting they never have to meet — a 64K
+ * model would be billed for a 1M cache and reported as too big for a rig it
+ * runs on comfortably.
+ */
+export function effectiveContext(model: DerivedModel, choice: ContextChoice): number {
+  return choice === MAX_CONTEXT ? model.context : Math.min(choice, model.context);
+}
+
+/** Token counts as the picker writes them — 128K, 1M — for use mid-sentence. */
+export function formatContext(tokens: number): string {
+  if (tokens >= 1024 * 1024) {
+    const m = tokens / (1024 * 1024);
+    return `${Number.isInteger(m) ? m : m.toFixed(1)}M`;
+  }
+  if (tokens >= 1024) {
+    const k = tokens / 1024;
+    return `${Number.isInteger(k) ? k : Math.round(k)}K`;
+  }
+  return String(tokens);
+}
 
 /** 1-2-5 decade ticks — the only readable way to label three decades of log axis. */
 export function logTicks(lo: number, hi: number): number[] {
@@ -206,6 +245,10 @@ export function footprint(
 
 export interface Fit {
   model: DerivedModel;
+  /** Tokens this model was actually sized at — its own maximum, when that is lower. */
+  context: number;
+  /** Whether that is the model's ceiling rather than the context that was asked for. */
+  capped: boolean;
   /** One entry per quant, best precision first. Empty when the model is unsizable. */
   ladder: Footprint[];
   /** Highest-precision quant that fits at or above the quality floor. */
@@ -258,15 +301,19 @@ export function throughput(
 export function fit(
   model: DerivedModel,
   rig: Rig,
-  context: number,
+  context: ContextChoice,
   kvQuant: KvQuantKey,
   floor: QuantKey
 ): Fit {
   const bytesPerElem = KV_QUANTS.find((k) => k.key === kvQuant)?.bytes ?? 2;
+  const ctx = effectiveContext(model, context);
+  const capped = context !== MAX_CONTEXT && ctx < context;
 
   if (!model.arch || model.params === null) {
     return {
       model,
+      context: ctx,
+      capped,
       ladder: [],
       best: null,
       belowFloor: null,
@@ -276,7 +323,7 @@ export function fit(
   }
 
   const ladder = QUANTS.map((q) =>
-    footprint(model, q, rig, context, bytesPerElem)
+    footprint(model, q, rig, ctx, bytesPerElem)
   ).filter((f): f is Footprint => f !== null);
 
   const floorIndex = QUANTS.findIndex((q) => q.key === floor);
@@ -287,11 +334,13 @@ export function fit(
 
   return {
     model,
+    context: ctx,
+    capped,
     ladder,
     best,
     belowFloor,
     verdict: best ? best.verdict : "no-fit",
-    throughput: best ? throughput(model, best, rig, context, bytesPerElem) : null,
+    throughput: best ? throughput(model, best, rig, ctx, bytesPerElem) : null,
   };
 }
 
@@ -299,7 +348,7 @@ export function fit(
 export function fitCatalog(
   models: DerivedModel[],
   rig: Rig,
-  context: number,
+  context: ContextChoice,
   kvQuant: KvQuantKey,
   floor: QuantKey
 ): Fit[] {

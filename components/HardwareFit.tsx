@@ -6,13 +6,16 @@ import { ChartCard } from "@/components/ChartCard";
 import { providerColor } from "@/lib/accent";
 import { formatParams } from "@/lib/format";
 import {
+  MAX_CONTEXT,
   QUANTS,
   VERDICT_GLYPH,
   VERDICT_LABEL,
   VERDICT_TINT,
+  formatContext,
   formatGiB,
   formatTokPerSec,
   usableBytes,
+  type ContextChoice,
   type Fit,
   type Footprint,
   type QuantKey,
@@ -24,7 +27,7 @@ interface Props {
   fits: Fit[];
   rig: Rig;
   floor: QuantKey;
-  context: number;
+  context: ContextChoice;
   selected: string[];
   onToggle: (id: string) => void;
 }
@@ -38,6 +41,15 @@ export function HardwareFit({ fits, rig, floor, context, selected, onToggle }: P
   const oversize = sizable.filter((f) => !f.best);
   const hosted = fits.filter((f) => f.verdict === "unsizable");
   const top = fitting[0];
+
+  // How the sizing was framed, mid-sentence. Naming the cap matters: a reader
+  // who asked for 1M and sees a 32K model fitting comfortably is owed the
+  // reason, which is that it was never sized at 1M.
+  const askedFor =
+    context === MAX_CONTEXT
+      ? "each model's own maximum context"
+      : `${context.toLocaleString()} tokens of context`;
+  const capped = sizable.filter((f) => f.capped).length;
 
   // Models that miss by a little are the useful ones to name: they are what a
   // memory upgrade, or one more step of quantization, would actually buy.
@@ -57,8 +69,8 @@ export function HardwareFit({ fits, rig, floor, context, selected, onToggle }: P
             </h2>
             <p className="mt-1 text-sm leading-relaxed text-ink-secondary">
               {formatGiB(usableBytes(rig))} of usable memory is not enough for any open-weight
-              model here once a {context.toLocaleString()}-token cache is reserved. Try a shorter
-              context, an 8-bit cache, or a lower quality floor.
+              model here once a cache for {askedFor} is reserved. Try a shorter context, an 8-bit
+              cache, or a lower quality floor.
             </p>
           </>
         ) : (
@@ -68,7 +80,7 @@ export function HardwareFit({ fits, rig, floor, context, selected, onToggle }: P
               <span className="num">{sizable.length}</span> open-weight models fit {rig.label}
             </h2>
             <p className="mt-1 text-sm leading-relaxed text-ink-secondary">
-              At {context.toLocaleString()} tokens of context and no worse than{" "}
+              At {askedFor} and no worse than{" "}
               {QUANTS.find((q) => q.key === floor)?.label}, the most capable one is{" "}
               <Link href={withSelection(`/models/${top.model.id}`, selected)} className="link font-medium">
                 {top.model.name}
@@ -79,6 +91,13 @@ export function HardwareFit({ fits, rig, floor, context, selected, onToggle }: P
               {top.verdict === "tight" &&
                 " That is tight enough that anything else wanting memory will push it out — the next row down will have more room."}
             </p>
+            {capped > 0 && (
+              <p className="mt-1 text-sm leading-relaxed text-ink-muted">
+                <span className="num">{capped}</span> of them cannot hold that much and are sized
+                at their own maximum instead — a model is never charged for a cache longer than it
+                can serve.
+              </p>
+            )}
           </>
         )}
 
@@ -139,6 +158,7 @@ export function HardwareFit({ fits, rig, floor, context, selected, onToggle }: P
                 <FitRow
                   key={f.model.id}
                   fit={f}
+                  showContext={f.capped || context === MAX_CONTEXT}
                   selected={selected}
                   onToggle={onToggle}
                 />
@@ -161,7 +181,13 @@ export function HardwareFit({ fits, rig, floor, context, selected, onToggle }: P
               )}
               {showOversize &&
                 oversize.map((f) => (
-                  <FitRow key={f.model.id} fit={f} selected={selected} onToggle={onToggle} />
+                  <FitRow
+                    key={f.model.id}
+                    fit={f}
+                    showContext={f.capped || context === MAX_CONTEXT}
+                    selected={selected}
+                    onToggle={onToggle}
+                  />
                 ))}
 
               {hosted.length > 0 && (
@@ -181,7 +207,13 @@ export function HardwareFit({ fits, rig, floor, context, selected, onToggle }: P
               )}
               {showHosted &&
                 hosted.map((f) => (
-                  <FitRow key={f.model.id} fit={f} selected={selected} onToggle={onToggle} />
+                  <FitRow
+                    key={f.model.id}
+                    fit={f}
+                    showContext={f.capped || context === MAX_CONTEXT}
+                    selected={selected}
+                    onToggle={onToggle}
+                  />
                 ))}
             </tbody>
           </table>
@@ -203,10 +235,13 @@ export function HardwareFit({ fits, rig, floor, context, selected, onToggle }: P
 
 function FitRow({
   fit,
+  showContext,
   selected,
   onToggle,
 }: {
   fit: Fit;
+  /** Name the context this row was sized at — when it is not the one asked for. */
+  showContext: boolean;
   selected: string[];
   onToggle: (id: string) => void;
 }) {
@@ -235,6 +270,16 @@ function FitRow({
             {m.arch?.activeParams && (
               <span className="num" title="Active parameters per token">
                 ({m.arch.activeParams}B active)
+              </span>
+            )}
+            {showContext && (
+              <span
+                className="num"
+                title={`Sized at its ${fit.context.toLocaleString()}-token maximum${
+                  fit.capped ? ", which is shorter than the context requested" : ""
+                }`}
+              >
+                · {formatContext(fit.context)} max
               </span>
             )}
           </span>
