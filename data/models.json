@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-08-04",
+    "lastReviewed": "2026-08-06",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -882,6 +882,39 @@
         "reasoning"
       ],
       "url": "https://api-docs.deepseek.com/"
+    },
+    {
+      "id": "muse-spark-1-2",
+      "name": "Muse Spark 1.2",
+      "provider": "Meta",
+      "released": "2026-08",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 1048576,
+      "maxOutput": 65536,
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 1.25,
+        "output": 4.25
+      },
+      "cutoff": "2026-05",
+      "speed": 43,
+      "scores": {
+        "terminalBench2": 82.9,
+        "gpqa": 90.4,
+        "hle": 44,
+        "aaIndex": 54
+      },
+      "tags": [
+        "agentic-coding",
+        "multimodal"
+      ],
+      "url": "https://research.meta.ai/blog/introducing-muse-code-and-muse-spark-1-2"
     },
     {
       "id": "muse-spark-1-1",
