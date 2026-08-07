@@ -13,9 +13,11 @@ import {
   DEFAULT_DEVICE_ID,
   DEFAULT_FLOOR,
   DEVICE_BY_ID,
+  MAX_CONTEXT,
   QUANT_BY_KEY,
   fitCatalog,
   rigFromDevice,
+  type ContextChoice,
   type KvQuantKey,
   type QuantKey,
   type Rig,
@@ -35,7 +37,7 @@ export default function HardwarePage() {
 
   const [deviceId, setDeviceId] = useState(DEFAULT_DEVICE_ID);
   const [custom, setCustom] = useState<CustomRig>(DEFAULT_CUSTOM);
-  const [context, setContext] = useState<number>(DEFAULT_CONTEXT);
+  const [context, setContext] = useState<ContextChoice>(DEFAULT_CONTEXT);
   const [kvQuant, setKvQuant] = useState<KvQuantKey>("fp16");
   const [floor, setFloor] = useState<QuantKey>(DEFAULT_FLOOR);
   const [hydrated, setHydrated] = useState(false);
@@ -61,8 +63,13 @@ export default function HardwarePage() {
       setDeviceId(hw);
     }
 
-    const ctx = Number(params.get("ctx"));
-    if (CONTEXT_CHOICES.includes(ctx as (typeof CONTEXT_CHOICES)[number])) setContext(ctx);
+    const ctxParam = params.get("ctx");
+    if (ctxParam === MAX_CONTEXT) {
+      setContext(MAX_CONTEXT);
+    } else {
+      const ctx = Number(ctxParam);
+      if (CONTEXT_CHOICES.includes(ctx as (typeof CONTEXT_CHOICES)[number])) setContext(ctx);
+    }
 
     const kv = params.get("kv");
     if (kv === "q8" || kv === "fp16") setKvQuant(kv);

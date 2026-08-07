@@ -6,9 +6,11 @@ import {
   CONTEXT_LABELS,
   CUSTOM_ID,
   KV_QUANTS,
+  MAX_CONTEXT,
   QUANTS,
   formatGiB,
   usableBytes,
+  type ContextChoice,
   type KvQuantKey,
   type QuantKey,
   type Rig,
@@ -24,13 +26,13 @@ export interface CustomRig {
 interface Props {
   deviceId: string;
   custom: CustomRig;
-  context: number;
+  context: ContextChoice;
   kvQuant: KvQuantKey;
   floor: QuantKey;
   rig: Rig;
   onDevice: (id: string) => void;
   onCustom: (next: CustomRig) => void;
-  onContext: (tokens: number) => void;
+  onContext: (tokens: ContextChoice) => void;
   onKvQuant: (key: KvQuantKey) => void;
   onFloor: (key: QuantKey) => void;
 }
@@ -110,6 +112,16 @@ export function HardwarePicker({
               {CONTEXT_LABELS[c]}
             </Choice>
           ))}
+          {/* Every rung is capped at each model's own ceiling, so this is not a
+              longer context so much as a different question — each model at its
+              own limit, rather than all of them at one number. */}
+          <Choice
+            active={context === MAX_CONTEXT}
+            onClick={() => onContext(MAX_CONTEXT)}
+            title="Size every model at its own maximum context"
+          >
+            Max
+          </Choice>
           <span className="mx-1 h-5 w-px bg-hairline" aria-hidden />
           {KV_QUANTS.map((k) => (
             <Choice key={k.key} active={kvQuant === k.key} onClick={() => onKvQuant(k.key)}>
