@@ -4045,6 +4045,97 @@
       },
       "tags": ["open-weights", "agentic-coding", "flagship", "multimodal", "frontier"],
       "url": "https://huggingface.co/deepreinforce-ai/Ornith-1.0-397B"
+    },
+    {
+      "id": "lfm2-5-230m",
+      "name": "LFM2.5-230M",
+      "provider": "Liquid AI",
+      "released": "2026-06",
+      "license": "open",
+      "params": 0.23,
+      "localTier": "laptop",
+      "context": 32768,
+      "maxOutput": 8192,
+      "modalities": ["text"],
+      "reasoning": false,
+      "pricing": {
+        "input": 0.01,
+        "output": 0.02
+      },
+      "cutoff": "2026-02",
+      "speed": 340,
+      "scores": {},
+      "tags": ["open-weights", "tiny", "edge", "on-device", "fast"],
+      "url": "https://huggingface.co/LiquidAI/LFM2.5-230M"
+    },
+    {
+      "id": "lfm2-5-2-6b",
+      "name": "LFM2.5-2.6B",
+      "provider": "Liquid AI",
+      "released": "2026-08",
+      "license": "open",
+      "params": 2.7,
+      "localTier": "laptop",
+      "context": 131072,
+      "maxOutput": 16384,
+      "modalities": ["text"],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.03,
+        "output": 0.12
+      },
+      "cutoff": "2026-04",
+      "speed": 240,
+      "scores": {
+        "gpqa": 30.6,
+        "mmluPro": 29.8
+      },
+      "tags": ["open-weights", "edge", "on-device", "efficient"],
+      "url": "https://huggingface.co/LiquidAI/LFM2.5-2.6B"
+    },
+    {
+      "id": "lfm2-5-8b-a1b",
+      "name": "LFM2.5-8B-A1B",
+      "provider": "Liquid AI",
+      "released": "2026-05",
+      "license": "open",
+      "params": 8.3,
+      "localTier": "laptop",
+      "context": 131072,
+      "maxOutput": 16384,
+      "modalities": ["text"],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.02,
+        "output": 0.08
+      },
+      "cutoff": "2026-02",
+      "speed": 230,
+      "scores": {},
+      "tags": ["open-weights", "edge", "on-device", "efficient", "fast"],
+      "url": "https://huggingface.co/LiquidAI/LFM2.5-8B-A1B"
+    },
+    {
+      "id": "lfm2-24b-a2b",
+      "name": "LFM2-24B-A2B",
+      "provider": "Liquid AI",
+      "released": "2026-02",
+      "license": "open",
+      "params": 24,
+      "localTier": "workstation",
+      "context": 131072,
+      "maxOutput": 16384,
+      "modalities": ["text"],
+      "reasoning": false,
+      "pricing": {
+        "input": 0.03,
+        "output": 0.12
+      },
+      "cutoff": "2025-11",
+      "speed": 170,
+      "scores": {},
+      "tags": ["open-weights", "efficient", "self-host"],
+      "url": "https://huggingface.co/LiquidAI/LFM2-24B-A2B"
     }
   ]
 }
