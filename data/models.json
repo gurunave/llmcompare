@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-08-07",
+    "lastReviewed": "2026-08-10",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -3914,6 +3914,137 @@
       },
       "tags": ["fast", "cheap", "high-volume"],
       "url": "https://ai.google.dev/gemini-api/docs/models"
+    },
+    {
+      "id": "mistral-large-3-1",
+      "name": "Mistral Large 3.1",
+      "provider": "Mistral",
+      "released": "2026-08",
+      "license": "open",
+      "params": 675,
+      "localTier": "cluster",
+      "context": 256000,
+      "maxOutput": 32000,
+      "modalities": ["text", "image"],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.45,
+        "output": 1.35
+      },
+      "cutoff": "2026-02",
+      "speed": 118,
+      "scores": {
+        "mmluPro": 82,
+        "gpqa": 76,
+        "swebench": 63,
+        "aime": 90,
+        "mmmu": 75
+      },
+      "tags": ["open-weights", "european"],
+      "url": "https://mistral.ai/models"
+    },
+    {
+      "id": "command-a-2",
+      "name": "Command A 2",
+      "provider": "Cohere",
+      "released": "2026-08",
+      "license": "open",
+      "params": 150,
+      "localTier": "server",
+      "context": 300000,
+      "maxOutput": 32768,
+      "modalities": ["text"],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.3,
+        "output": 1.2
+      },
+      "cutoff": "2026-03",
+      "speed": 100,
+      "scores": {
+        "mmluPro": 79,
+        "gpqa": 72,
+        "swebench": 44,
+        "aime": 86
+      },
+      "tags": ["open-weights", "enterprise", "rag", "reasoning"],
+      "url": "https://docs.cohere.com/docs/models"
+    },
+    {
+      "id": "ornith-1-0-35b",
+      "name": "Ornith 1.0 35B",
+      "provider": "DeepReinforce",
+      "released": "2026-06",
+      "license": "open",
+      "params": 35,
+      "localTier": "workstation",
+      "context": 262144,
+      "maxOutput": 65536,
+      "modalities": ["text", "image"],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.09,
+        "output": 0.5
+      },
+      "cutoff": "2026-03",
+      "speed": 200,
+      "scores": {
+        "terminalBench2": 64.2,
+        "swebench": 75.6
+      },
+      "tags": ["open-weights", "agentic-coding", "efficient", "multimodal", "self-host"],
+      "url": "https://huggingface.co/ornith-ai/Ornith-1.0-35B"
+    },
+    {
+      "id": "ornith-1-0-9b",
+      "name": "Ornith 1.0 9B",
+      "provider": "DeepReinforce",
+      "released": "2026-06",
+      "license": "open",
+      "params": 9,
+      "localTier": "laptop",
+      "context": 262144,
+      "maxOutput": 65536,
+      "modalities": ["text", "image"],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.05,
+        "output": 0.18
+      },
+      "cutoff": "2026-03",
+      "speed": 210,
+      "scores": {
+        "terminalBench2": 43.1,
+        "swebench": 69.4
+      },
+      "tags": ["open-weights", "agentic-coding", "efficient", "multimodal", "self-host", "laptop"],
+      "url": "https://huggingface.co/ornith-ai/Ornith-1.0-9B"
+    },
+    {
+      "id": "ornith-1-0-397b",
+      "name": "Ornith 1.0 397B",
+      "provider": "DeepReinforce",
+      "released": "2026-06",
+      "license": "open",
+      "params": 397,
+      "localTier": "cluster",
+      "context": 262144,
+      "maxOutput": 65536,
+      "modalities": ["text", "image"],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.6,
+        "output": 2.4
+      },
+      "cutoff": "2026-03",
+      "speed": 110,
+      "scores": {
+        "terminalBench2": 77.5,
+        "swebench": 82.4,
+        "swebenchPro": 62.2
+      },
+      "tags": ["open-weights", "agentic-coding", "flagship", "multimodal", "frontier"],
+      "url": "https://huggingface.co/deepreinforce-ai/Ornith-1.0-397B"
     }
   ]
 }
