@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-08-09",
+    "lastReviewed": "2026-08-10",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -3969,6 +3969,82 @@
       },
       "tags": ["open-weights", "enterprise", "rag", "reasoning"],
       "url": "https://docs.cohere.com/docs/models"
+    },
+    {
+      "id": "ornith-1-0-35b",
+      "name": "Ornith 1.0 35B",
+      "provider": "DeepReinforce",
+      "released": "2026-06",
+      "license": "open",
+      "params": 35,
+      "localTier": "workstation",
+      "context": 262144,
+      "maxOutput": 65536,
+      "modalities": ["text", "image"],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.09,
+        "output": 0.5
+      },
+      "cutoff": "2026-03",
+      "speed": 200,
+      "scores": {
+        "terminalBench2": 64.2,
+        "swebench": 75.6
+      },
+      "tags": ["open-weights", "agentic-coding", "efficient", "multimodal", "self-host"],
+      "url": "https://huggingface.co/ornith-ai/Ornith-1.0-35B"
+    },
+    {
+      "id": "ornith-1-0-9b",
+      "name": "Ornith 1.0 9B",
+      "provider": "DeepReinforce",
+      "released": "2026-06",
+      "license": "open",
+      "params": 9,
+      "localTier": "laptop",
+      "context": 262144,
+      "maxOutput": 65536,
+      "modalities": ["text", "image"],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.05,
+        "output": 0.18
+      },
+      "cutoff": "2026-03",
+      "speed": 210,
+      "scores": {
+        "terminalBench2": 43.1,
+        "swebench": 69.4
+      },
+      "tags": ["open-weights", "agentic-coding", "efficient", "multimodal", "self-host", "laptop"],
+      "url": "https://huggingface.co/ornith-ai/Ornith-1.0-9B"
+    },
+    {
+      "id": "ornith-1-0-397b",
+      "name": "Ornith 1.0 397B",
+      "provider": "DeepReinforce",
+      "released": "2026-06",
+      "license": "open",
+      "params": 397,
+      "localTier": "cluster",
+      "context": 262144,
+      "maxOutput": 65536,
+      "modalities": ["text", "image"],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.6,
+        "output": 2.4
+      },
+      "cutoff": "2026-03",
+      "speed": 110,
+      "scores": {
+        "terminalBench2": 77.5,
+        "swebench": 82.4,
+        "swebenchPro": 62.2
+      },
+      "tags": ["open-weights", "agentic-coding", "flagship", "multimodal", "frontier"],
+      "url": "https://huggingface.co/deepreinforce-ai/Ornith-1.0-397B"
     }
   ]
 }
