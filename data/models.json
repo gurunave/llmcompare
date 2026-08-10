@@ -400,7 +400,7 @@
         "terminalBench2": 81.0,
         "gpqa": 91.2,
         "aime": 99.2,
-        "hle": 54.7
+        "hle": 40.5
       },
       "tags": [
         "open-weights",
@@ -437,7 +437,8 @@
         "terminalBench2": 86.6,
         "swebenchPro": 67.7,
         "gpqa": 92.6,
-        "mmluPro": 82.3
+        "mmluPro": 82.3,
+        "hle": 43.6
       },
       "tags": [
         "frontier",
@@ -475,7 +476,8 @@
         "swebench": 73,
         "aime": 93,
         "mmmu": 65,
-        "aaIndex": 50
+        "aaIndex": 50,
+        "swebenchPro": 58.7
       },
       "tags": [
         "fast",
@@ -577,7 +579,10 @@
         "mmluPro": 86,
         "gpqa": 91,
         "swebench": 74,
-        "aime": 97
+        "aime": 97,
+        "aaIndex": 50,
+        "gdpval": 1559,
+        "terminalBench2": 79
       },
       "tags": [
         "open-weights",
@@ -612,10 +617,10 @@
       "scores": {
         "mmluPro": 89,
         "gpqa": 84,
-        "swebench": 96,
+        "swebench": 97,
         "aime": 94,
         "mmmu": 80,
-        "aaIndex": 61,
+        "aaIndex": 60.7,
         "gdpval": 1858,
         "terminalBench2": 84.6,
         "hle": 52.6,
@@ -694,13 +699,13 @@
         "swebench": 95,
         "aime": 90,
         "mmmu": 89,
-        "aaIndex": 60,
+        "aaIndex": 59.9,
         "gdpval": 1760,
         "terminalBench2": 80.5,
         "hle": 53.3,
         "scicode": 60.2,
         "swebenchPro": 80.3,
-        "lmarenaElo": 1509,
+        "lmarenaElo": 1525,
         "frontierMath": 88,
         "osworld": 85,
         "enterpriseOps": 51.1
@@ -770,10 +775,10 @@
         "gpqa": 94,
         "aaIndex": 57,
         "gdpval": 1684,
-        "terminalBench2": 80.9,
+        "terminalBench2": 85,
         "scicode": 58.7,
         "tau3Banking": 33.4,
-        "swebench": 93.4
+        "swebench": 76.8
       },
       "tags": [
         "open-weights",
@@ -806,14 +811,15 @@
       "speed": 55,
       "scores": {
         "gpqa": 94,
-        "aaIndex": 59,
+        "aaIndex": 58.9,
         "gdpval": 1743,
         "terminalBench2": 85.8,
         "hle": 47.2,
         "tau3Banking": 33,
         "arcAgi2": 92.5,
         "arcAgi3": 7.8,
-        "frontierMath": 83
+        "frontierMath": 83,
+        "swebench": 96.2
       },
       "tags": [
         "frontier",
@@ -845,7 +851,10 @@
       "speed": 90,
       "scores": {
         "gdpval": 1593,
-        "frontierMath": 68.3
+        "frontierMath": 68.3,
+        "aaIndex": 55,
+        "terminalBench2": 87.4,
+        "swebenchPro": 63.4
       },
       "tags": [
         "workhorse",
@@ -876,7 +885,7 @@
       "speed": 180,
       "scores": {
         "swebench": 93,
-        "aaIndex": 51,
+        "aaIndex": 51.2,
         "gdpval": 1592,
         "terminalBench2": 79,
         "frontierMath": 58.5
@@ -1009,9 +1018,9 @@
       "speed": 55,
       "scores": {
         "mmluPro": 74,
-        "gpqa": 87,
-        "swebench": 78,
-        "aime": 97
+        "gpqa": 87.2,
+        "swebench": 77.6,
+        "aime": 97.1
       },
       "tags": [
         "open-weights",
@@ -1084,7 +1093,9 @@
       "scores": {
         "gpqa": 93,
         "aaIndex": 54,
-        "gdpval": 1535
+        "gdpval": 1535,
+        "terminalBench2": 83.3,
+        "swebenchPro": 64.7
       },
       "tags": [
         "agentic-coding",

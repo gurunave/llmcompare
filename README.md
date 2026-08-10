@@ -94,8 +94,9 @@ no other file needs to change.
   "pricing": { "input": 0.1, "output": 0.3 },   // USD per 1M tokens
   "cutoff": "2024-12",
   "speed": 120,                 // output tokens/sec
-  "scores": {                   // null means "not published", never zero
-    "mmluPro": 70, "gpqa": 56, "swebench": 30, "aime": 72, "mmmu": null
+  "scores": {                   // omit a benchmark that is not published —
+    "mmluPro": 70, "gpqa": 56,  // never a null, never a zero
+    "swebench": 30, "aime": 72
   },
   "tags": ["open-weights", "self-host"],
   "url": "https://example.com/docs",
@@ -137,7 +138,7 @@ model against the axis.
 
 ## About the numbers
 
-The figures are approximate and community-reported, reviewed **July 2026**.
+The figures are approximate and community-reported, reviewed **August 2026**.
 Pricing and benchmark scores move constantly, and list prices ignore batch,
 cached-input and volume discounts. Verify against the provider's own documentation
 before making a purchasing decision. A blank cell means "not published or not
