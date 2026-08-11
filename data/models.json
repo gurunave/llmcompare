@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-08-10",
+    "lastReviewed": "2026-08-11",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -920,6 +920,42 @@
         "reasoning"
       ],
       "url": "https://api-docs.deepseek.com/"
+    },
+    {
+      "id": "muse-glimmer-30b",
+      "name": "Muse Glimmer 30B",
+      "provider": "Meta",
+      "released": "2026-08",
+      "license": "open",
+      "params": 30,
+      "localTier": "workstation",
+      "context": 131072,
+      "maxOutput": 32768,
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.35,
+        "output": 1.5
+      },
+      "cutoff": "2026-01",
+      "speed": 220,
+      "scores": {
+        "swebench": 76,
+        "gpqa": 83.5,
+        "aime": 94.7,
+        "aaIndex": 35
+      },
+      "tags": [
+        "open-weights",
+        "agentic-coding",
+        "efficient",
+        "multimodal",
+        "self-host"
+      ],
+      "url": "https://research.meta.ai/blog/introducing-muse-glimmer-open-agentic-model"
     },
     {
       "id": "muse-spark-1-2",
