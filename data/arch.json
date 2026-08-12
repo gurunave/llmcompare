@@ -1,4 +1,16 @@
 {
+  "muse-glimmer-30b": {
+    "layers": 52,
+    "kvLayers": 52,
+    "kvHeads": 8,
+    "headDim": 128,
+    "attn": "gqa",
+    "kvLatentDim": null,
+    "activeParams": null,
+    "slidingWindow": 2048,
+    "globalEvery": 4,
+    "source": "config"
+  },
   "laguna-s-2-1": {
     "layers": 48,
     "kvLayers": 48,

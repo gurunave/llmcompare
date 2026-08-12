@@ -4136,6 +4136,35 @@
       "scores": {},
       "tags": ["open-weights", "efficient", "self-host"],
       "url": "https://huggingface.co/LiquidAI/LFM2-24B-A2B"
+    },
+    {
+      "id": "muse-glimmer-30b",
+      "name": "Muse Glimmer 30B",
+      "provider": "Meta",
+      "released": "2026-08",
+      "license": "open",
+      "params": 29.6,
+      "localTier": "workstation",
+      "context": 131072,
+      "maxOutput": 32768,
+      "modalities": ["text", "image"],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.08,
+        "output": 0.3
+      },
+      "cutoff": "2026-05",
+      "speed": 210,
+      "scores": {
+        "swebench": 76.0,
+        "swebenchPro": 51.2,
+        "aime": 94.7,
+        "gpqa": 83.5,
+        "mmmu": 74,
+        "tau3Banking": 23.5
+      },
+      "tags": ["open-weights", "self-host", "multimodal", "agentic-coding"],
+      "url": "https://research.meta.ai/blog/introducing-muse-glimmer-open-agentic-model"
     }
   ]
 }
