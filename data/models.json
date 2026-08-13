@@ -4192,6 +4192,32 @@
       },
       "tags": ["open-weights", "agentic-coding", "multimodal", "long-context"],
       "url": "https://www.minimax.io/models/text/m3"
+    },
+    {
+      "id": "grok-4-6",
+      "name": "Grok 4.6",
+      "provider": "xAI",
+      "released": "2026-08",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 500000,
+      "maxOutput": 64000,
+      "modalities": ["text", "image"],
+      "reasoning": true,
+      "pricing": {
+        "input": 2,
+        "output": 6
+      },
+      "cutoff": "2025-09",
+      "speed": 75,
+      "scores": {
+        "aaIndex": 61,
+        "gdpval": 1753,
+        "terminalBench2": 88.4
+      },
+      "tags": ["agentic-coding", "reasoning", "frontier"],
+      "url": "https://docs.x.ai/docs/models"
     }
   ]
 }
