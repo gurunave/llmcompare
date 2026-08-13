@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-08-10",
+    "lastReviewed": "2026-08-12",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -4165,6 +4165,59 @@
       },
       "tags": ["open-weights", "self-host", "multimodal", "agentic-coding"],
       "url": "https://research.meta.ai/blog/introducing-muse-glimmer-open-agentic-model"
+    },
+    {
+      "id": "minimax-m3",
+      "name": "MiniMax M3",
+      "provider": "MiniMax",
+      "released": "2026-06",
+      "license": "open",
+      "params": 428,
+      "localTier": "cluster",
+      "context": 1048576,
+      "maxOutput": 131072,
+      "modalities": ["text", "image", "video"],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.3,
+        "output": 1.2
+      },
+      "cutoff": "2026-01",
+      "speed": 96,
+      "scores": {
+        "gpqa": 93,
+        "swebenchPro": 59.0,
+        "terminalBench2": 66.0,
+        "aaIndex": 55
+      },
+      "tags": ["open-weights", "agentic-coding", "multimodal", "long-context"],
+      "url": "https://www.minimax.io/models/text/m3"
+    },
+    {
+      "id": "grok-4-6",
+      "name": "Grok 4.6",
+      "provider": "xAI",
+      "released": "2026-08",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 500000,
+      "maxOutput": 64000,
+      "modalities": ["text", "image"],
+      "reasoning": true,
+      "pricing": {
+        "input": 2,
+        "output": 6
+      },
+      "cutoff": "2025-09",
+      "speed": 75,
+      "scores": {
+        "aaIndex": 61,
+        "gdpval": 1753,
+        "terminalBench2": 88.4
+      },
+      "tags": ["agentic-coding", "reasoning", "frontier"],
+      "url": "https://docs.x.ai/docs/models"
     }
   ]
 }

@@ -802,5 +802,17 @@
     "slidingWindow": null,
     "globalEvery": null,
     "source": "config"
+  },
+  "minimax-m3": {
+    "layers": 60,
+    "kvLayers": 60,
+    "kvHeads": 8,
+    "headDim": 128,
+    "attn": "gqa",
+    "kvLatentDim": null,
+    "activeParams": 23,
+    "slidingWindow": null,
+    "globalEvery": null,
+    "source": "estimated"
   }
 }
