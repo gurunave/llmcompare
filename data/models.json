@@ -4218,6 +4218,84 @@
       },
       "tags": ["agentic-coding", "reasoning", "frontier"],
       "url": "https://docs.x.ai/docs/models"
+    },
+    {
+      "id": "ling-3-0-flash",
+      "name": "Ling 3.0 Flash",
+      "provider": "InclusionAI",
+      "released": "2026-07",
+      "license": "open",
+      "params": 124,
+      "localTier": "server",
+      "context": 262144,
+      "maxOutput": 32768,
+      "modalities": ["text"],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.06,
+        "output": 0.18
+      },
+      "cutoff": "2026-04",
+      "speed": 380,
+      "scores": {
+        "aaIndex": 37.8
+      },
+      "tags": ["open-weights", "self-host", "reasoning", "agentic-coding"],
+      "url": "https://huggingface.co/inclusionAI/Ling-3.0-flash"
+    },
+    {
+      "id": "qwen3-8-27b",
+      "name": "Qwen3.8-27B",
+      "provider": "Alibaba",
+      "released": "2026-08",
+      "license": "open",
+      "params": 27.8,
+      "localTier": "workstation",
+      "context": 262144,
+      "maxOutput": 32768,
+      "modalities": ["text", "image", "video"],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.45,
+        "output": 3.2
+      },
+      "cutoff": "2026-05",
+      "speed": 150,
+      "scores": {
+        "swebenchPro": 61.7,
+        "livecodebench": 90.3,
+        "terminalBench2": 73.0,
+        "gpqa": 89.2,
+        "osworld": 84.3
+      },
+      "tags": ["open-weights", "multimodal", "self-host", "agentic-coding"],
+      "url": "https://qwenlm.github.io/"
+    },
+    {
+      "id": "gemini-3-7-flash",
+      "name": "Gemini 3.7 Flash",
+      "provider": "Google",
+      "released": "2026-08",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 1048576,
+      "maxOutput": 65536,
+      "modalities": ["text", "image", "audio", "video"],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.75,
+        "output": 3.75
+      },
+      "cutoff": "2026-03",
+      "speed": 340,
+      "scores": {
+        "aaIndex": 56,
+        "gpqa": 94.5,
+        "terminalBench2": 85.8
+      },
+      "tags": ["fast", "cheap", "agentic-coding", "multimodal"],
+      "url": "https://ai.google.dev/gemini-api/docs/models"
     }
   ]
 }
