@@ -814,5 +814,17 @@
     "slidingWindow": null,
     "globalEvery": null,
     "source": "estimated"
+  },
+  "qwen3-8-27b": {
+    "layers": 64,
+    "kvLayers": 16,
+    "kvHeads": 4,
+    "headDim": 256,
+    "attn": "hybrid",
+    "kvLatentDim": null,
+    "activeParams": null,
+    "slidingWindow": null,
+    "globalEvery": 4,
+    "source": "estimated"
   }
 }
