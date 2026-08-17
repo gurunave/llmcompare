@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-08-14",
+    "lastReviewed": "2026-08-16",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -3875,7 +3875,10 @@
       "localTier": null,
       "context": 400000,
       "maxOutput": 128000,
-      "modalities": ["text", "image"],
+      "modalities": [
+        "text",
+        "image"
+      ],
       "reasoning": true,
       "pricing": {
         "input": 1.75,
@@ -3889,7 +3892,11 @@
         "swebenchPro": 56.8,
         "aaIndex": 44
       },
-      "tags": ["frontier", "agentic-coding", "reasoning"],
+      "tags": [
+        "frontier",
+        "agentic-coding",
+        "reasoning"
+      ],
       "url": "https://platform.openai.com/docs/models"
     },
     {
@@ -3902,7 +3909,12 @@
       "localTier": null,
       "context": 1048576,
       "maxOutput": 65536,
-      "modalities": ["text", "image", "audio", "video"],
+      "modalities": [
+        "text",
+        "image",
+        "audio",
+        "video"
+      ],
       "reasoning": true,
       "pricing": {
         "input": 0.3,
@@ -3913,7 +3925,11 @@
       "scores": {
         "aaIndex": 36
       },
-      "tags": ["fast", "cheap", "high-volume"],
+      "tags": [
+        "fast",
+        "cheap",
+        "high-volume"
+      ],
       "url": "https://ai.google.dev/gemini-api/docs/models"
     },
     {
@@ -3926,7 +3942,10 @@
       "localTier": "cluster",
       "context": 256000,
       "maxOutput": 32000,
-      "modalities": ["text", "image"],
+      "modalities": [
+        "text",
+        "image"
+      ],
       "reasoning": true,
       "pricing": {
         "input": 0.45,
@@ -3941,7 +3960,10 @@
         "aime": 90,
         "mmmu": 75
       },
-      "tags": ["open-weights", "european"],
+      "tags": [
+        "open-weights",
+        "european"
+      ],
       "url": "https://mistral.ai/models"
     },
     {
@@ -3954,7 +3976,9 @@
       "localTier": "server",
       "context": 300000,
       "maxOutput": 32768,
-      "modalities": ["text"],
+      "modalities": [
+        "text"
+      ],
       "reasoning": true,
       "pricing": {
         "input": 0.3,
@@ -3968,7 +3992,12 @@
         "swebench": 44,
         "aime": 86
       },
-      "tags": ["open-weights", "enterprise", "rag", "reasoning"],
+      "tags": [
+        "open-weights",
+        "enterprise",
+        "rag",
+        "reasoning"
+      ],
       "url": "https://docs.cohere.com/docs/models"
     },
     {
@@ -3981,7 +4010,10 @@
       "localTier": "workstation",
       "context": 262144,
       "maxOutput": 65536,
-      "modalities": ["text", "image"],
+      "modalities": [
+        "text",
+        "image"
+      ],
       "reasoning": true,
       "pricing": {
         "input": 0.09,
@@ -3993,7 +4025,13 @@
         "terminalBench2": 64.2,
         "swebench": 75.6
       },
-      "tags": ["open-weights", "agentic-coding", "efficient", "multimodal", "self-host"],
+      "tags": [
+        "open-weights",
+        "agentic-coding",
+        "efficient",
+        "multimodal",
+        "self-host"
+      ],
       "url": "https://huggingface.co/ornith-ai/Ornith-1.0-35B"
     },
     {
@@ -4006,7 +4044,10 @@
       "localTier": "laptop",
       "context": 262144,
       "maxOutput": 65536,
-      "modalities": ["text", "image"],
+      "modalities": [
+        "text",
+        "image"
+      ],
       "reasoning": true,
       "pricing": {
         "input": 0.05,
@@ -4018,7 +4059,14 @@
         "terminalBench2": 43.1,
         "swebench": 69.4
       },
-      "tags": ["open-weights", "agentic-coding", "efficient", "multimodal", "self-host", "laptop"],
+      "tags": [
+        "open-weights",
+        "agentic-coding",
+        "efficient",
+        "multimodal",
+        "self-host",
+        "laptop"
+      ],
       "url": "https://huggingface.co/ornith-ai/Ornith-1.0-9B"
     },
     {
@@ -4031,7 +4079,10 @@
       "localTier": "cluster",
       "context": 262144,
       "maxOutput": 65536,
-      "modalities": ["text", "image"],
+      "modalities": [
+        "text",
+        "image"
+      ],
       "reasoning": true,
       "pricing": {
         "input": 0.6,
@@ -4044,7 +4095,13 @@
         "swebench": 82.4,
         "swebenchPro": 62.2
       },
-      "tags": ["open-weights", "agentic-coding", "flagship", "multimodal", "frontier"],
+      "tags": [
+        "open-weights",
+        "agentic-coding",
+        "flagship",
+        "multimodal",
+        "frontier"
+      ],
       "url": "https://huggingface.co/deepreinforce-ai/Ornith-1.0-397B"
     },
     {
@@ -4057,7 +4114,9 @@
       "localTier": "laptop",
       "context": 32768,
       "maxOutput": 8192,
-      "modalities": ["text"],
+      "modalities": [
+        "text"
+      ],
       "reasoning": false,
       "pricing": {
         "input": 0.01,
@@ -4066,7 +4125,13 @@
       "cutoff": "2026-02",
       "speed": 340,
       "scores": {},
-      "tags": ["open-weights", "tiny", "edge", "on-device", "fast"],
+      "tags": [
+        "open-weights",
+        "tiny",
+        "edge",
+        "on-device",
+        "fast"
+      ],
       "url": "https://huggingface.co/LiquidAI/LFM2.5-230M"
     },
     {
@@ -4079,7 +4144,9 @@
       "localTier": "laptop",
       "context": 131072,
       "maxOutput": 16384,
-      "modalities": ["text"],
+      "modalities": [
+        "text"
+      ],
       "reasoning": true,
       "pricing": {
         "input": 0.03,
@@ -4091,7 +4158,12 @@
         "gpqa": 30.6,
         "mmluPro": 29.8
       },
-      "tags": ["open-weights", "edge", "on-device", "efficient"],
+      "tags": [
+        "open-weights",
+        "edge",
+        "on-device",
+        "efficient"
+      ],
       "url": "https://huggingface.co/LiquidAI/LFM2.5-2.6B"
     },
     {
@@ -4104,7 +4176,9 @@
       "localTier": "laptop",
       "context": 131072,
       "maxOutput": 16384,
-      "modalities": ["text"],
+      "modalities": [
+        "text"
+      ],
       "reasoning": true,
       "pricing": {
         "input": 0.02,
@@ -4113,7 +4187,13 @@
       "cutoff": "2026-02",
       "speed": 230,
       "scores": {},
-      "tags": ["open-weights", "edge", "on-device", "efficient", "fast"],
+      "tags": [
+        "open-weights",
+        "edge",
+        "on-device",
+        "efficient",
+        "fast"
+      ],
       "url": "https://huggingface.co/LiquidAI/LFM2.5-8B-A1B"
     },
     {
@@ -4126,7 +4206,9 @@
       "localTier": "workstation",
       "context": 131072,
       "maxOutput": 16384,
-      "modalities": ["text"],
+      "modalities": [
+        "text"
+      ],
       "reasoning": false,
       "pricing": {
         "input": 0.03,
@@ -4135,7 +4217,11 @@
       "cutoff": "2025-11",
       "speed": 170,
       "scores": {},
-      "tags": ["open-weights", "efficient", "self-host"],
+      "tags": [
+        "open-weights",
+        "efficient",
+        "self-host"
+      ],
       "url": "https://huggingface.co/LiquidAI/LFM2-24B-A2B"
     },
     {
@@ -4148,7 +4234,10 @@
       "localTier": "workstation",
       "context": 131072,
       "maxOutput": 32768,
-      "modalities": ["text", "image"],
+      "modalities": [
+        "text",
+        "image"
+      ],
       "reasoning": true,
       "pricing": {
         "input": 0.08,
@@ -4164,7 +4253,12 @@
         "mmmu": 74,
         "tau3Banking": 23.5
       },
-      "tags": ["open-weights", "self-host", "multimodal", "agentic-coding"],
+      "tags": [
+        "open-weights",
+        "self-host",
+        "multimodal",
+        "agentic-coding"
+      ],
       "url": "https://research.meta.ai/blog/introducing-muse-glimmer-open-agentic-model"
     },
     {
@@ -4177,7 +4271,11 @@
       "localTier": "cluster",
       "context": 1048576,
       "maxOutput": 131072,
-      "modalities": ["text", "image", "video"],
+      "modalities": [
+        "text",
+        "image",
+        "video"
+      ],
       "reasoning": true,
       "pricing": {
         "input": 0.3,
@@ -4191,7 +4289,12 @@
         "terminalBench2": 66.0,
         "aaIndex": 55
       },
-      "tags": ["open-weights", "agentic-coding", "multimodal", "long-context"],
+      "tags": [
+        "open-weights",
+        "agentic-coding",
+        "multimodal",
+        "long-context"
+      ],
       "url": "https://www.minimax.io/models/text/m3"
     },
     {
@@ -4204,7 +4307,10 @@
       "localTier": null,
       "context": 500000,
       "maxOutput": 64000,
-      "modalities": ["text", "image"],
+      "modalities": [
+        "text",
+        "image"
+      ],
       "reasoning": true,
       "pricing": {
         "input": 2,
@@ -4217,7 +4323,11 @@
         "gdpval": 1753,
         "terminalBench2": 88.4
       },
-      "tags": ["agentic-coding", "reasoning", "frontier"],
+      "tags": [
+        "agentic-coding",
+        "reasoning",
+        "frontier"
+      ],
       "url": "https://docs.x.ai/docs/models"
     },
     {
@@ -4230,7 +4340,12 @@
       "localTier": null,
       "context": 1048576,
       "maxOutput": 65536,
-      "modalities": ["text", "image", "audio", "video"],
+      "modalities": [
+        "text",
+        "image",
+        "audio",
+        "video"
+      ],
       "reasoning": true,
       "pricing": {
         "input": 0.75,
@@ -4244,8 +4359,85 @@
         "gpqa": 94.5,
         "aaIndex": 56
       },
-      "tags": ["fast", "cheap", "agentic-coding"],
+      "tags": [
+        "fast",
+        "cheap",
+        "agentic-coding"
+      ],
       "url": "https://ai.google.dev/gemini-api/docs/models"
+    },
+    {
+      "id": "qwen3-8-27b",
+      "name": "Qwen3.8-27B",
+      "provider": "Alibaba",
+      "released": "2026-08",
+      "license": "open",
+      "params": 27.78,
+      "localTier": "workstation",
+      "context": 262144,
+      "maxOutput": 65536,
+      "modalities": [
+        "text",
+        "image",
+        "video"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.4,
+        "output": 3
+      },
+      "cutoff": "2026-05",
+      "speed": 70,
+      "scores": {
+        "gpqa": 89.2,
+        "swebenchPro": 61.7,
+        "terminalBench2": 73.0,
+        "livecodebench": 90.3,
+        "osworld": 84.3
+      },
+      "tags": [
+        "open-weights",
+        "multimodal",
+        "agentic-coding",
+        "self-host"
+      ],
+      "url": "https://huggingface.co/Qwen/Qwen3.8-27B"
+    },
+    {
+      "id": "nemotron-3-5-lightning",
+      "name": "Nemotron 3.5 Lightning",
+      "provider": "NVIDIA",
+      "released": "2026-08",
+      "license": "open",
+      "params": 30,
+      "localTier": "workstation",
+      "context": 1048576,
+      "maxOutput": 131072,
+      "modalities": [
+        "text"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.08,
+        "output": 0.2
+      },
+      "cutoff": "2026-05",
+      "speed": 297,
+      "scores": {
+        "gpqa": 75.44,
+        "mmluPro": 81.94,
+        "swebench": 51.56,
+        "hle": 11.72,
+        "aaIndex": 24
+      },
+      "tags": [
+        "open-weights",
+        "agentic-coding",
+        "cheap",
+        "fast",
+        "self-host"
+      ],
+      "url": "https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-BF16"
     }
   ]
 }
