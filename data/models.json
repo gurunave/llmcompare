@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-08-16",
+    "lastReviewed": "2026-08-18",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -409,6 +409,34 @@
         "frontier"
       ],
       "url": "https://docs.z.ai/guides/llm/glm-5.2"
+    },
+    {
+      "id": "glm-5-3",
+      "name": "GLM-5.3",
+      "provider": "Zhipu",
+      "released": "2026-08",
+      "license": "proprietary",
+      "params": 743,
+      "localTier": null,
+      "context": 1048576,
+      "maxOutput": 128000,
+      "modalities": [
+        "text"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 1.4,
+        "output": 4.4
+      },
+      "cutoff": "2025-11",
+      "speed": 160,
+      "scores": {},
+      "tags": [
+        "agentic-coding",
+        "long-context",
+        "frontier"
+      ],
+      "url": "https://docs.z.ai/guides/llm/glm-5.3"
     },
     {
       "id": "qwen3-8-max",
