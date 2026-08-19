@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-08-18",
+    "lastReviewed": "2026-08-19",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -596,8 +596,8 @@
       ],
       "reasoning": true,
       "pricing": {
-        "input": 0.14,
-        "output": 0.28
+        "input": 0.22,
+        "output": 0.66
       },
       "cutoff": "2026-04",
       "speed": 150,
@@ -866,8 +866,8 @@
       ],
       "reasoning": true,
       "pricing": {
-        "input": 2.5,
-        "output": 15
+        "input": 2,
+        "output": 12
       },
       "cutoff": "2026-02",
       "speed": 90,
@@ -897,8 +897,8 @@
       ],
       "reasoning": true,
       "pricing": {
-        "input": 1,
-        "output": 6
+        "input": 0.2,
+        "output": 1.2
       },
       "cutoff": "2026-02",
       "speed": 180,
@@ -931,8 +931,8 @@
       ],
       "reasoning": true,
       "pricing": {
-        "input": 0.435,
-        "output": 0.87
+        "input": 0.66,
+        "output": 1.98
       },
       "cutoff": "2026-03",
       "speed": 45,
