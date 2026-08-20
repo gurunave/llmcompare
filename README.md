@@ -1,7 +1,7 @@
 # LLM Compare
 
 A visual side-by-side comparison of large language models — capability, price,
-speed and context, for 121 models across 28 providers — 81 of them open-weights,
+speed and context, for 123 models across 28 providers — 81 of them open-weights,
 from cluster-scale MoEs down to models that fit on a laptop.
 
 Everything is driven by one bundled file — `data/models.json` — so there are no API
@@ -13,7 +13,7 @@ keys, no backend and no network calls at runtime.
 |---|---|
 | `/` | Browse: cost-vs-capability scatter over the whole catalog — either axis can be reframed onto any other metric (prices, individual benchmarks, speed, context, parameters) and reset back — plus a sortable, filterable table. Selection happens here. |
 | `/compare` | The selection side by side: capability radar, benchmark bars with a leaderboard mode, and a spec table marking the best value per row. |
-| `/models/[id]` | One page per model — headline stats, its own radar and benchmark bars, full specs, and the closest alternatives by price and capability. 121 statically generated pages. |
+| `/models/[id]` | One page per model — headline stats, its own radar and benchmark bars, full specs, and the closest alternatives by price and capability. 123 statically generated pages. |
 | `/recommend` | Four questions about task, budget, deployment target and context; hard constraints filter, cost and speed preferences rank. |
 | `/hardware` | Pick a GPU, Mac, DGX node or custom rig from a searchable list, and a context length; every open-weight model is sized against it — weights, KV cache and overhead — showing what fits, at which quantization, and an estimated decode speed. The footprint plot's capability axis can be reframed onto any single benchmark. |
 | `/methodology` | Where the numbers come from, how blended price and the mean score are computed, what each radar axis means. |

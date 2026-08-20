@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-08-16",
+    "lastReviewed": "2026-08-19",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -4438,6 +4438,65 @@
         "self-host"
       ],
       "url": "https://huggingface.co/nvidia/NVIDIA-Nemotron-3.5-Lightning-30B-A3B-BF16"
+    },
+    {
+      "id": "glm-5-3",
+      "name": "GLM-5.3",
+      "provider": "Zhipu",
+      "released": "2026-08",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 1048576,
+      "maxOutput": 128000,
+      "modalities": [
+        "text"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 1.4,
+        "output": 4.4
+      },
+      "cutoff": "2025-11",
+      "speed": 115,
+      "scores": {},
+      "tags": [
+        "agentic-coding",
+        "long-context",
+        "frontier"
+      ],
+      "url": "https://docs.z.ai/guides/llm/glm-5.3"
+    },
+    {
+      "id": "seed-2-1-turbo",
+      "name": "Seed 2.1 Turbo",
+      "provider": "ByteDance",
+      "released": "2026-06",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 262144,
+      "maxOutput": 32768,
+      "modalities": [
+        "text",
+        "image",
+        "video"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.5,
+        "output": 2.5
+      },
+      "cutoff": "2026-02",
+      "speed": 41,
+      "scores": {},
+      "tags": [
+        "fast",
+        "cheap",
+        "agentic-coding",
+        "multimodal"
+      ],
+      "url": "https://www.volcengine.com/product/doubao"
     }
   ]
 }
