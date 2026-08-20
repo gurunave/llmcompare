@@ -4444,9 +4444,9 @@
       "name": "GLM-5.3",
       "provider": "Zhipu",
       "released": "2026-08",
-      "license": "open",
-      "params": 744,
-      "localTier": "cluster",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
       "context": 1048576,
       "maxOutput": 128000,
       "modalities": [
@@ -4459,11 +4459,8 @@
       },
       "cutoff": "2025-11",
       "speed": 115,
-      "scores": {
-        "terminalBench2": 88.2
-      },
+      "scores": {},
       "tags": [
-        "open-weights",
         "agentic-coding",
         "long-context",
         "frontier"
