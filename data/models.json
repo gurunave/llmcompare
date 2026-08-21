@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-08-20",
+    "lastReviewed": "2026-08-21",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -4532,6 +4532,38 @@
         "multimodal"
       ],
       "url": "https://www.volcengine.com/product/doubao"
+    },
+    {
+      "id": "deepseek-v4-flash-vision-exp",
+      "name": "DeepSeek-V4-Flash-Vision-Exp",
+      "provider": "DeepSeek",
+      "released": "2026-08",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 1048576,
+      "maxOutput": 384000,
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.22,
+        "output": 0.66
+      },
+      "cutoff": "2026-04",
+      "speed": 150,
+      "scores": {
+        "terminalBench2": 83.9
+      },
+      "tags": [
+        "multimodal",
+        "agentic-coding",
+        "long-context",
+        "cheap"
+      ],
+      "url": "https://api-docs.deepseek.com/news/news260821/"
     }
   ]
 }
