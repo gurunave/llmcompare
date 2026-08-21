@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-08-19",
+    "lastReviewed": "2026-08-20",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -568,8 +568,8 @@
       ],
       "reasoning": true,
       "pricing": {
-        "input": 0.14,
-        "output": 0.28
+        "input": 0.22,
+        "output": 0.66
       },
       "cutoff": "2026-04",
       "speed": 150,
@@ -784,6 +784,41 @@
       "url": "https://platform.moonshot.ai/"
     },
     {
+      "id": "kimi-k2-7-code",
+      "name": "Kimi K2.7 Code",
+      "provider": "Moonshot",
+      "released": "2026-06",
+      "license": "open",
+      "params": 1000,
+      "localTier": "cluster",
+      "context": 262144,
+      "maxOutput": 32768,
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.95,
+        "output": 4
+      },
+      "cutoff": "2025-04",
+      "speed": 38,
+      "scores": {
+        "mmluPro": 71.4,
+        "gpqa": 89.6,
+        "aime": 91.5,
+        "swebenchPro": 58.6
+      },
+      "tags": [
+        "open-weights",
+        "agentic-coding",
+        "multimodal",
+        "reasoning"
+      ],
+      "url": "https://huggingface.co/moonshotai/Kimi-K2.7-Code"
+    },
+    {
       "id": "gpt-5-6-sol",
       "name": "GPT-5.6 Sol",
       "provider": "OpenAI",
@@ -838,8 +873,8 @@
       ],
       "reasoning": true,
       "pricing": {
-        "input": 2.5,
-        "output": 15
+        "input": 2,
+        "output": 12
       },
       "cutoff": "2026-02",
       "speed": 90,
@@ -869,8 +904,8 @@
       ],
       "reasoning": true,
       "pricing": {
-        "input": 1,
-        "output": 6
+        "input": 0.2,
+        "output": 1.2
       },
       "cutoff": "2026-02",
       "speed": 180,
@@ -903,8 +938,8 @@
       ],
       "reasoning": true,
       "pricing": {
-        "input": 0.435,
-        "output": 0.87
+        "input": 0.66,
+        "output": 1.98
       },
       "cutoff": "2026-03",
       "speed": 45,

@@ -71,6 +71,18 @@
     "globalEvery": null,
     "source": "estimated"
   },
+  "kimi-k2-7-code": {
+    "layers": 61,
+    "kvLayers": 61,
+    "kvHeads": null,
+    "headDim": null,
+    "attn": "mla",
+    "kvLatentDim": 576,
+    "activeParams": 32,
+    "slidingWindow": null,
+    "globalEvery": null,
+    "source": "estimated"
+  },
   "deepseek-v4-pro": {
     "layers": 64,
     "kvLayers": 64,
