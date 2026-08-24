@@ -4564,6 +4564,39 @@
         "cheap"
       ],
       "url": "https://api-docs.deepseek.com/news/news260821/"
+    },
+    {
+      "id": "ling-3-0-flash",
+      "name": "Ling-3.0-flash",
+      "provider": "Ant Group",
+      "released": "2026-07",
+      "license": "open",
+      "params": 124,
+      "localTier": "server",
+      "context": 262144,
+      "maxOutput": 32768,
+      "modalities": [
+        "text"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.06,
+        "output": 0.18
+      },
+      "cutoff": "2026-02",
+      "speed": 380,
+      "scores": {
+        "swebenchPro": 56.6,
+        "aaIndex": 38
+      },
+      "tags": [
+        "open-weights",
+        "agentic-coding",
+        "reasoning",
+        "long-context",
+        "efficient"
+      ],
+      "url": "https://huggingface.co/inclusionAI/Ling-3.0-flash"
     }
   ]
 }
