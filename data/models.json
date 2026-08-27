@@ -4564,6 +4564,41 @@
         "cheap"
       ],
       "url": "https://api-docs.deepseek.com/news/news260821/"
+    },
+    {
+      "id": "glm-5-3-flash",
+      "name": "GLM-5.3-Flash",
+      "provider": "Zhipu",
+      "released": "2026-08",
+      "license": "open",
+      "params": 320,
+      "localTier": "cluster",
+      "context": 1048576,
+      "maxOutput": 131072,
+      "modalities": [
+        "text",
+        "image",
+        "video"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.15,
+        "output": 0.5
+      },
+      "cutoff": "2025-11",
+      "speed": 49,
+      "scores": {
+        "aaIndex": 57
+      },
+      "tags": [
+        "open-weights",
+        "multimodal",
+        "agentic-coding",
+        "long-context",
+        "cheap",
+        "frontier"
+      ],
+      "url": "https://docs.z.ai/guides/llm/glm-5.3-flash"
     }
   ]
 }
