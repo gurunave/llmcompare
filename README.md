@@ -1,7 +1,7 @@
 # LLM Compare
 
 A visual side-by-side comparison of large language models — capability, price,
-speed and context, for 126 models across 28 providers — 83 of them open-weights,
+speed and context, for 127 models across 28 providers — 84 of them open-weights,
 from cluster-scale MoEs down to models that fit on a laptop.
 
 Everything is driven by one bundled file — `data/models.json` — so there are no API
