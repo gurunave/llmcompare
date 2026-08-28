@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { PageHeader } from "@/components/PageHeader";
 
-const FEEDBACK_EMAIL = "naveen.kumar@elmeasure.com";
+const FEEDBACK_EMAIL = "gurunave@gmail.com";
 
 const CATEGORIES = [
   { key: "bug", label: "Bug report" },
