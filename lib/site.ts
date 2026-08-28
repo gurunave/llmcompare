@@ -16,6 +16,15 @@ export const SITE_URL = process.env.SITE_URL
     ? `https://${owner}.github.io/${repo}`
     : "http://localhost:3000";
 
+/**
+ * Google Analytics 4 measurement id, e.g. "G-XXXXXXX". Left unset, the layout
+ * renders no analytics script at all — so a local build or a fork with no id
+ * configured never phones home. Set as a `NEXT_PUBLIC_GA_ID` build-time env
+ * var (a GitHub Actions repo variable for the Pages build, or a Vercel
+ * project env var).
+ */
+export const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "";
+
 /** Every route the site serves, without the per-model pages. */
 export const STATIC_ROUTES = [
   "",
@@ -24,4 +33,5 @@ export const STATIC_ROUTES = [
   "/recommend",
   "/hardware",
   "/methodology",
+  "/feedback",
 ];

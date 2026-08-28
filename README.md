@@ -5,7 +5,9 @@ speed and context, for 127 models across 28 providers — 84 of them open-weight
 from cluster-scale MoEs down to models that fit on a laptop.
 
 Everything is driven by one bundled file — `data/models.json` — so there are no API
-keys, no backend and no network calls at runtime.
+keys, no backend and no network calls at runtime, beyond an optional Google
+Analytics tag (see [Analytics](#analytics)) and the feedback page opening the
+visitor's own email client.
 
 ## Pages
 
@@ -18,6 +20,7 @@ keys, no backend and no network calls at runtime.
 | `/recommend` | Four questions about task, budget, deployment target and context; hard constraints filter, cost and speed preferences rank. |
 | `/hardware` | Pick a GPU, Mac, DGX node or custom rig from a searchable list, and a context length; every open-weight model is sized against it — weights, KV cache and overhead — showing what fits, at which quantization, and an estimated decode speed. The footprint plot's capability axis can be reframed onto any single benchmark. |
 | `/methodology` | Where the numbers come from, how blended price and the mean score are computed, what each radar axis means. |
+| `/feedback` | A category (bug, feature request, data correction, general), a subject and a message. "Open email to send" builds a `mailto:` link — subject tagged `[category]` for a mail filter — and hands off to the visitor's own email client; nothing is sent from the page itself. |
 
 A left rail carries the navigation and the selection tray, so models can be added
 or dropped from any page; below `lg` it collapses into a drawer. A toggle in the
@@ -72,6 +75,20 @@ with the defaults is enough — framework detection, build command and output
 directory all resolve on their own. Leave `GITHUB_PAGES` unset there: without it
 the config is a plain Next app with no base path. Any host that can run
 `next build` / `next start` works equally well.
+
+## Analytics
+
+Google Analytics 4 is wired up but off by default — the layout renders no
+analytics script at all unless a `NEXT_PUBLIC_GA_ID` build-time env var is set
+(a GA4 measurement id, `G-XXXXXXX`), so a local build or a fork never phones
+home unless its owner opts in.
+
+- **GitHub Pages:** add a repository variable named `NEXT_PUBLIC_GA_ID` under
+  **Settings → Secrets and variables → Actions → Variables** — the workflow
+  passes it through to the build. Not a secret: a GA measurement id is public
+  in every page's source, so a plain variable is enough.
+- **Vercel:** add `NEXT_PUBLIC_GA_ID` under the project's Environment
+  Variables.
 
 ## Editing the data
 
