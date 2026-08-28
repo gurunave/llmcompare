@@ -14,6 +14,12 @@ import { useSelection, withSelection } from "@/lib/selection";
 const NAV = [
   { href: "/", label: "Browse", tint: "var(--series-1)", match: (p: string) => p === "/" },
   {
+    href: "/timeline",
+    label: "Timeline",
+    tint: "var(--series-6)",
+    match: (p: string) => p.startsWith("/timeline"),
+  },
+  {
     href: "/compare",
     label: "Compare",
     tint: "var(--series-3)",

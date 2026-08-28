@@ -17,4 +17,11 @@ export const SITE_URL = process.env.SITE_URL
     : "http://localhost:3000";
 
 /** Every route the site serves, without the per-model pages. */
-export const STATIC_ROUTES = ["", "/compare", "/recommend", "/hardware", "/methodology"];
+export const STATIC_ROUTES = [
+  "",
+  "/timeline",
+  "/compare",
+  "/recommend",
+  "/hardware",
+  "/methodology",
+];

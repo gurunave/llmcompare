@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-08-26",
+    "lastReviewed": "2026-08-27",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -4599,6 +4599,44 @@
         "frontier"
       ],
       "url": "https://docs.z.ai/guides/llm/glm-5.3-flash"
+    },
+    {
+      "id": "qwen3-8-flash-next",
+      "name": "Qwen3.8-Flash-Next",
+      "provider": "Alibaba",
+      "released": "2026-08",
+      "license": "open",
+      "params": 180,
+      "localTier": "server",
+      "context": 262144,
+      "maxOutput": 131072,
+      "modalities": [
+        "text",
+        "image",
+        "video"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.16,
+        "output": 0.47
+      },
+      "cutoff": "2026-06",
+      "speed": 74,
+      "scores": {
+        "gpqa": 91.7,
+        "swebenchPro": 62.5,
+        "livecodebench": 91.9,
+        "aaIndex": 56
+      },
+      "tags": [
+        "open-weights",
+        "multimodal",
+        "agentic-coding",
+        "long-context",
+        "cheap",
+        "efficient"
+      ],
+      "url": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next"
     }
   ]
 }
