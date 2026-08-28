@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-08-27",
+    "lastReviewed": "2026-08-28",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -4637,6 +4637,38 @@
         "efficient"
       ],
       "url": "https://huggingface.co/Qwen/Qwen3.8-Flash-Next"
+    },
+    {
+      "id": "ling-3-0-flash",
+      "name": "Ling-3.0-Flash",
+      "provider": "Ant Group",
+      "released": "2026-07",
+      "license": "open",
+      "params": 124,
+      "localTier": "server",
+      "context": 262144,
+      "maxOutput": 32768,
+      "modalities": [
+        "text"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.075,
+        "output": 0.22
+      },
+      "cutoff": "2026-04",
+      "speed": 368,
+      "scores": {
+        "aaIndex": 38
+      },
+      "tags": [
+        "open-weights",
+        "agentic-coding",
+        "long-context",
+        "cheap",
+        "efficient"
+      ],
+      "url": "https://huggingface.co/inclusionAI/Ling-3.0-flash"
     }
   ]
 }
