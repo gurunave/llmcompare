@@ -1,14 +1,17 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { MultiSelect, type MultiOption } from "@/components/MultiSelect";
 import { PageHeader } from "@/components/PageHeader";
 import { TimelineFeed } from "@/components/TimelineFeed";
 import { TimelineTable } from "@/components/TimelineTable";
 import { TimelinePanel } from "@/components/charts/TimelinePanel";
+import { providerColor } from "@/lib/accent";
 import { formatMonth } from "@/lib/format";
-import { MODELS, PROVIDERS } from "@/lib/models";
+import { MODELS } from "@/lib/models";
 import { useSelection } from "@/lib/selection";
 import { byReleaseDesc } from "@/lib/timeline";
+import type { DerivedModel } from "@/lib/types";
 
 type View = "chart" | "feed" | "table";
 type LicenseFilter = "all" | "open" | "proprietary";
@@ -28,21 +31,24 @@ export default function TimelinePage() {
 
   const [view, setView] = useState<View>("chart");
   const [query, setQuery] = useState("");
-  const [provider, setProvider] = useState("all");
+  const [providers, setProviders] = useState<string[]>([]);
   const [license, setLicense] = useState<LicenseFilter>("all");
+
+  const providerOptions = useMemo(() => buildProviderOptions(MODELS), []);
 
   const filtered = useMemo(() => {
     const q = query.trim().toLowerCase();
+    const byProvider = new Set(providers);
     return MODELS.filter((m) => {
       if (q && !`${m.name} ${m.provider} ${m.tags.join(" ")}`.toLowerCase().includes(q))
         return false;
-      if (provider !== "all" && m.provider !== provider) return false;
+      if (byProvider.size > 0 && !byProvider.has(m.provider)) return false;
       if (license !== "all" && m.license !== license) return false;
       return true;
     }).sort(byReleaseDesc);
-  }, [query, provider, license]);
+  }, [query, providers, license]);
 
-  const filtering = query.trim() !== "" || provider !== "all" || license !== "all";
+  const filtering = query.trim() !== "" || providers.length > 0 || license !== "all";
 
   return (
     <main className="mx-auto max-w-5xl space-y-4 px-4 py-6 lg:py-8">
@@ -69,19 +75,14 @@ export default function TimelinePage() {
           aria-label="Search models"
           className="field sm:max-w-xs"
         />
-        <select
-          value={provider}
-          onChange={(e) => setProvider(e.target.value)}
-          aria-label="Filter by provider"
-          className="field sm:w-auto"
-        >
-          <option value="all">All providers</option>
-          {PROVIDERS.map((p) => (
-            <option key={p} value={p}>
-              {p}
-            </option>
-          ))}
-        </select>
+        <MultiSelect
+          label="Providers"
+          emptyLabel="All"
+          placeholder="Search providers…"
+          options={providerOptions}
+          value={providers}
+          onChange={setProviders}
+        />
         <div className="flex flex-wrap gap-1.5">
           {(["all", "open", "proprietary"] as LicenseFilter[]).map((l) => (
             <FilterChip key={l} active={license === l} onClick={() => setLicense(l)}>
@@ -128,6 +129,19 @@ function ViewSwitch({ view, onChange }: { view: View; onChange: (v: View) => voi
       ))}
     </div>
   );
+}
+
+function buildProviderOptions(all: DerivedModel[]): MultiOption[] {
+  const counts = new Map<string, number>();
+  for (const m of all) counts.set(m.provider, (counts.get(m.provider) ?? 0) + 1);
+  return Array.from(counts.entries())
+    .sort((a, b) => a[0].localeCompare(b[0]))
+    .map(([provider, count]) => ({
+      id: provider,
+      label: provider,
+      hint: `${count} model${count === 1 ? "" : "s"}`,
+      tint: providerColor(provider),
+    }));
 }
 
 function FilterChip({
