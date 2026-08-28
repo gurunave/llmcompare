@@ -36,6 +36,7 @@ jobs:
         env:
           GITHUB_PAGES: "true"
           REPO_NAME: ${{ github.event.repository.name }}
+          NEXT_PUBLIC_GA_ID: ${{ vars.NEXT_PUBLIC_GA_ID }}
 
       # Jekyll would otherwise drop Next's _next/ asset directory.
       - run: touch out/.nojekyll

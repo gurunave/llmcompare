@@ -43,6 +43,12 @@ const NAV = [
     tint: "var(--series-2)",
     match: (p: string) => p.startsWith("/methodology"),
   },
+  {
+    href: "/feedback",
+    label: "Feedback",
+    tint: "var(--series-7)",
+    match: (p: string) => p.startsWith("/feedback"),
+  },
 ];
 
 export function AppShell({ children }: { children: ReactNode }) {
