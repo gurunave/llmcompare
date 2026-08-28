@@ -58,7 +58,7 @@ export default function TimelinePage() {
           NEWEST && OLDEST
             ? `${MODELS.length} models from ${formatMonth(OLDEST.released)} to ${formatMonth(
                 NEWEST.released
-              )}. Plotted against capability, read as a feed, or sorted in a table.`
+              )}. Plotted against any benchmark, read as a feed, or sorted in a table.`
             : undefined
         }
         actions={<ViewSwitch view={view} onChange={setView} />}

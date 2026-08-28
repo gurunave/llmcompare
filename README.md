@@ -12,7 +12,7 @@ keys, no backend and no network calls at runtime.
 | Route | What it does |
 |---|---|
 | `/` | Browse: cost-vs-capability scatter over the whole catalog — either axis can be reframed onto any other metric (prices, individual benchmarks, speed, context, parameters) and reset back — plus a sortable, filterable table. Selection happens here. |
-| `/timeline` | Release dates across the catalog, in three views: a release-date-vs-capability scatter, a reverse-chronological feed grouped by month, and a sortable table — one shared search/provider/licence filter across all three. |
+| `/timeline` | Release dates across the catalog, in three views: a release-date-vs-score scatter (capability index by default, reframeable onto any category or individual benchmark), a reverse-chronological feed grouped by month, and a sortable table — one shared search/provider/licence filter across all three. |
 | `/compare` | The selection side by side: capability radar, benchmark bars with a leaderboard mode, and a spec table marking the best value per row. |
 | `/models/[id]` | One page per model — headline stats, its own radar and benchmark bars, full specs, and the closest alternatives by price and capability. 127 statically generated pages. |
 | `/recommend` | Four questions about task, budget, deployment target and context; hard constraints filter, cost and speed preferences rank. |
