@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import {
   CartesianGrid,
   LabelList,
@@ -13,8 +13,10 @@ import {
   ZAxis,
 } from "recharts";
 import { ChartCard } from "@/components/ChartCard";
+import { InfoHint } from "@/components/InfoHint";
 import { SeriesLegend } from "@/components/SeriesLegend";
-import { formatMonth, formatScore, formatTokens } from "@/lib/format";
+import { formatMonth, formatTokens } from "@/lib/format";
+import { DEFAULT_SCORE, METRIC_BY_KEY, SCORE_METRICS, metricOf, type Metric } from "@/lib/metrics";
 import { indexToMonth, monthIndex, monthTicks } from "@/lib/timeline";
 import { seriesColor } from "@/lib/series";
 import type { DerivedModel } from "@/lib/types";
@@ -45,13 +47,17 @@ interface Props {
 }
 
 /**
- * Release date against capability, rather than a bare list of dates — it turns
+ * Release date against a score, rather than a bare list of dates — it turns
  * "when did this come out" into "how good was the frontier at that point,"
- * which is the more useful question. Models without a published capability
- * score have no y to plot and drop out of this view; they still show up in
- * the feed and the table.
+ * which is the more useful question. The score defaults to the capability
+ * index but can be reframed onto any category or individual benchmark.
+ * Models without a published score on the chosen metric have no y to plot
+ * and drop out of this view; they still show up in the feed and the table.
  */
 export function TimelinePanel({ pool, selected, hidden, onToggle, onSolo, onShowAll }: Props) {
+  const [yKey, setYKey] = useState(DEFAULT_SCORE);
+  const yMetric = metricOf(yKey, DEFAULT_SCORE);
+
   const shownIds = new Set(selected.filter((m) => !hidden?.has(m.id)).map((m) => m.id));
 
   const { plottable, toPoint } = useMemo(() => {
@@ -67,11 +73,11 @@ export function TimelinePanel({ pool, selected, hidden, onToggle, onSolo, onShow
     });
 
     const rows = pool
-      .filter((m) => m.capability !== null)
-      .map((m) => ({ m, x: monthIndex(m.released), y: m.capability as number }));
+      .map((m) => ({ m, x: monthIndex(m.released), y: yMetric.value(m) }))
+      .filter((r): r is { m: DerivedModel; x: number; y: number } => r.y !== null);
 
     return { plottable: rows, toPoint: point };
-  }, [pool]);
+  }, [pool, yMetric]);
 
   const xValues = plottable.map((r) => r.x);
   const minIdx = xValues.length ? Math.min(...xValues) : monthIndex("2024-01");
@@ -106,15 +112,16 @@ export function TimelinePanel({ pool, selected, hidden, onToggle, onSolo, onShow
 
   return (
     <ChartCard
-      title="Release date vs. capability"
-      subtitle="Every model plotted by when it shipped and where it lands on the capability index — the shape of the frontier moving out over time."
+      title={`Released vs. ${yMetric.label}`}
+      subtitle={`Every model plotted by when it shipped, scored against the ${yMetric.axisLabel} — the shape of the frontier moving out over time.`}
       note={`Bubble size is the context window.${
         omitted > 0
-          ? ` ${omitted} model${omitted === 1 ? "" : "s"} without a published capability score ${
+          ? ` ${omitted} model${omitted === 1 ? "" : "s"} without a published ${yMetric.axisLabel} ${
               omitted === 1 ? "is" : "are"
             } omitted — see the feed or the table for the full list.`
           : ""
       }`}
+      actions={<AxisPicker value={yMetric.key} onChange={setYKey} />}
     >
       <div className="h-[380px] w-full sm:h-[440px]">
         <ResponsiveContainer width="100%" height="100%">
@@ -147,7 +154,7 @@ export function TimelinePanel({ pool, selected, hidden, onToggle, onSolo, onShow
               axisLine={{ stroke: "var(--baseline)" }}
               width={36}
               label={{
-                value: "Capability index",
+                value: yMetric.axisLabel,
                 angle: -90,
                 position: "insideLeft",
                 fill: "var(--text-muted)",
@@ -156,7 +163,7 @@ export function TimelinePanel({ pool, selected, hidden, onToggle, onSolo, onShow
               }}
             />
             <ZAxis type="number" dataKey="z" range={[36, 240]} />
-            <Tooltip content={<TimelineTooltip />} cursor={{ strokeDasharray: "3 3" }} />
+            <Tooltip content={<TimelineTooltip yMetric={yMetric} />} cursor={{ strokeDasharray: "3 3" }} />
             <Scatter
               name="Open weights"
               data={openCloud}
@@ -231,7 +238,48 @@ function CloudKey({ color, label }: { color: string; label: string }) {
   );
 }
 
-function TimelineTooltip({ active, payload }: { active?: boolean; payload?: Array<{ payload: Point }> }) {
+/** Y-axis metric picker — restricted to score-like metrics, since X is fixed to release date. */
+function AxisPicker({ value, onChange }: { value: string; onChange: (key: string) => void }) {
+  const current = METRIC_BY_KEY.get(value);
+
+  return (
+    <span className="inline-flex items-center gap-1.5">
+      <label className="inline-flex items-center gap-1.5 text-xs text-ink-secondary">
+        <span className="font-medium">Benchmark</span>
+        <select
+          value={value}
+          onChange={(e) => onChange(e.target.value)}
+          aria-label="Y-axis benchmark"
+          className="field w-auto py-1.5 text-xs"
+        >
+          {SCORE_METRICS.map((m) => (
+            <option key={m.key} value={m.key}>
+              {m.label}
+            </option>
+          ))}
+        </select>
+      </label>
+      {current?.hint && (
+        <InfoHint
+          label={current.label}
+          title={current.label}
+          body={current.hint}
+          source={current.source}
+        />
+      )}
+    </span>
+  );
+}
+
+function TimelineTooltip({
+  active,
+  payload,
+  yMetric,
+}: {
+  active?: boolean;
+  payload?: Array<{ payload: Point }>;
+  yMetric: Metric;
+}) {
   if (!active || !payload?.length) return null;
   const p = payload[0].payload;
   return (
@@ -242,7 +290,7 @@ function TimelineTooltip({ active, payload }: { active?: boolean; payload?: Arra
       </p>
       <dl className="space-y-0.5 text-xs">
         <Row label="Released" value={formatMonth(indexToMonth(p.x))} />
-        <Row label="Capability" value={formatScore(p.y)} />
+        <Row label={yMetric.label} value={yMetric.format(p.y)} />
         <Row label="Context" value={`${formatTokens(p.z)} tokens`} />
       </dl>
     </div>
