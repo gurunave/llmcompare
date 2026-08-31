@@ -161,6 +161,11 @@ cached-input and volume discounts. Verify against the provider's own documentati
 before making a purchasing decision. A blank cell means "not published or not
 comparably measured" — it is never a zero.
 
+**Pending re-verification:** `glm-5-3` and `glm-5-3-flash`'s `aaIndex`,
+`terminalBench2`, `scicode`, `gpqa` and `mmluPro` scores (added 2026-08-31) each
+came from a single, unconfirmed source. Cross-check them against a second source
+on the next data review and correct or remove any that don't hold up.
+
 ## Design notes
 
 - Up to ten models can be compared at once, which is more than any palette can name.

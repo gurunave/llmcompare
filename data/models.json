@@ -4494,7 +4494,10 @@
       },
       "cutoff": "2025-11",
       "speed": 115,
-      "scores": {},
+      "scores": {
+        "aaIndex": 60,
+        "terminalBench2": 88.2
+      },
       "tags": [
         "agentic-coding",
         "long-context",
@@ -4588,7 +4591,11 @@
       "cutoff": "2025-11",
       "speed": 49,
       "scores": {
-        "aaIndex": 57
+        "aaIndex": 57,
+        "terminalBench2": 84.3,
+        "scicode": 46.1,
+        "gpqa": 91.5,
+        "mmluPro": 80.6
       },
       "tags": [
         "open-weights",
