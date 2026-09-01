@@ -704,6 +704,36 @@
       "url": "https://platform.claude.com/docs/en/models/fable-5-1/overview"
     },
     {
+      "id": "claude-mythos-5-1",
+      "name": "Claude Mythos 5.1",
+      "provider": "Anthropic",
+      "released": "2026-09",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 1000000,
+      "maxOutput": 128000,
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 10,
+        "output": 50
+      },
+      "cutoff": "2026-06",
+      "speed": 63,
+      "scores": {},
+      "tags": [
+        "frontier",
+        "agentic-coding",
+        "long-horizon",
+        "restricted-access"
+      ],
+      "url": "https://platform.claude.com/docs/en/models/mythos-5-1/overview"
+    },
+    {
       "id": "claude-fable-5",
       "name": "Claude Fable 5",
       "provider": "Anthropic",
