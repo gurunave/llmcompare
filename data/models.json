@@ -158,13 +158,13 @@
         "id": "hle",
         "label": "Humanity's Last Exam",
         "short": "HLE",
-        "blurb": "Expert-written questions across every discipline; top models sit near 35%, humans near 90%",
+        "blurb": "Expert-written questions across every discipline; the frontier crossed 60% in 2026, humans sit near 90%",
         "category": "reasoning",
         "scale": "pct",
         "tier": "headline",
         "range": [
           2,
-          60
+          70
         ],
         "inIndex": true,
         "source": "CAIS / Scale AI Humanity's Last Exam, text-only subset, no tools"
@@ -693,7 +693,8 @@
         "aaIndex": 66,
         "gdpval": 1853,
         "terminalBench2": 85.0,
-        "livecodebench": 90.5
+        "livecodebench": 90.5,
+        "hle": 60.9
       },
       "tags": [
         "frontier",

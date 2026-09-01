@@ -140,7 +140,7 @@ export default function MethodologyPage() {
             <dt className="font-medium text-ink">Why not a plain mean of the scores</dt>
             <dd className="mt-0.5 text-ink-secondary">
               Because the benchmarks are no longer in the same difficulty band. The best score in
-              this catalog is 53 on Humanity&apos;s Last Exam and 30 on ARC-AGI-3, against 91 on
+              this catalog is 61 on Humanity&apos;s Last Exam and 30 on ARC-AGI-3, against 92 on
               MMLU-Pro. Averaged raw, a frontier model that reports the hard evaluations would land
               below a mid-tier model that only reports the easy ones — the headline number would
               reward not publishing. Normalizing per benchmark, then averaging per category, removes

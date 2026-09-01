@@ -124,9 +124,10 @@ describe("coverage", () => {
  */
 describe("regressions", () => {
   it("does not punish a model for publishing a hard benchmark", () => {
-    // Reporting HLE (frontier ~53) alongside GPQA must not score below
-    // reporting GPQA alone. Averaging raw scores inverted exactly here.
-    const withHard = categoryScore(model({ gpqa: 92, hle: 53 }), "reasoning")!;
+    // Reporting HLE (frontier ~61, on a range that runs to 70) alongside GPQA
+    // must not score below reporting GPQA alone. Averaging raw scores inverted
+    // exactly here.
+    const withHard = categoryScore(model({ gpqa: 92, hle: 61 }), "reasoning")!;
     const easyOnly = categoryScore(model({ gpqa: 92 }), "reasoning")!;
     expect(withHard).toBeGreaterThanOrEqual(easyOnly);
   });
