@@ -19,6 +19,7 @@ visitor's own email client.
 | `/models/[id]` | One page per model — headline stats, its own radar and benchmark bars, full specs, and the closest alternatives by price and capability. 135 statically generated pages. |
 | `/recommend` | Four questions about task, budget, deployment target and context; hard constraints filter, cost and speed preferences rank. |
 | `/hardware` | Pick a GPU, Mac, DGX node or custom rig from a searchable list, and a context length; every open-weight model is sized against it — weights, KV cache and overhead — showing what fits, at which quantization, and an estimated decode speed. The footprint plot's capability axis can be reframed onto any single benchmark. |
+| `/coverage` | Data coverage: how much of the catalog is actually measured. Headline density (published figures against every figure that could exist), then three views — every benchmark with the share of models reporting it and, expanded, the named lists of who does and does not; every model with the count and share of benchmarks it publishes; and a models × benchmarks matrix where a filled square is a published figure. Provider, category and tier filters narrow both pools, and every number is recomputed over what is left. |
 | `/methodology` | Where the numbers come from, how blended price and the mean score are computed, what each radar axis means. |
 | `/feedback` | A category (bug, feature request, data correction, general), a subject and a message. "Open email to send" builds a `mailto:` link — subject tagged `[category]` for a mail filter — and hands off to the visitor's own email client; nothing is sent from the page itself. |
 
@@ -220,6 +221,7 @@ components/          app shell, browser, recommender, spec table, selection tray
 components/charts/   radar, cost-vs-capability scatter, benchmark bars
 lib/                 typed catalog, derived metrics, selection state, scoring
 lib/hardware.ts      memory and throughput model — pure functions, no React
+lib/coverage.ts      what is measured and what is missing — pure functions, no React
 data/models.json     the catalog
 data/hardware.json   GPUs, Macs and CPU tiers: memory, bandwidth, device count
 ```

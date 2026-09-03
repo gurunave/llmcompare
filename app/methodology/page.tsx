@@ -51,7 +51,9 @@ export default function MethodologyPage() {
           Every figure lives in a single bundled file, <code>data/models.json</code>, covering{" "}
           {MODELS.length} models from {new Set(MODELS.map((m) => m.provider)).size} providers. There
           is no API and no runtime network call: what you see is what shipped with the build, last
-          reviewed {formatMonth(catalog.meta.lastReviewed.slice(0, 7))}.
+          reviewed {formatMonth(catalog.meta.lastReviewed.slice(0, 7))}. The{" "}
+          <a href="/coverage" className="link">coverage page</a> maps how much of it is filled in —
+          which benchmarks have results, which models report them, and where the gaps are.
         </p>
         <p className="mt-3 rounded-lg border border-hairline p-3 text-sm leading-relaxed text-ink-secondary">
           <strong className="text-ink">Treat the numbers as approximate.</strong>{" "}
