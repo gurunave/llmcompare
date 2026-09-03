@@ -192,6 +192,17 @@ body {
     @apply hover:underline;
   }
 
+  /* The disclosure marker on a benchmark row. `list-none` on the summary drops
+     the native triangle, which is inconsistent between browsers and cannot be
+     placed inside the row's own layout. */
+  .chevron {
+    @apply inline-block transition-transform;
+  }
+
+  details[open] > summary .chevron {
+    transform: rotate(90deg);
+  }
+
   .num {
     font-variant-numeric: tabular-nums;
   }

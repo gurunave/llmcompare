@@ -38,6 +38,12 @@ const NAV = [
     match: (p: string) => p.startsWith("/hardware"),
   },
   {
+    href: "/coverage",
+    label: "Coverage",
+    tint: "var(--series-8)",
+    match: (p: string) => p.startsWith("/coverage"),
+  },
+  {
     href: "/methodology",
     label: "Methodology",
     tint: "var(--series-2)",

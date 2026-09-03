@@ -32,6 +32,7 @@ export const STATIC_ROUTES = [
   "/compare",
   "/recommend",
   "/hardware",
+  "/coverage",
   "/methodology",
   "/feedback",
 ];
