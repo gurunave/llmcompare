@@ -29,7 +29,7 @@
         "tier": "headline",
         "range": [
           10,
-          90
+          95
         ],
         "inIndex": true,
         "source": "Terminal-Bench 2.1 leaderboard - a harder revision of the 89-task 2.0 set, and not directly comparable to it"
@@ -4929,6 +4929,42 @@
         "self-host"
       ],
       "url": "https://huggingface.co/inclusionAI/Ling-3.0-flash"
+    },
+    {
+      "id": "gemini-3-8-flash",
+      "name": "Gemini 3.8 Flash",
+      "provider": "Google",
+      "released": "2026-09",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 1048576,
+      "maxOutput": 65536,
+      "modalities": [
+        "text",
+        "image",
+        "audio",
+        "video"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.75,
+        "output": 3.75
+      },
+      "cutoff": "2026-03",
+      "speed": 305,
+      "scores": {
+        "gdpval": 1545,
+        "terminalBench2": 90.8,
+        "gpqa": 95.3,
+        "aaIndex": 59
+      },
+      "tags": [
+        "fast",
+        "cheap",
+        "agentic-coding"
+      ],
+      "url": "https://ai.google.dev/gemini-api/docs/models"
     }
   ]
 }
