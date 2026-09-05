@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-09-03",
+    "lastReviewed": "2026-09-05",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -224,7 +224,7 @@
         "tier": "headline",
         "range": [
           0,
-          95
+          100
         ],
         "inIndex": true,
         "source": "Epoch AI FrontierMath Tier 4, v2 - the June 2026 revision that corrected errors in 42% of the original problems"
@@ -4965,6 +4965,40 @@
         "agentic-coding"
       ],
       "url": "https://ai.google.dev/gemini-api/docs/models"
+    },
+    {
+      "id": "gpt-6-astra",
+      "name": "GPT-6 Astra",
+      "provider": "OpenAI",
+      "released": "2026-09",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 1000000,
+      "maxOutput": 128000,
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 10,
+        "output": 50
+      },
+      "cutoff": "2026-04",
+      "speed": 64,
+      "scores": {
+        "gpqa": 96,
+        "frontierMath": 97.6,
+        "aaIndex": 61
+      },
+      "tags": [
+        "frontier",
+        "agentic-coding",
+        "reasoning",
+        "flagship"
+      ],
+      "url": "https://platform.openai.com/docs/models"
     }
   ]
 }
