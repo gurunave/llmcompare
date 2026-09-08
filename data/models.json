@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-09-04",
+    "lastReviewed": "2026-09-08",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -5029,6 +5029,37 @@
         "agentic-coding"
       ],
       "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/3-8-flash-and-3-8-flash-cyber/"
+    },
+    {
+      "id": "qwen3-8-max-0902",
+      "name": "Qwen3.8-Max-0902",
+      "provider": "Alibaba",
+      "released": "2026-09",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 1048576,
+      "maxOutput": 131072,
+      "modalities": [
+        "text",
+        "image",
+        "video"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 2,
+        "output": 6
+      },
+      "cutoff": "2026-05",
+      "speed": 85,
+      "scores": {},
+      "tags": [
+        "frontier",
+        "multimodal",
+        "long-context",
+        "agentic-coding"
+      ],
+      "url": "https://openrouter.ai/qwen/qwen3.8-max-0902"
     }
   ]
 }
