@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-09-06",
+    "lastReviewed": "2026-09-09",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -5029,6 +5029,73 @@
         "agentic-coding"
       ],
       "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/3-8-flash-and-3-8-flash-cyber/"
+    },
+    {
+      "id": "qwen3-8-max-0902",
+      "name": "Qwen3.8-Max-0902",
+      "provider": "Alibaba",
+      "released": "2026-09",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 1048576,
+      "maxOutput": 131072,
+      "modalities": [
+        "text",
+        "image",
+        "video"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 2,
+        "output": 6
+      },
+      "cutoff": "2026-05",
+      "speed": 85,
+      "scores": {
+        "osworld": 86.1,
+        "terminalBench2": 86.6,
+        "swebenchPro": 67.7,
+        "gpqa": 92.6,
+        "mmluPro": 82.3
+      },
+      "tags": [
+        "frontier",
+        "multimodal",
+        "long-context",
+        "agentic-coding",
+        "coding"
+      ],
+      "url": "https://openrouter.ai/qwen/qwen3.8-max-0902"
+    },
+    {
+      "id": "ling-3-0-flash-sante",
+      "name": "Ling 3.0 Flash Sante",
+      "provider": "Ant Group",
+      "released": "2026-09",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 262144,
+      "maxOutput": 32768,
+      "modalities": [
+        "text"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.07,
+        "output": 0.22
+      },
+      "cutoff": "2026-03",
+      "speed": 370,
+      "scores": {},
+      "tags": [
+        "reasoning",
+        "agentic-coding",
+        "long-context",
+        "rag"
+      ],
+      "url": "https://openrouter.ai/inclusionai/ling-3.0-flash-sante:free"
     },
     {
       "id": "granite-4-2-3b",
