@@ -1,7 +1,7 @@
 # LLM Compare
 
 A visual side-by-side comparison of large language models — capability, price,
-speed and context, for 138 models across 29 providers — 89 of them open-weights,
+speed and context, for 141 models across 29 providers — 92 of them open-weights,
 from cluster-scale MoEs down to models that fit on a laptop.
 
 Everything is driven by one bundled file — `data/models.json` — so there are no API
@@ -16,7 +16,7 @@ visitor's own email client.
 | `/` | Browse: cost-vs-capability scatter over the whole catalog — either axis can be reframed onto any other metric (prices, individual benchmarks, speed, context, parameters) and reset back — plus a sortable, filterable table. Selection happens here. |
 | `/timeline` | Release dates across the catalog, in three views: a release-date-vs-score scatter (capability index by default, reframeable onto any category or individual benchmark), a reverse-chronological feed grouped by month, and a sortable table — one shared search/provider/licence filter across all three. |
 | `/compare` | The selection side by side: capability radar, benchmark bars with a leaderboard mode, and a spec table marking the best value per row. |
-| `/models/[id]` | One page per model — headline stats, its own radar and benchmark bars, full specs, and the closest alternatives by price and capability. 138 statically generated pages. |
+| `/models/[id]` | One page per model — headline stats, its own radar and benchmark bars, full specs, and the closest alternatives by price and capability. 141 statically generated pages. |
 | `/recommend` | Four questions about task, budget, deployment target and context; hard constraints filter, cost and speed preferences rank. |
 | `/hardware` | Pick a GPU, Mac, DGX node or custom rig from a searchable list, and a context length; every open-weight model is sized against it — weights, KV cache and overhead — showing what fits, at which quantization, and an estimated decode speed. The footprint plot's capability axis can be reframed onto any single benchmark. |
 | `/coverage` | Data coverage: how much of the catalog is actually measured. Headline density (published figures against every figure that could exist), then three views — every benchmark with the share of models reporting it and, expanded, the named lists of who does and does not; every model with the count and share of benchmarks it publishes; and a models × benchmarks matrix where a filled square is a published figure. Provider, category and tier filters narrow both pools, and every number is recomputed over what is left. |
@@ -174,6 +174,14 @@ range was widened to fit its reported 97.6. Cross-check both against OpenAI's
 primary source on the next review. A reported ARC-AGI-3 figure near 100% for
 this model was excluded as implausible against the benchmark's near-0%
 frontier and the catalog's existing range, rather than recorded unverified.
+
+`granite-4-2-3b`, `granite-4-2-8b` and `granite-4-2-30b` (added 2026-09-06,
+IBM's August 25 release that the prior two reviews missed) have their
+`cutoff` estimated from the catalog's typical release-to-cutoff lag — IBM has
+not published one — and `granite-4-2-8b`'s `speed` is interpolated between
+the sourced 3B and 30B throughput figures rather than measured directly; the
+egress proxy blocked Hugging Face's own model cards. Cross-check all three
+against IBM's documentation on the next review.
 
 ## Design notes
 

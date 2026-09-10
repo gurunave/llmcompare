@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-09-04",
+    "lastReviewed": "2026-09-06",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -5029,6 +5029,106 @@
         "agentic-coding"
       ],
       "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/3-8-flash-and-3-8-flash-cyber/"
+    },
+    {
+      "id": "granite-4-2-3b",
+      "name": "Granite 4.2 3B",
+      "provider": "IBM",
+      "released": "2026-08",
+      "license": "open",
+      "params": 3,
+      "localTier": "laptop",
+      "context": 131072,
+      "maxOutput": 16384,
+      "modalities": [
+        "text"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.03,
+        "output": 0.12
+      },
+      "cutoff": "2026-02",
+      "speed": 210,
+      "scores": {
+        "mmluPro": 68
+      },
+      "tags": [
+        "open-weights",
+        "enterprise",
+        "reasoning",
+        "laptop",
+        "edge"
+      ],
+      "url": "https://www.ibm.com/granite/docs/"
+    },
+    {
+      "id": "granite-4-2-8b",
+      "name": "Granite 4.2 8B",
+      "provider": "IBM",
+      "released": "2026-08",
+      "license": "open",
+      "params": 8,
+      "localTier": "laptop",
+      "context": 131072,
+      "maxOutput": 16384,
+      "modalities": [
+        "text"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.06,
+        "output": 0.25
+      },
+      "cutoff": "2026-02",
+      "speed": 190,
+      "scores": {
+        "mmluPro": 74,
+        "swebench": 48
+      },
+      "tags": [
+        "open-weights",
+        "enterprise",
+        "reasoning",
+        "laptop",
+        "self-host"
+      ],
+      "url": "https://www.ibm.com/granite/docs/"
+    },
+    {
+      "id": "granite-4-2-30b",
+      "name": "Granite 4.2 30B",
+      "provider": "IBM",
+      "released": "2026-08",
+      "license": "open",
+      "params": 30,
+      "localTier": "workstation",
+      "context": 131072,
+      "maxOutput": 16384,
+      "modalities": [
+        "text"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.16,
+        "output": 0.65
+      },
+      "cutoff": "2026-02",
+      "speed": 76,
+      "scores": {
+        "mmluPro": 78,
+        "gpqa": 66,
+        "swebench": 57,
+        "terminalBench2": 29
+      },
+      "tags": [
+        "open-weights",
+        "enterprise",
+        "reasoning",
+        "workstation",
+        "self-host"
+      ],
+      "url": "https://www.ibm.com/granite/docs/"
     }
   ]
 }
