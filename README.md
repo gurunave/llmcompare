@@ -1,7 +1,7 @@
 # LLM Compare
 
 A visual side-by-side comparison of large language models — capability, price,
-speed and context, for 143 models across 29 providers — 92 of them open-weights,
+speed and context, for 144 models across 29 providers — 93 of them open-weights,
 from cluster-scale MoEs down to models that fit on a laptop.
 
 Everything is driven by one bundled file — `data/models.json` — so there are no API
@@ -16,7 +16,7 @@ visitor's own email client.
 | `/` | Browse: cost-vs-capability scatter over the whole catalog — either axis can be reframed onto any other metric (prices, individual benchmarks, speed, context, parameters) and reset back — plus a sortable, filterable table. Selection happens here. |
 | `/timeline` | Release dates across the catalog, in three views: a release-date-vs-score scatter (capability index by default, reframeable onto any category or individual benchmark), a reverse-chronological feed grouped by month, and a sortable table — one shared search/provider/licence filter across all three. |
 | `/compare` | The selection side by side: capability radar, benchmark bars with a leaderboard mode, and a spec table marking the best value per row. |
-| `/models/[id]` | One page per model — headline stats, its own radar and benchmark bars, full specs, and the closest alternatives by price and capability. 143 statically generated pages. |
+| `/models/[id]` | One page per model — headline stats, its own radar and benchmark bars, full specs, and the closest alternatives by price and capability. 144 statically generated pages. |
 | `/recommend` | Four questions about task, budget, deployment target and context; hard constraints filter, cost and speed preferences rank. |
 | `/hardware` | Pick a GPU, Mac, DGX node or custom rig from a searchable list, and a context length; every open-weight model is sized against it — weights, KV cache and overhead — showing what fits, at which quantization, and an estimated decode speed. The footprint plot's capability axis can be reframed onto any single benchmark. |
 | `/coverage` | Data coverage: how much of the catalog is actually measured. Headline density (published figures against every figure that could exist), then three views — every benchmark with the share of models reporting it and, expanded, the named lists of who does and does not; every model with the count and share of benchmarks it publishes; and a models × benchmarks matrix where a filled square is a published figure. Provider, category and tier filters narrow both pools, and every number is recomputed over what is left. |
@@ -195,6 +195,19 @@ not published one — and `granite-4-2-8b`'s `speed` is interpolated between
 the sourced 3B and 30B throughput figures rather than measured directly; the
 egress proxy blocked Hugging Face's own model cards. Cross-check all three
 against IBM's documentation on the next review.
+
+`deepseek-v4-1-flash` (added 2026-09-10, released the same day) ships with no
+benchmark scores: DeepSeek's own comparison table for it emphasizes evals this
+catalog doesn't track (CyberGym, DeepSWE v1.1, Automation-Bench), and the two
+third-party GPQA Diamond figures found for it - 90.9 and 36.8 - contradict
+each other by too wide a margin to record either; the higher one is most
+likely a misattribution of sibling `deepseek-v4-flash`'s real 91. Its
+`cutoff` is estimated from the catalog's typical release-to-cutoff lag (none
+published), `maxOutput` is carried over from the `deepseek-v4-flash` sibling
+as a placeholder (not published either), and `speed` is a middle estimate
+across community tests that ranged from ~300 to a 427 peak - deepseek.com,
+Hugging Face and Artificial Analysis were all blocked by the egress proxy on
+this pass. Cross-check all four against a primary source on the next review.
 
 ## Design notes
 
