@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-09-09",
+    "lastReviewed": "2026-09-10",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -5196,6 +5196,38 @@
         "self-host"
       ],
       "url": "https://www.ibm.com/granite/docs/"
+    },
+    {
+      "id": "deepseek-v4-1-flash",
+      "name": "DeepSeek-V4.1-Flash",
+      "provider": "DeepSeek",
+      "released": "2026-09",
+      "license": "open",
+      "params": 552,
+      "localTier": "cluster",
+      "context": 1048576,
+      "maxOutput": 65536,
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.22,
+        "output": 0.66
+      },
+      "cutoff": "2026-06",
+      "speed": 350,
+      "scores": {},
+      "tags": [
+        "open-weights",
+        "agentic-coding",
+        "reasoning",
+        "multimodal",
+        "long-context",
+        "cheap"
+      ],
+      "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash"
     }
   ]
 }
