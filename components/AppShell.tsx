@@ -10,7 +10,12 @@ import { ThemeToggle } from "@/components/ThemeToggle";
 import { MODELS } from "@/lib/models";
 import { useSelection, withSelection } from "@/lib/selection";
 
-/** Each section carries one of the categorical hues, so the rail reads as a map. */
+/**
+ * Each section carries one of the categorical hues, so the rail reads as a map.
+ * The palette has eight slots and there are nine sections, so one hue repeats —
+ * Countries and Methodology, kept as far apart in the list as the order allows.
+ * Hue is decoration here anyway: every item is labelled.
+ */
 const NAV = [
   { href: "/", label: "Browse", tint: "var(--series-1)", match: (p: string) => p === "/" },
   {
@@ -18,6 +23,12 @@ const NAV = [
     label: "Timeline",
     tint: "var(--series-6)",
     match: (p: string) => p.startsWith("/timeline"),
+  },
+  {
+    href: "/countries",
+    label: "Countries",
+    tint: "var(--series-2)",
+    match: (p: string) => p.startsWith("/countries"),
   },
   {
     href: "/compare",

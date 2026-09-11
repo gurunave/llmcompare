@@ -29,6 +29,7 @@ export const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "";
 export const STATIC_ROUTES = [
   "",
   "/timeline",
+  "/countries",
   "/compare",
   "/recommend",
   "/hardware",

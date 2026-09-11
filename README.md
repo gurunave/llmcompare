@@ -15,6 +15,7 @@ visitor's own email client.
 |---|---|
 | `/` | Browse: cost-vs-capability scatter over the whole catalog — either axis can be reframed onto any other metric (prices, individual benchmarks, speed, context, parameters) and reset back — plus a sortable, filterable table. Selection happens here. |
 | `/timeline` | Release dates across the catalog, in three views: a release-date-vs-score scatter (capability index by default, reframeable onto any category or individual benchmark), a reverse-chronological feed grouped by month, and a sortable table — one shared search/provider/licence filter across all three. |
+| `/countries` | Country journey: how each country's hold on the frontier changed month by month. Every month re-ranks the catalog as it stood then and counts how many of the top N seats each country's models hold, in three views — that hold as a stacked share, each country's running best capability index against the best anywhere, and cumulative releases. Licence and frontier-size filters recut all three, and selecting a country lists the releases that moved its own record. A country is the headquarters of the lab that published the weights, mapped in `lib/geography.ts`. |
 | `/compare` | The selection side by side: capability radar, benchmark bars with a leaderboard mode, and a spec table marking the best value per row. |
 | `/models/[id]` | One page per model — headline stats, its own radar and benchmark bars, full specs, and the closest alternatives by price and capability. 144 statically generated pages. |
 | `/recommend` | Four questions about task, budget, deployment target and context; hard constraints filter, cost and speed preferences rank. |
@@ -209,6 +210,22 @@ across community tests that ranged from ~300 to a 427 peak - deepseek.com,
 Hugging Face and Artificial Analysis were all blocked by the egress proxy on
 this pass. Cross-check all four against a primary source on the next review.
 
+Country attribution on `/countries` is a separate hand-kept mapping in
+`lib/geography.ts`, from provider to the country its publishing organization is
+headquartered in — the catalog itself records no country. It is a deliberately
+narrow claim: research is international, and several of these labs were founded
+somewhere other than where they now file their paperwork. The entries where that
+reading is genuinely arguable (Hugging Face, Poolside, Cohere) carry a note that
+the page shows beside the country. A test fails the build if a provider lands in
+the catalog without a mapping, so a new lab cannot quietly go unattributed.
+
+Two things the frontier view there cannot see, both worth holding in mind. The
+catalog keeps superseded models, so seats on the top N measure presence rather
+than lead — a lab shipping six near-identical checkpoints holds more seats than
+one shipping a single stronger model. And benchmark coverage is thin and uneven,
+so a country whose labs publish fewer results appears there later and smaller
+than it did in reality.
+
 ## Design notes
 
 - Up to ten models can be compared at once, which is more than any palette can name.
@@ -264,6 +281,7 @@ components/charts/   radar, cost-vs-capability scatter, benchmark bars
 lib/                 typed catalog, derived metrics, selection state, scoring
 lib/hardware.ts      memory and throughput model — pure functions, no React
 lib/coverage.ts      what is measured and what is missing — pure functions, no React
+lib/geography.ts     provider → country, and the month-by-month replay of the frontier
 data/models.json     the catalog
 data/hardware.json   GPUs, Macs and CPU tiers: memory, bandwidth, device count
 ```
