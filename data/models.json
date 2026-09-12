@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-09-10",
+    "lastReviewed": "2026-09-11",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -5228,6 +5228,64 @@
         "cheap"
       ],
       "url": "https://huggingface.co/deepseek-ai/DeepSeek-V4.1-Flash"
+    },
+    {
+      "id": "fugu-max",
+      "name": "Fugu Max",
+      "provider": "Sakana AI",
+      "released": "2026-09",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 1000000,
+      "maxOutput": 128000,
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 2,
+        "output": 6
+      },
+      "cutoff": "2026-08",
+      "speed": 62,
+      "scores": {},
+      "tags": [
+        "workhorse",
+        "agentic-coding",
+        "reasoning"
+      ],
+      "url": "https://console.sakana.ai/get-started"
+    },
+    {
+      "id": "fugu-ultra-v2",
+      "name": "Fugu Ultra v2",
+      "provider": "Sakana AI",
+      "released": "2026-09",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 1000000,
+      "maxOutput": 128000,
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 5,
+        "output": 30
+      },
+      "cutoff": "2026-08",
+      "speed": 49,
+      "scores": {},
+      "tags": [
+        "frontier",
+        "agentic-coding",
+        "reasoning"
+      ],
+      "url": "https://console.sakana.ai/get-started"
     }
   ]
 }
