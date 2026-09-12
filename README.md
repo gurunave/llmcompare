@@ -1,7 +1,7 @@
 # LLM Compare
 
 A visual side-by-side comparison of large language models — capability, price,
-speed and context, for 146 models across 30 providers — 93 of them open-weights,
+speed and context, for 149 models across 30 providers — 94 of them open-weights,
 from cluster-scale MoEs down to models that fit on a laptop.
 
 Everything is driven by one bundled file — `data/models.json` — so there are no API
@@ -16,7 +16,7 @@ visitor's own email client.
 | `/` | Browse: cost-vs-capability scatter over the whole catalog — either axis can be reframed onto any other metric (prices, individual benchmarks, speed, context, parameters) and reset back — plus a sortable, filterable table. Selection happens here. |
 | `/timeline` | Release dates across the catalog, in three views: a release-date-vs-score scatter (capability index by default, reframeable onto any category or individual benchmark), a reverse-chronological feed grouped by month, and a sortable table — one shared search/provider/licence filter across all three. |
 | `/compare` | The selection side by side: capability radar, benchmark bars with a leaderboard mode, and a spec table marking the best value per row. |
-| `/models/[id]` | One page per model — headline stats, its own radar and benchmark bars, full specs, and the closest alternatives by price and capability. 146 statically generated pages. |
+| `/models/[id]` | One page per model — headline stats, its own radar and benchmark bars, full specs, and the closest alternatives by price and capability. 149 statically generated pages. |
 | `/recommend` | Four questions about task, budget, deployment target and context; hard constraints filter, cost and speed preferences rank. |
 | `/hardware` | Pick a GPU, Mac, DGX node or custom rig from a searchable list, and a context length; every open-weight model is sized against it — weights, KV cache and overhead — showing what fits, at which quantization, and an estimated decode speed. The footprint plot's capability axis can be reframed onto any single benchmark. |
 | `/coverage` | Data coverage: how much of the catalog is actually measured. Headline density (published figures against every figure that could exist), then three views — every benchmark with the share of models reporting it and, expanded, the named lists of who does and does not; every model with the count and share of benchmarks it publishes; and a models × benchmarks matrix where a filled square is a published figure. Provider, category and tier filters narrow both pools, and every number is recomputed over what is left. |
@@ -224,6 +224,29 @@ models rather than a single trained network, so `params` and `arch` are
 intentionally absent rather than undisclosed-and-missing. `sakana.ai` itself
 was blocked by the egress proxy on this pass. Cross-check both against
 Sakana's launch post and OpenRouter's model pages on the next review.
+
+`hy4-preview` (Tencent, added 2026-09-12, released 2026-08-28 and missed by
+the two prior reviews), `seed-2-1-pro` (ByteDance, added 2026-09-12, released
+2026-06-24 alongside the already-catalogued `seed-2-1-turbo`) and `ernie-5-1`
+(Baidu, added 2026-09-12, released 2026-05-09) are backfilled gaps rather than
+this run's new releases. All three have estimated `cutoff` values (none of
+the three vendors published one) and, for `seed-2-1-pro`, an estimated
+`speed` — ByteDance's own posts compare it only on evals this catalog doesn't
+track (MobileWorld, BrowseComp) and no third-party throughput figure was
+found, so it's interpolated below sibling `seed-2-1-turbo`'s measured 41.
+`seed-2-1-pro`'s `context` and `maxOutput` are carried over from that same
+sibling as placeholders since ByteDance hasn't published architecture details
+for the 2.1 generation. `ernie-5-1`'s `params` is left blank rather than
+estimated: Baidu discloses it only as a ratio against ERNIE 5.0's own
+undisclosed active-parameter count, which doesn't resolve to a number.
+`hy4-preview`'s `gpqa` (92.3) and `ernie-5-1`'s `mmluPro` (85.6), `gpqa`
+(82.1) and `lmarenaElo` (1476) are the only figures found that map cleanly
+onto this catalog's tracked benchmarks; other reported scores for both
+(SWE-bench Multilingual, AIME26-with-tools) use evals or conditions this
+catalog doesn't track and were left out rather than misattributed.
+`huggingface.co`, `seed.bytedance.com` and `ernie.baidu.com` were all
+reachable this pass; cross-check all three entries against a second source
+on the next review regardless.
 
 ## Design notes
 
