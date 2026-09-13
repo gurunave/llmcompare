@@ -1,7 +1,7 @@
 # LLM Compare
 
 A visual side-by-side comparison of large language models — capability, price,
-speed and context, for 146 models across 30 providers — 93 of them open-weights,
+speed and context, for 147 models across 30 providers — 94 of them open-weights,
 from cluster-scale MoEs down to models that fit on a laptop.
 
 Everything is driven by one bundled file — `data/models.json` — so there are no API
@@ -16,7 +16,7 @@ visitor's own email client.
 | `/` | Browse: cost-vs-capability scatter over the whole catalog — either axis can be reframed onto any other metric (prices, individual benchmarks, speed, context, parameters) and reset back — plus a sortable, filterable table. Selection happens here. |
 | `/timeline` | Release dates across the catalog, in three views: a release-date-vs-score scatter (capability index by default, reframeable onto any category or individual benchmark), a reverse-chronological feed grouped by month, and a sortable table — one shared search/provider/licence filter across all three. |
 | `/compare` | The selection side by side: capability radar, benchmark bars with a leaderboard mode, and a spec table marking the best value per row. |
-| `/models/[id]` | One page per model — headline stats, its own radar and benchmark bars, full specs, and the closest alternatives by price and capability. 146 statically generated pages. |
+| `/models/[id]` | One page per model — headline stats, its own radar and benchmark bars, full specs, and the closest alternatives by price and capability. 147 statically generated pages. |
 | `/recommend` | Four questions about task, budget, deployment target and context; hard constraints filter, cost and speed preferences rank. |
 | `/hardware` | Pick a GPU, Mac, DGX node or custom rig from a searchable list, and a context length; every open-weight model is sized against it — weights, KV cache and overhead — showing what fits, at which quantization, and an estimated decode speed. The footprint plot's capability axis can be reframed onto any single benchmark. |
 | `/coverage` | Data coverage: how much of the catalog is actually measured. Headline density (published figures against every figure that could exist), then three views — every benchmark with the share of models reporting it and, expanded, the named lists of who does and does not; every model with the count and share of benchmarks it publishes; and a models × benchmarks matrix where a filled square is a published figure. Provider, category and tier filters narrow both pools, and every number is recomputed over what is left. |
@@ -224,6 +224,21 @@ models rather than a single trained network, so `params` and `arch` are
 intentionally absent rather than undisclosed-and-missing. `sakana.ai` itself
 was blocked by the egress proxy on this pass. Cross-check both against
 Sakana's launch post and OpenRouter's model pages on the next review.
+
+`hy4-preview` (Tencent, released 2026-08-28, a missed model backfilled on the
+2026-09-13 review) is a 770B/49B-active open-weight (Apache 2.0) MoE, text-only
+with no vision input yet per Tencent. `scores` covers only what a primary or
+near-primary source confirmed with a number (GDPval-AA v2 1678, Terminal-Bench
+2.1 85.4, SWE-bench Pro 65.7, HLE 55.4, GPQA Diamond 92.3); LiveCodeBench,
+MMLU-Pro, AIME, ARC-AGI-2/3, BFCL v4, FrontierMath, τ-bench/τ³-Banking,
+OSWorld, EnterpriseOps-Gym and SWE-bench Verified were referenced only as
+"not found" or via non-catalog benchmarks (DeepSWE, SWE-bench Multilingual)
+and are left absent rather than guessed. `cutoff` is estimated from the
+catalog's typical release-to-cutoff lag (none published); `speed` (35 tok/s)
+is OpenRouter's launch-week measurement, likely to rise as serving optimizes.
+Tencent's own site, Tencent Cloud's docs and Hugging Face were all blocked by
+the egress proxy on this pass. Cross-check against a primary source on the
+next review.
 
 ## Design notes
 
