@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-09-14",
+    "lastReviewed": "2026-09-15",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -5409,6 +5409,75 @@
         "reasoning"
       ],
       "url": "https://platform.moonshot.ai/"
+    },
+    {
+      "id": "command-a-plus",
+      "name": "Command A+",
+      "provider": "Cohere",
+      "released": "2026-05",
+      "license": "open",
+      "params": 218,
+      "localTier": "server",
+      "context": 128000,
+      "maxOutput": 65536,
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 2.5,
+        "output": 10
+      },
+      "cutoff": "2026-02",
+      "speed": 85,
+      "scores": {
+        "mmluPro": 63,
+        "mmmu": 75.1,
+        "aaIndex": 37
+      },
+      "tags": [
+        "open-weights",
+        "enterprise",
+        "rag",
+        "reasoning",
+        "multimodal"
+      ],
+      "url": "https://docs.cohere.com/docs/command-a-plus"
+    },
+    {
+      "id": "north-mini-code",
+      "name": "North Mini Code",
+      "provider": "Cohere",
+      "released": "2026-06",
+      "license": "open",
+      "params": 30,
+      "localTier": "server",
+      "context": 256000,
+      "maxOutput": 65536,
+      "modalities": [
+        "text"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0,
+        "output": 0
+      },
+      "cutoff": "2026-03",
+      "speed": 190,
+      "scores": {
+        "swebench": 67.6,
+        "swebenchPro": 40.2,
+        "livecodebench": 70.3,
+        "terminalBench2": 36.0
+      },
+      "tags": [
+        "open-weights",
+        "agentic-coding",
+        "reasoning",
+        "cheap"
+      ],
+      "url": "https://docs.cohere.com/docs/north-mini-code-1.0"
     }
   ]
 }
