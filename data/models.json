@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-09-11",
+    "lastReviewed": "2026-09-12",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -5286,6 +5286,99 @@
         "reasoning"
       ],
       "url": "https://console.sakana.ai/get-started"
+    },
+    {
+      "id": "hy4-preview",
+      "name": "Hy4 Preview",
+      "provider": "Tencent",
+      "released": "2026-08",
+      "license": "open",
+      "params": 770,
+      "localTier": "cluster",
+      "context": 1048576,
+      "maxOutput": 65536,
+      "modalities": [
+        "text"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.83,
+        "output": 2.5
+      },
+      "cutoff": "2026-04",
+      "speed": 90,
+      "scores": {
+        "gpqa": 92.3
+      },
+      "tags": [
+        "open-weights",
+        "agentic-coding",
+        "long-context",
+        "self-host"
+      ],
+      "url": "https://huggingface.co/tencent/Hy4-preview"
+    },
+    {
+      "id": "seed-2-1-pro",
+      "name": "Seed 2.1 Pro",
+      "provider": "ByteDance",
+      "released": "2026-06",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 262144,
+      "maxOutput": 32768,
+      "modalities": [
+        "text",
+        "image",
+        "video"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.85,
+        "output": 4.15
+      },
+      "cutoff": "2026-02",
+      "speed": 35,
+      "scores": {},
+      "tags": [
+        "agentic-coding",
+        "multimodal",
+        "frontier"
+      ],
+      "url": "https://seed.bytedance.com/en/seed2"
+    },
+    {
+      "id": "ernie-5-1",
+      "name": "ERNIE 5.1",
+      "provider": "Baidu",
+      "released": "2026-05",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 131072,
+      "maxOutput": 65536,
+      "modalities": [
+        "text"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.59,
+        "output": 2.65
+      },
+      "cutoff": "2026-01",
+      "speed": 80,
+      "scores": {
+        "mmluPro": 85.6,
+        "gpqa": 82.1,
+        "lmarenaElo": 1476
+      },
+      "tags": [
+        "reasoning",
+        "agentic-coding",
+        "multilingual"
+      ],
+      "url": "https://ernie.baidu.com/"
     }
   ]
 }
