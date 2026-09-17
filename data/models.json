@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-09-16",
+    "lastReviewed": "2026-09-17",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -5409,6 +5409,39 @@
         "reasoning"
       ],
       "url": "https://platform.moonshot.ai/"
+    },
+    {
+      "id": "atria-dawn-preview",
+      "name": "Atria Dawn Preview",
+      "provider": "Shanghai AI Lab",
+      "released": "2026-09",
+      "license": "open",
+      "params": 744,
+      "localTier": "cluster",
+      "context": 262144,
+      "maxOutput": 128000,
+      "modalities": [
+        "text"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 1.4,
+        "output": 4.4
+      },
+      "cutoff": "2025-11",
+      "speed": 130,
+      "scores": {
+        "swebenchPro": 59.6,
+        "terminalBench2": 78.3,
+        "bfclV4": 77.0
+      },
+      "tags": [
+        "open-weights",
+        "agentic-coding",
+        "long-context",
+        "research"
+      ],
+      "url": "https://huggingface.co/internlm/Atria-Dawn-Preview"
     }
   ]
 }
