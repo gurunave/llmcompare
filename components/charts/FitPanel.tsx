@@ -122,7 +122,9 @@ export function FitPanel({
         quant: shown.quant.label,
         fits: Boolean(f.best),
         detail: `${formatGiB(shown.weights)} weights + ${formatGiB(shown.kv)} cache`,
-        speed: f.throughput ? `${formatTokPerSec(f.throughput)} tok/s` : null,
+        speed: f.throughput
+          ? `${formatTokPerSec(f.throughput)} tok/s${f.users > 1 ? " per user" : ""}`
+          : null,
       };
     })
     .filter((p): p is Point => p !== null);

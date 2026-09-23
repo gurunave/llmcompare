@@ -248,6 +248,19 @@ export default function MethodologyPage() {
               model. The range shown is the 55–85% of peak bandwidth a real runtime reaches.
             </dd>
           </div>
+          <div>
+            <dt className="font-medium text-ink">Concurrent users</dt>
+            <dd className="mt-0.5 text-ink-secondary">
+              Serving several people at once shares one copy of the weights, but every user holds a
+              KV cache of their own, so memory is <code>weights + users × cache + overhead</code>.
+              Each decode step reads the weights once for the whole batch plus every user&rsquo;s
+              cache, so the speed each person sees drops as users are added while the total rises.
+              A mixture-of-experts routes each user to different experts, so it is charged for up
+              to <code>users × active</code> parameters per step, capped at the whole model — a
+              conservative stand-in for the expert overlap a real batch gets. Compute limits at
+              large batches are not modelled.
+            </dd>
+          </div>
         </dl>
 
         <p className="mt-3 rounded-lg border border-hairline p-3 text-sm leading-relaxed text-ink-secondary">

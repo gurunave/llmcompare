@@ -35,7 +35,7 @@ export const DEVICE_GROUPS: { group: string; devices: Device[] }[] = DEVICES.red
   [] as { group: string; devices: Device[] }[]
 );
 
-export const DEFAULT_DEVICE_ID = "rtx-4090";
+export const DEFAULT_DEVICE_ID = "dgx-spark";
 
 /** The one picker entry that is not a preset — whatever the user types in. */
 export const CUSTOM_ID = "custom";
@@ -79,6 +79,10 @@ export const CONTEXT_CHOICES = [
   4096, 8192, 32768, 131072, 262144, 524288, 1048576,
 ] as const;
 export const DEFAULT_CONTEXT = 8192;
+
+/** People sending requests at the same moment — each one holds its own KV cache. */
+export const USER_CHOICES = [1, 2, 4, 8, 16, 32] as const;
+export const DEFAULT_USERS = 1;
 
 /**
  * Size every model at its own published ceiling rather than at one shared
@@ -176,7 +180,7 @@ export function weightBytes(params: number, quant: Quant): number {
 }
 
 /**
- * KV cache for a whole context, not per token — models that interleave a small
+ * KV cache for a whole context, for one sequence, not per token — models that interleave a small
  * sliding window with occasional full-attention layers pay a flat rate on most
  * layers once the context passes the window, and a per-token rate on the rest.
  */
@@ -219,12 +223,14 @@ export function footprint(
   quant: Quant,
   rig: Rig,
   context: number,
-  kvBytesPerElem: number
+  kvBytesPerElem: number,
+  users = 1
 ): Footprint | null {
   if (!model.arch || model.params === null) return null;
 
+  // Weights are loaded once and shared; every concurrent user holds a cache of their own.
   const weights = weightBytes(model.params, quant);
-  const kv = kvBytes(model.arch, context, kvBytesPerElem);
+  const kv = kvBytes(model.arch, context, kvBytesPerElem) * users;
   const overhead = overheadBytes(weights);
   const total = weights + kv + overhead;
   const load = total / usableBytes(rig);
@@ -249,6 +255,8 @@ export interface Fit {
   context: number;
   /** Whether that is the model's ceiling rather than the context that was asked for. */
   capped: boolean;
+  /** Concurrent users sized for — each holds a full cache. */
+  users: number;
   /** One entry per quant, best precision first. Empty when the model is unsizable. */
   ladder: Footprint[];
   /** Highest-precision quant that fits at or above the quality floor. */
@@ -256,12 +264,12 @@ export interface Fit {
   /** Fits, but only by dropping below the floor the user asked for. */
   belowFloor: Footprint | null;
   verdict: Verdict;
+  /** Decode speed each user sees. Aggregate throughput is this times `users`. */
   throughput: { low: number; high: number } | null;
 }
 
 /**
- * Single-stream decode is bounded by how fast the active weights can be read
- * once per token. Tensor parallelism splits that read, but the per-layer syncs
+ * Decode is bounded by how fast the active weights can be read once per step. Tensor parallelism splits that read, but the per-layer syncs
  * eat most of the gain — past a couple of devices you are buying capacity, not
  * speed, which is what the efficiency term encodes.
  *
@@ -278,17 +286,21 @@ export function throughput(
   fp: Footprint,
   rig: Rig,
   context: number,
-  kvBytesPerElem: number
+  kvBytesPerElem: number,
+  users = 1
 ): { low: number; high: number } | null {
   if (!model.arch || model.params === null) return null;
 
   // A mixture-of-experts reads only its active parameters per token, which is
-  // the whole reason a 235B MoE decodes like a 22B dense model.
+  // the whole reason a 235B MoE decodes like a 22B dense model. A batch of
+  // users routes to different experts, so each extra user can pull in another
+  // set, up to the whole model; a dense model reads the same weights either way.
   const active = model.arch.activeParams ?? model.params;
-  const activeWeights = weightBytes(active, fp.quant);
-  // Half the context is a fair average for the cache actually walked per token.
-  const cacheRead = kvBytes(model.arch, Math.round(context / 2), kvBytesPerElem);
-  const perToken = activeWeights + cacheRead;
+  const weightsRead = weightBytes(Math.min(model.params, active * users), fp.quant);
+  // Half the context is a fair average for the cache actually walked per token,
+  // and every user's cache is walked on every step.
+  const cacheRead = kvBytes(model.arch, Math.round(context / 2), kvBytesPerElem) * users;
+  const perToken = weightsRead + cacheRead;
   if (perToken <= 0) return null;
 
   // Real runtimes reach 55-85% of peak bandwidth on a decode loop. The band is
@@ -303,7 +315,8 @@ export function fit(
   rig: Rig,
   context: ContextChoice,
   kvQuant: KvQuantKey,
-  floor: QuantKey
+  floor: QuantKey,
+  users = 1
 ): Fit {
   const bytesPerElem = KV_QUANTS.find((k) => k.key === kvQuant)?.bytes ?? 2;
   const ctx = effectiveContext(model, context);
@@ -314,6 +327,7 @@ export function fit(
       model,
       context: ctx,
       capped,
+      users,
       ladder: [],
       best: null,
       belowFloor: null,
@@ -323,7 +337,7 @@ export function fit(
   }
 
   const ladder = QUANTS.map((q) =>
-    footprint(model, q, rig, ctx, bytesPerElem)
+    footprint(model, q, rig, ctx, bytesPerElem, users)
   ).filter((f): f is Footprint => f !== null);
 
   const floorIndex = QUANTS.findIndex((q) => q.key === floor);
@@ -336,11 +350,12 @@ export function fit(
     model,
     context: ctx,
     capped,
+    users,
     ladder,
     best,
     belowFloor,
     verdict: best ? best.verdict : "no-fit",
-    throughput: best ? throughput(model, best, rig, ctx, bytesPerElem) : null,
+    throughput: best ? throughput(model, best, rig, ctx, bytesPerElem, users) : null,
   };
 }
 
@@ -350,7 +365,8 @@ export function fitCatalog(
   rig: Rig,
   context: ContextChoice,
   kvQuant: KvQuantKey,
-  floor: QuantKey
+  floor: QuantKey,
+  users = 1
 ): Fit[] {
   // Fits or does not — "tight" is a caveat on a model that runs, not a rank
   // below one that does, and the headline count treats it the same way.
@@ -362,7 +378,7 @@ export function fitCatalog(
   };
 
   return models
-    .map((m) => fit(m, rig, context, kvQuant, floor))
+    .map((m) => fit(m, rig, context, kvQuant, floor, users))
     .sort((a, b) => {
       const byVerdict = RANK[a.verdict] - RANK[b.verdict];
       if (byVerdict !== 0) return byVerdict;
