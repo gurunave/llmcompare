@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import {
   CartesianGrid,
   LabelList,
+  ReferenceArea,
   ResponsiveContainer,
   Scatter,
   ScatterChart,
@@ -17,6 +18,7 @@ import { InfoHint } from "@/components/InfoHint";
 import { ChartCard } from "@/components/ChartCard";
 import { MultiSelect, type MultiOption } from "@/components/MultiSelect";
 import { SeriesLegend } from "@/components/SeriesLegend";
+import { ZoomControls, useChartZoom } from "@/components/charts/zoom";
 import { providerColor } from "@/lib/accent";
 import { DEFAULT_FILTERS, filterModels, isFiltered, type BrowseFilters } from "@/lib/browse";
 import { formatTokens } from "@/lib/format";
@@ -142,10 +144,24 @@ export function ScatterPanel({
     plottable.map((r) => r.y)
   );
 
+  const zoom = useChartZoom({
+    x: { base: xScale.domain, log: xScale.log },
+    y: { base: yScale.domain, log: yScale.log },
+    resetKey: `${xMetric.key}|${yMetric.key}`,
+  });
+  const viewX: AxisScale = { ...xScale, domain: zoom.domain.x };
+  const viewY: AxisScale = { ...yScale, domain: zoom.domain.y };
+  // Bubble size is read against the whole catalog, so zooming never rescales it.
+  const zExtent: [number, number] = [
+    Math.min(...pool.map((m) => m.context)),
+    Math.max(...pool.map((m) => m.context)),
+  ];
+
   // The unselected cloud is split by licence — two hues that clear the all-pairs
   // gates in both modes, named in the legend below the plot. Opacity is the
   // second channel: the cloud recedes, the labeled selection sits on top of it.
-  const unselected = plottable.filter((r) => !shownIds.has(r.m.id));
+  const inView = plottable.filter((r) => zoom.visible(r.x, r.y));
+  const unselected = inView.filter((r) => !shownIds.has(r.m.id));
   const openCloud = unselected
     .filter((r) => r.m.license === "open")
     .map((r) => toPoint(r.m, r.x, r.y, "var(--open)"));
@@ -157,7 +173,7 @@ export function ScatterPanel({
   // on hue alone — which matters most past eight series, where hues repeat.
   const highlights = selected
     .map((m, i) => ({
-      row: shownIds.has(m.id) ? plottable.find((r) => r.m.id === m.id) : undefined,
+      row: shownIds.has(m.id) ? inView.find((r) => r.m.id === m.id) : undefined,
       index: i,
     }))
     .filter((h): h is { row: { m: DerivedModel; x: number; y: number }; index: number } =>
@@ -172,8 +188,8 @@ export function ScatterPanel({
   // table, so a cluster of eight in one corner still resolves into eight lines.
   const placements = placeLabels(
     highlights.map((h) => h.point),
-    xScale,
-    yScale
+    viewX,
+    viewY
   );
   const withNames = highlights.length <= NAMED_LABEL_LIMIT;
 
@@ -208,8 +224,9 @@ export function ScatterPanel({
               setProviders([]);
               setModelIds([]);
               setAttrs(DEFAULT_FILTERS);
+              zoom.controls.reset();
             }}
-            disabled={isDefault}
+            disabled={isDefault && !zoom.zoomed}
             className="chip disabled:opacity-40 disabled:hover:border-hairline"
             title="Back to blended price vs capability index, unfiltered"
           >
@@ -259,16 +276,18 @@ export function ScatterPanel({
         />
       </div>
 
-      <div className="h-[380px] w-full sm:h-[440px]">
+      <ZoomControls {...zoom.controls} />
+      <div className="h-[380px] w-full select-none sm:h-[440px]" style={zoom.containerStyle}>
         <ResponsiveContainer width="100%" height="100%">
-          <ScatterChart margin={{ top: 28, right: 40, bottom: 28, left: 4 }}>
+          <ScatterChart margin={{ top: 28, right: 40, bottom: 28, left: 4 }} {...zoom.handlers}>
             <CartesianGrid stroke="var(--gridline)" strokeDasharray="2 4" />
             <XAxis
               type="number"
               dataKey="x"
               scale={xScale.log ? "log" : "linear"}
-              domain={xScale.domain}
-              ticks={xScale.ticks}
+              domain={zoom.domain.x}
+              ticks={zoom.ticks.x ?? xScale.ticks}
+              allowDataOverflow
               tickFormatter={(v: number) => xMetric.format(v)}
               tick={{ fill: "var(--text-muted)", fontSize: 11 }}
               tickLine={false}
@@ -285,8 +304,9 @@ export function ScatterPanel({
               type="number"
               dataKey="y"
               scale={yScale.log ? "log" : "linear"}
-              domain={yScale.domain}
-              ticks={yScale.ticks}
+              domain={zoom.domain.y}
+              ticks={zoom.ticks.y ?? yScale.ticks}
+              allowDataOverflow
               tickFormatter={(v: number) => yMetric.format(v)}
               tick={{ fill: "var(--text-muted)", fontSize: 11 }}
               tickLine={false}
@@ -301,7 +321,7 @@ export function ScatterPanel({
                 style: { textAnchor: "middle" },
               }}
             />
-            <ZAxis type="number" dataKey="z" range={[36, 240]} />
+            <ZAxis type="number" dataKey="z" range={[36, 240]} domain={zExtent} />
             <Tooltip
               content={<ScatterTooltip xMetric={xMetric} yMetric={yMetric} />}
               cursor={{ strokeDasharray: "3 3" }}
@@ -324,6 +344,19 @@ export function ScatterPanel({
               strokeWidth={2}
               isAnimationActive={false}
             />
+            {zoom.selection && (
+              <ReferenceArea
+                x1={zoom.selection.x1}
+                x2={zoom.selection.x2}
+                y1={zoom.selection.y1}
+                y2={zoom.selection.y2}
+                fill="var(--accent)"
+                fillOpacity={0.12}
+                stroke="var(--accent)"
+                strokeOpacity={0.6}
+                ifOverflow="hidden"
+              />
+            )}
             {highlights.map(({ point, index }) => (
               <Scatter
                 key={point.id}

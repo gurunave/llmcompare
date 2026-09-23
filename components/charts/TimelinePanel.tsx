@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import {
   CartesianGrid,
   LabelList,
+  ReferenceArea,
   ResponsiveContainer,
   Scatter,
   ScatterChart,
@@ -15,6 +16,7 @@ import {
 import { ChartCard } from "@/components/ChartCard";
 import { InfoHint } from "@/components/InfoHint";
 import { SeriesLegend } from "@/components/SeriesLegend";
+import { ZoomControls, useChartZoom } from "@/components/charts/zoom";
 import { formatMonth, formatTokens } from "@/lib/format";
 import { DEFAULT_SCORE, METRIC_BY_KEY, SCORE_METRICS, metricOf, type Metric } from "@/lib/metrics";
 import { indexToMonth, monthIndex, monthTicks } from "@/lib/timeline";
@@ -85,7 +87,22 @@ export function TimelinePanel({ pool, selected, hidden, onToggle, onSolo, onShow
   const xTicks = monthTicks(minIdx, maxIdx);
   const pad = Math.max(1, Math.round((maxIdx - minIdx) * 0.04));
 
-  const unselected = plottable.filter((r) => !shownIds.has(r.m.id));
+  const zoom = useChartZoom({
+    x: {
+      base: [minIdx - pad, maxIdx + pad],
+      // Whole months only, so a tight zoom never labels the same month twice.
+      ticks: (d) => monthTicks(Math.ceil(d[0]), Math.floor(d[1])),
+    },
+    y: { base: [0, 100] },
+    resetKey: yMetric.key,
+  });
+  const zExtent: [number, number] = [
+    Math.min(...pool.map((m) => m.context)),
+    Math.max(...pool.map((m) => m.context)),
+  ];
+
+  const inView = plottable.filter((r) => zoom.visible(r.x, r.y));
+  const unselected = inView.filter((r) => !shownIds.has(r.m.id));
   const openCloud = unselected
     .filter((r) => r.m.license === "open")
     .map((r) => toPoint(r.m, r.x, r.y, "var(--open)"));
@@ -95,7 +112,7 @@ export function TimelinePanel({ pool, selected, hidden, onToggle, onSolo, onShow
 
   const highlights = selected
     .map((m, i) => ({
-      row: shownIds.has(m.id) ? plottable.find((r) => r.m.id === m.id) : undefined,
+      row: shownIds.has(m.id) ? inView.find((r) => r.m.id === m.id) : undefined,
       index: i,
     }))
     .filter(
@@ -123,15 +140,17 @@ export function TimelinePanel({ pool, selected, hidden, onToggle, onSolo, onShow
       }`}
       actions={<AxisPicker value={yMetric.key} onChange={setYKey} />}
     >
-      <div className="h-[380px] w-full sm:h-[440px]">
+      <ZoomControls {...zoom.controls} />
+      <div className="h-[380px] w-full select-none sm:h-[440px]" style={zoom.containerStyle}>
         <ResponsiveContainer width="100%" height="100%">
-          <ScatterChart margin={{ top: 28, right: 24, bottom: 28, left: 4 }}>
+          <ScatterChart margin={{ top: 28, right: 24, bottom: 28, left: 4 }} {...zoom.handlers}>
             <CartesianGrid stroke="var(--gridline)" strokeDasharray="2 4" />
             <XAxis
               type="number"
               dataKey="x"
-              domain={[minIdx - pad, maxIdx + pad]}
-              ticks={xTicks}
+              domain={zoom.domain.x}
+              ticks={zoom.ticks.x ?? xTicks}
+              allowDataOverflow
               tickFormatter={(v: number) => formatMonth(indexToMonth(Math.round(v)))}
               tick={{ fill: "var(--text-muted)", fontSize: 11 }}
               tickLine={false}
@@ -147,8 +166,9 @@ export function TimelinePanel({ pool, selected, hidden, onToggle, onSolo, onShow
             <YAxis
               type="number"
               dataKey="y"
-              domain={[0, 100]}
-              ticks={[0, 20, 40, 60, 80, 100]}
+              domain={zoom.domain.y}
+              ticks={zoom.ticks.y ?? [0, 20, 40, 60, 80, 100]}
+              allowDataOverflow
               tick={{ fill: "var(--text-muted)", fontSize: 11 }}
               tickLine={false}
               axisLine={{ stroke: "var(--baseline)" }}
@@ -162,7 +182,7 @@ export function TimelinePanel({ pool, selected, hidden, onToggle, onSolo, onShow
                 style: { textAnchor: "middle" },
               }}
             />
-            <ZAxis type="number" dataKey="z" range={[36, 240]} />
+            <ZAxis type="number" dataKey="z" range={[36, 240]} domain={zExtent} />
             <Tooltip content={<TimelineTooltip yMetric={yMetric} />} cursor={{ strokeDasharray: "3 3" }} />
             <Scatter
               name="Open weights"
@@ -182,6 +202,19 @@ export function TimelinePanel({ pool, selected, hidden, onToggle, onSolo, onShow
               strokeWidth={2}
               isAnimationActive={false}
             />
+            {zoom.selection && (
+              <ReferenceArea
+                x1={zoom.selection.x1}
+                x2={zoom.selection.x2}
+                y1={zoom.selection.y1}
+                y2={zoom.selection.y2}
+                fill="var(--accent)"
+                fillOpacity={0.12}
+                stroke="var(--accent)"
+                strokeOpacity={0.6}
+                ifOverflow="hidden"
+              />
+            )}
             {highlights.map(({ point, index }) => (
               <Scatter
                 key={point.id}

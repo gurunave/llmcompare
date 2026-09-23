@@ -16,6 +16,7 @@ import {
 import { InfoHint } from "@/components/InfoHint";
 import { ChartCard } from "@/components/ChartCard";
 import { SeriesLegend } from "@/components/SeriesLegend";
+import { ZoomControls, useChartZoom } from "@/components/charts/zoom";
 import {
   QUANTS,
   formatGiB,
@@ -131,6 +132,19 @@ export function FitPanel({
 
   const picker = <ScorePicker value={metric.key} onChange={setScoreKey} />;
 
+  const xs = points.map((p) => p.x);
+  const budgetGiB = budget / GIB;
+  const lo = Math.min(...xs, budgetGiB) * 0.7;
+  const hi = Math.max(...xs, budgetGiB) * 1.4;
+
+  // Resets with the score and the machine: a window onto one rig's budget line
+  // is not the window anyone wants on another.
+  const zoom = useChartZoom({
+    x: { base: [lo, hi], log: true },
+    y: { base: [0, 100] },
+    resetKey: `${metric.key}|${rig.label}|${rig.memoryGB}`,
+  });
+
   if (!points.length) {
     return (
       <ChartCard
@@ -149,20 +163,18 @@ export function FitPanel({
 
   const shownIds = new Set(selected.filter((m) => !hidden?.has(m.id)).map((m) => m.id));
   const highlights = selected
-    .map((m, i) => ({ point: points.find((p) => p.id === m.id), index: i }))
+    .map((m, i) => ({
+      point: points.find((p) => p.id === m.id && zoom.visible(p.x, p.y)),
+      index: i,
+    }))
     .filter((h): h is { point: Point; index: number } =>
       Boolean(h.point) && shownIds.has(h.point!.id)
     );
   const highlighted = new Set(highlights.map((h) => h.point.id));
 
-  const cloud = points.filter((p) => !highlighted.has(p.id));
+  const cloud = points.filter((p) => !highlighted.has(p.id) && zoom.visible(p.x, p.y));
   const fitting = cloud.filter((p) => p.fits);
   const oversize = cloud.filter((p) => !p.fits);
-
-  const xs = points.map((p) => p.x);
-  const budgetGiB = budget / GIB;
-  const lo = Math.min(...xs, budgetGiB) * 0.7;
-  const hi = Math.max(...xs, budgetGiB) * 1.4;
 
   const fitCount = points.filter((p) => p.fits).length;
 
@@ -188,14 +200,15 @@ export function FitPanel({
       }`}
       actions={picker}
     >
-      <div className="h-[380px] w-full sm:h-[440px]">
+      <ZoomControls {...zoom.controls} />
+      <div className="h-[380px] w-full select-none sm:h-[440px]" style={zoom.containerStyle}>
         <ResponsiveContainer width="100%" height="100%">
-          <ScatterChart margin={{ top: 28, right: 40, bottom: 28, left: 4 }}>
+          <ScatterChart margin={{ top: 28, right: 40, bottom: 28, left: 4 }} {...zoom.handlers}>
             <CartesianGrid stroke="var(--gridline)" strokeDasharray="2 4" />
             {/* The runnable region, washed rather than outlined — it is context
                 for the line, not a mark of its own. */}
             <ReferenceArea
-              x1={lo}
+              x1={zoom.domain.x[0]}
               x2={budgetGiB}
               fill="var(--open)"
               fillOpacity={0.07}
@@ -205,9 +218,12 @@ export function FitPanel({
               type="number"
               dataKey="x"
               scale="log"
-              domain={[lo, hi]}
-              ticks={logTicks(lo, hi)}
-              tickFormatter={(v: number) => (v >= 1 ? `${Math.round(v)}` : v.toFixed(1))}
+              domain={zoom.domain.x}
+              ticks={zoom.ticks.x ?? logTicks(lo, hi)}
+              allowDataOverflow
+              tickFormatter={(v: number) =>
+                v >= 10 || Number.isInteger(v) ? `${Math.round(v)}` : v.toFixed(1)
+              }
               tick={{ fill: "var(--text-muted)", fontSize: 11 }}
               tickLine={false}
               axisLine={{ stroke: "var(--baseline)" }}
@@ -222,7 +238,9 @@ export function FitPanel({
             <YAxis
               type="number"
               dataKey="y"
-              domain={[0, 100]}
+              domain={zoom.domain.y}
+              ticks={zoom.ticks.y}
+              allowDataOverflow
               tick={{ fill: "var(--text-muted)", fontSize: 11 }}
               tickLine={false}
               axisLine={{ stroke: "var(--baseline)" }}
@@ -269,6 +287,19 @@ export function FitPanel({
               strokeOpacity={0.6}
               isAnimationActive={false}
             />
+            {zoom.selection && (
+              <ReferenceArea
+                x1={zoom.selection.x1}
+                x2={zoom.selection.x2}
+                y1={zoom.selection.y1}
+                y2={zoom.selection.y2}
+                fill="var(--accent)"
+                fillOpacity={0.12}
+                stroke="var(--accent)"
+                strokeOpacity={0.6}
+                ifOverflow="hidden"
+              />
+            )}
             {highlights.map(({ point, index }) => (
               <Scatter
                 key={point.id}
