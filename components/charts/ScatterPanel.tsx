@@ -12,11 +12,13 @@ import {
   YAxis,
   ZAxis,
 } from "recharts";
+import { BrowseFilterBar } from "@/components/BrowseFilterBar";
 import { InfoHint } from "@/components/InfoHint";
 import { ChartCard } from "@/components/ChartCard";
 import { MultiSelect, type MultiOption } from "@/components/MultiSelect";
 import { SeriesLegend } from "@/components/SeriesLegend";
 import { providerColor } from "@/lib/accent";
+import { DEFAULT_FILTERS, filterModels, isFiltered, type BrowseFilters } from "@/lib/browse";
 import { formatTokens } from "@/lib/format";
 import {
   axisScale,
@@ -67,9 +69,11 @@ export function ScatterPanel({
   const [yKey, setYKey] = useState(DEFAULT_Y);
   const [providers, setProviders] = useState<string[]>([]);
   const [modelIds, setModelIds] = useState<string[]>([]);
+  const [attrs, setAttrs] = useState<BrowseFilters>(DEFAULT_FILTERS);
   const xMetric = metricOf(xKey, DEFAULT_X);
   const yMetric = metricOf(yKey, DEFAULT_Y);
-  const filtering = providers.length > 0 || modelIds.length > 0;
+  const naming = providers.length > 0 || modelIds.length > 0;
+  const filtering = naming || isFiltered(attrs);
   const isDefault = xMetric.key === DEFAULT_X && yMetric.key === DEFAULT_Y && !filtering;
 
   // A hidden model is still in the catalog, so it rejoins the anonymous cloud
@@ -79,18 +83,23 @@ export function ScatterPanel({
 
   const { providerOptions, modelOptions } = useMemo(() => buildOptions(all), [all]);
 
-  // The two filters are additive rather than intersecting: picking Anthropic
-  // and then naming GPT-5 asks for both, which is what "provider or model"
-  // means to a reader. Intersecting them would empty the plot instead.
-  // Whatever is selected for comparison always stays plotted — a filter is
-  // there to thin the background, not to drop the models under discussion.
+  // Providers and models are additive rather than intersecting: picking
+  // Anthropic and then naming GPT-5 asks for both, which is what "provider or
+  // model" means to a reader. The attribute filters (context, price, year…)
+  // then narrow whatever that leaves. Whatever is selected for comparison
+  // always stays plotted — a filter is there to thin the background, not to
+  // drop the models under discussion.
   const pool = useMemo(() => {
     if (!filtering) return all;
     const byProvider = new Set(providers);
     const byId = new Set(modelIds);
     const kept = new Set(selected.map((m) => m.id));
-    return all.filter((m) => byProvider.has(m.provider) || byId.has(m.id) || kept.has(m.id));
-  }, [all, filtering, providers, modelIds, selected]);
+    const named = naming
+      ? all.filter((m) => byProvider.has(m.provider) || byId.has(m.id))
+      : all;
+    const matched = new Set(filterModels(named, attrs).map((m) => m.id));
+    return all.filter((m) => matched.has(m.id) || kept.has(m.id));
+  }, [all, filtering, naming, providers, modelIds, attrs, selected]);
 
   // A model is plottable only when both chosen metrics are published for it —
   // parameter counts and some benchmarks are missing across much of the catalog.
@@ -198,6 +207,7 @@ export function ScatterPanel({
               setYKey(DEFAULT_Y);
               setProviders([]);
               setModelIds([]);
+              setAttrs(DEFAULT_FILTERS);
             }}
             disabled={isDefault}
             className="chip disabled:opacity-40 disabled:hover:border-hairline"
@@ -210,36 +220,43 @@ export function ScatterPanel({
     >
       {/* Filters sit above the plot rather than in the header: the header row
           already carries both axis pickers, and these are wider controls. */}
-      <div className="mb-3 flex flex-wrap items-center gap-1.5">
-        <span className="text-xs text-ink-muted">Filter</span>
-        <MultiSelect
-          label="Providers"
-          emptyLabel="All"
-          placeholder="Search providers…"
-          options={providerOptions}
-          value={providers}
-          onChange={setProviders}
+      <div className="mb-3">
+        <BrowseFilterBar
+          compact
+          withSearch={false}
+          filters={attrs}
+          onChange={setAttrs}
+          leading={
+            <>
+              <span className="text-xs text-ink-muted">Filter</span>
+              <MultiSelect
+                label="Providers"
+                emptyLabel="All"
+                placeholder="Search providers…"
+                options={providerOptions}
+                value={providers}
+                onChange={setProviders}
+              />
+              <MultiSelect
+                label="Models"
+                emptyLabel="All"
+                placeholder="Search models…"
+                options={modelOptions}
+                value={modelIds}
+                onChange={setModelIds}
+              />
+            </>
+          }
+          onClear={
+            filtering
+              ? () => {
+                  setProviders([]);
+                  setModelIds([]);
+                  setAttrs(DEFAULT_FILTERS);
+                }
+              : undefined
+          }
         />
-        <MultiSelect
-          label="Models"
-          emptyLabel="All"
-          placeholder="Search models…"
-          options={modelOptions}
-          value={modelIds}
-          onChange={setModelIds}
-        />
-        {filtering && (
-          <button
-            type="button"
-            onClick={() => {
-              setProviders([]);
-              setModelIds([]);
-            }}
-            className="chip hover:border-[var(--border-strong)]"
-          >
-            Clear filters
-          </button>
-        )}
       </div>
 
       <div className="h-[380px] w-full sm:h-[440px]">
