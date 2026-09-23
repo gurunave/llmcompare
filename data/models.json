@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-09-22",
+    "lastReviewed": "2026-09-23",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -5664,6 +5664,72 @@
         "agentic-coding"
       ],
       "url": "https://platform.openai.com/docs/models"
+    },
+    {
+      "id": "mimo-v2-6-flash",
+      "name": "MiMo-V2.6-Flash",
+      "provider": "Xiaomi",
+      "released": "2026-09",
+      "license": "open",
+      "params": 309,
+      "localTier": "cluster",
+      "context": 1048576,
+      "maxOutput": 65536,
+      "modalities": [
+        "text",
+        "image",
+        "video",
+        "audio"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.14,
+        "output": 0.28
+      },
+      "cutoff": "2026-06",
+      "speed": 150,
+      "scores": {},
+      "tags": [
+        "open-weights",
+        "multimodal",
+        "agentic-coding",
+        "long-context",
+        "cheap"
+      ],
+      "url": "https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Flash"
+    },
+    {
+      "id": "mimo-v2-6-pro",
+      "name": "MiMo-V2.6-Pro",
+      "provider": "Xiaomi",
+      "released": "2026-09",
+      "license": "open",
+      "params": 1020,
+      "localTier": "cluster",
+      "context": 1048576,
+      "maxOutput": 65536,
+      "modalities": [
+        "text",
+        "image",
+        "video",
+        "audio"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.435,
+        "output": 0.87
+      },
+      "cutoff": "2026-06",
+      "speed": 50,
+      "scores": {},
+      "tags": [
+        "open-weights",
+        "frontier",
+        "multimodal",
+        "agentic-coding",
+        "long-context"
+      ],
+      "url": "https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro"
     }
   ]
 }
