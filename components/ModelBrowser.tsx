@@ -3,26 +3,15 @@
 import Link from "next/link";
 import { useMemo, useState, type CSSProperties } from "react";
 import { licenceColor, providerColor } from "@/lib/accent";
-import {
-  CONTEXT_OPTIONS,
-  DEFAULT_FILTERS,
-  FAST_TOKENS_PER_SEC,
-  PRICE_OPTIONS,
-  filterModels,
-  isFiltered,
-  releaseYears,
-  type BrowseFilters,
-  type LicenseFilter,
-} from "@/lib/browse";
+import { BrowseFilterBar } from "@/components/BrowseFilterBar";
+import { DEFAULT_FILTERS, filterModels, isFiltered, type BrowseFilters } from "@/lib/browse";
 import { formatPrice, formatScore, formatTokens } from "@/lib/format";
-import { MAX_SELECTION, MODELS, PROVIDERS } from "@/lib/models";
+import { MAX_SELECTION, MODELS } from "@/lib/models";
 import { withSelection } from "@/lib/selection";
 import type { DerivedModel } from "@/lib/types";
 
 type SortKey = "name" | "provider" | "context" | "price" | "speed" | "capability" | "agentic";
 type SortDir = "asc" | "desc";
-
-const YEARS = releaseYears(MODELS);
 
 const COLUMNS: { key: SortKey; label: string; numeric: boolean }[] = [
   { key: "name", label: "Model", numeric: false },
@@ -66,10 +55,6 @@ export function ModelBrowser({
     dir: "desc",
   });
 
-  function set<K extends keyof BrowseFilters>(key: K, value: BrowseFilters[K]) {
-    setFilters((prev) => ({ ...prev, [key]: value }));
-  }
-
   const rows = useMemo(() => {
     return filterModels(MODELS, filters).sort((a, b) => {
       const av = sortValue(a, sort.key);
@@ -99,95 +84,12 @@ export function ModelBrowser({
       </header>
 
       {/* Filters live in one row above the data, per the interaction spec. */}
-      <div className="mb-4 space-y-2">
-        <div className="flex flex-wrap items-center gap-2">
-          <input
-            type="search"
-            value={filters.query}
-            onChange={(e) => set("query", e.target.value)}
-            placeholder="Name, provider or tag…"
-            aria-label="Search models"
-            className="field sm:max-w-[15rem]"
-          />
-          <select
-            value={filters.provider}
-            onChange={(e) => set("provider", e.target.value)}
-            aria-label="Filter by provider"
-            className="field sm:w-auto"
-          >
-            <option value="all">All providers</option>
-            {PROVIDERS.map((p) => (
-              <option key={p} value={p}>
-                {p}
-              </option>
-            ))}
-          </select>
-          <select
-            value={filters.minContext}
-            onChange={(e) => set("minContext", Number(e.target.value))}
-            aria-label="Minimum context window"
-            className="field sm:w-auto"
-          >
-            {CONTEXT_OPTIONS.map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
-            ))}
-          </select>
-          <select
-            value={String(filters.maxPrice)}
-            onChange={(e) => set("maxPrice", Number(e.target.value))}
-            aria-label="Maximum blended price"
-            className="field sm:w-auto"
-          >
-            {PRICE_OPTIONS.map((o) => (
-              <option key={o.value} value={String(o.value)}>
-                {o.label}
-              </option>
-            ))}
-          </select>
-          <select
-            value={filters.releasedYear}
-            onChange={(e) => set("releasedYear", e.target.value)}
-            aria-label="Release year"
-            className="field sm:w-auto"
-          >
-            <option value="all">Any year</option>
-            {YEARS.map((y) => (
-              <option key={y} value={y}>
-                Released {y}
-              </option>
-            ))}
-          </select>
-        </div>
-        <div className="flex flex-wrap items-center gap-1.5">
-          {(["all", "open", "proprietary"] as LicenseFilter[]).map((l) => (
-            <FilterChip key={l} active={filters.license === l} onClick={() => set("license", l)}>
-              {l === "all" ? "Any weights" : l === "open" ? "Open weights" : "Proprietary"}
-            </FilterChip>
-          ))}
-          <FilterChip active={filters.localOnly} onClick={() => set("localOnly", !filters.localOnly)}>
-            Runs on a workstation
-          </FilterChip>
-          <FilterChip active={filters.multimodal} onClick={() => set("multimodal", !filters.multimodal)}>
-            Sees images
-          </FilterChip>
-          <FilterChip active={filters.reasoning} onClick={() => set("reasoning", !filters.reasoning)}>
-            Reasoning
-          </FilterChip>
-          <FilterChip active={filters.fast} onClick={() => set("fast", !filters.fast)}>
-            Fast ({FAST_TOKENS_PER_SEC}+ tok/s)
-          </FilterChip>
-          {isFiltered(filters) && (
-            <button
-              type="button"
-              onClick={() => setFilters(DEFAULT_FILTERS)}
-              className="link ml-1 text-xs font-medium"
-            >
-              Clear filters
-            </button>
-          )}
-        </div>
+      <div className="mb-4">
+        <BrowseFilterBar
+          filters={filters}
+          onChange={setFilters}
+          onClear={isFiltered(filters) ? () => setFilters(DEFAULT_FILTERS) : undefined}
+        />
       </div>
 
       <div className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
@@ -319,26 +221,5 @@ function ScoreCell({ value }: { value: number | null }) {
         />
       </span>
     </span>
-  );
-}
-
-function FilterChip({
-  active,
-  onClick,
-  children,
-}: {
-  active: boolean;
-  onClick: () => void;
-  children: React.ReactNode;
-}) {
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      aria-pressed={active}
-      className={`chip ${active ? "chip-active" : "hover:border-[var(--border-strong)]"}`}
-    >
-      {children}
-    </button>
   );
 }
