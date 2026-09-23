@@ -3,6 +3,17 @@
 import Link from "next/link";
 import { useMemo, useState, type CSSProperties } from "react";
 import { licenceColor, providerColor } from "@/lib/accent";
+import {
+  CONTEXT_OPTIONS,
+  DEFAULT_FILTERS,
+  FAST_TOKENS_PER_SEC,
+  PRICE_OPTIONS,
+  filterModels,
+  isFiltered,
+  releaseYears,
+  type BrowseFilters,
+  type LicenseFilter,
+} from "@/lib/browse";
 import { formatPrice, formatScore, formatTokens } from "@/lib/format";
 import { MAX_SELECTION, MODELS, PROVIDERS } from "@/lib/models";
 import { withSelection } from "@/lib/selection";
@@ -10,7 +21,8 @@ import type { DerivedModel } from "@/lib/types";
 
 type SortKey = "name" | "provider" | "context" | "price" | "speed" | "capability" | "agentic";
 type SortDir = "asc" | "desc";
-type LicenseFilter = "all" | "open" | "proprietary";
+
+const YEARS = releaseYears(MODELS);
 
 const COLUMNS: { key: SortKey; label: string; numeric: boolean }[] = [
   { key: "name", label: "Model", numeric: false },
@@ -48,34 +60,24 @@ export function ModelBrowser({
   selected: string[];
   onToggle: (id: string) => void;
 }) {
-  const [query, setQuery] = useState("");
-  const [provider, setProvider] = useState("all");
-  const [license, setLicense] = useState<LicenseFilter>("all");
-  const [localOnly, setLocalOnly] = useState(false);
-  const [multimodal, setMultimodal] = useState(false);
+  const [filters, setFilters] = useState<BrowseFilters>(DEFAULT_FILTERS);
   const [sort, setSort] = useState<{ key: SortKey; dir: SortDir }>({
     key: "capability",
     dir: "desc",
   });
 
-  const rows = useMemo(() => {
-    const q = query.trim().toLowerCase();
-    const filtered = MODELS.filter((m) => {
-      if (q && !`${m.name} ${m.provider} ${m.tags.join(" ")}`.toLowerCase().includes(q)) return false;
-      if (provider !== "all" && m.provider !== provider) return false;
-      if (license !== "all" && m.license !== license) return false;
-      if (localOnly && !["laptop", "workstation"].includes(m.localTier ?? "")) return false;
-      if (multimodal && !m.modalities.includes("image")) return false;
-      return true;
-    });
+  function set<K extends keyof BrowseFilters>(key: K, value: BrowseFilters[K]) {
+    setFilters((prev) => ({ ...prev, [key]: value }));
+  }
 
-    return filtered.sort((a, b) => {
+  const rows = useMemo(() => {
+    return filterModels(MODELS, filters).sort((a, b) => {
       const av = sortValue(a, sort.key);
       const bv = sortValue(b, sort.key);
       const cmp = typeof av === "string" ? av.localeCompare(bv as string) : (av as number) - (bv as number);
       return sort.dir === "asc" ? cmp : -cmp;
     });
-  }, [query, provider, license, localOnly, multimodal, sort]);
+  }, [filters, sort]);
 
   function toggleSort(key: SortKey) {
     setSort((prev) =>
@@ -97,40 +99,94 @@ export function ModelBrowser({
       </header>
 
       {/* Filters live in one row above the data, per the interaction spec. */}
-      <div className="mb-4 flex flex-wrap items-center gap-2">
-        <input
-          type="search"
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search name, provider or tag…"
-          aria-label="Search models"
-          className="field sm:max-w-xs"
-        />
-        <select
-          value={provider}
-          onChange={(e) => setProvider(e.target.value)}
-          aria-label="Filter by provider"
-          className="field sm:w-auto"
-        >
-          <option value="all">All providers</option>
-          {PROVIDERS.map((p) => (
-            <option key={p} value={p}>
-              {p}
-            </option>
-          ))}
-        </select>
-        <div className="flex flex-wrap gap-1.5">
+      <div className="mb-4 space-y-2">
+        <div className="flex flex-wrap items-center gap-2">
+          <input
+            type="search"
+            value={filters.query}
+            onChange={(e) => set("query", e.target.value)}
+            placeholder="Name, provider or tag…"
+            aria-label="Search models"
+            className="field sm:max-w-[15rem]"
+          />
+          <select
+            value={filters.provider}
+            onChange={(e) => set("provider", e.target.value)}
+            aria-label="Filter by provider"
+            className="field sm:w-auto"
+          >
+            <option value="all">All providers</option>
+            {PROVIDERS.map((p) => (
+              <option key={p} value={p}>
+                {p}
+              </option>
+            ))}
+          </select>
+          <select
+            value={filters.minContext}
+            onChange={(e) => set("minContext", Number(e.target.value))}
+            aria-label="Minimum context window"
+            className="field sm:w-auto"
+          >
+            {CONTEXT_OPTIONS.map((o) => (
+              <option key={o.value} value={o.value}>
+                {o.label}
+              </option>
+            ))}
+          </select>
+          <select
+            value={String(filters.maxPrice)}
+            onChange={(e) => set("maxPrice", Number(e.target.value))}
+            aria-label="Maximum blended price"
+            className="field sm:w-auto"
+          >
+            {PRICE_OPTIONS.map((o) => (
+              <option key={o.value} value={String(o.value)}>
+                {o.label}
+              </option>
+            ))}
+          </select>
+          <select
+            value={filters.releasedYear}
+            onChange={(e) => set("releasedYear", e.target.value)}
+            aria-label="Release year"
+            className="field sm:w-auto"
+          >
+            <option value="all">Any year</option>
+            {YEARS.map((y) => (
+              <option key={y} value={y}>
+                Released {y}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div className="flex flex-wrap items-center gap-1.5">
           {(["all", "open", "proprietary"] as LicenseFilter[]).map((l) => (
-            <FilterChip key={l} active={license === l} onClick={() => setLicense(l)}>
+            <FilterChip key={l} active={filters.license === l} onClick={() => set("license", l)}>
               {l === "all" ? "Any weights" : l === "open" ? "Open weights" : "Proprietary"}
             </FilterChip>
           ))}
-          <FilterChip active={localOnly} onClick={() => setLocalOnly((v) => !v)}>
+          <FilterChip active={filters.localOnly} onClick={() => set("localOnly", !filters.localOnly)}>
             Runs on a workstation
           </FilterChip>
-          <FilterChip active={multimodal} onClick={() => setMultimodal((v) => !v)}>
+          <FilterChip active={filters.multimodal} onClick={() => set("multimodal", !filters.multimodal)}>
             Sees images
           </FilterChip>
+          <FilterChip active={filters.reasoning} onClick={() => set("reasoning", !filters.reasoning)}>
+            Reasoning
+          </FilterChip>
+          <FilterChip active={filters.fast} onClick={() => set("fast", !filters.fast)}>
+            Fast ({FAST_TOKENS_PER_SEC}+ tok/s)
+          </FilterChip>
+          {isFiltered(filters) && (
+            <button
+              type="button"
+              onClick={() => setFilters(DEFAULT_FILTERS)}
+              className="link ml-1 text-xs font-medium"
+            >
+              Clear filters
+            </button>
+          )}
         </div>
       </div>
 
