@@ -8,6 +8,7 @@ import {
   KV_QUANTS,
   MAX_CONTEXT,
   QUANTS,
+  USER_CHOICES,
   formatGiB,
   usableBytes,
   type ContextChoice,
@@ -29,12 +30,14 @@ interface Props {
   context: ContextChoice;
   kvQuant: KvQuantKey;
   floor: QuantKey;
+  users: number;
   rig: Rig;
   onDevice: (id: string) => void;
   onCustom: (next: CustomRig) => void;
   onContext: (tokens: ContextChoice) => void;
   onKvQuant: (key: KvQuantKey) => void;
   onFloor: (key: QuantKey) => void;
+  onUsers: (n: number) => void;
 }
 
 export function HardwarePicker({
@@ -43,12 +46,14 @@ export function HardwarePicker({
   context,
   kvQuant,
   floor,
+  users,
   rig,
   onDevice,
   onCustom,
   onContext,
   onKvQuant,
   onFloor,
+  onUsers,
 }: Props) {
   const isCustom = deviceId === CUSTOM_ID;
 
@@ -128,6 +133,17 @@ export function HardwarePicker({
               {k.label}
             </Choice>
           ))}
+        </Field>
+
+        <Field label="How many people will use it at once?">
+          {USER_CHOICES.map((n) => (
+            <Choice key={n} active={users === n} onClick={() => onUsers(n)}>
+              {n === 1 ? "Just me" : n}
+            </Choice>
+          ))}
+          <span className="ml-1 text-xs text-ink-muted">
+            Weights are shared; each user holds their own context cache and a share of the speed.
+          </span>
         </Field>
 
         <Field label="How much quantization will you accept?">

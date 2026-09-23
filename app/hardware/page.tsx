@@ -12,9 +12,11 @@ import {
   DEFAULT_CONTEXT,
   DEFAULT_DEVICE_ID,
   DEFAULT_FLOOR,
+  DEFAULT_USERS,
   DEVICE_BY_ID,
   MAX_CONTEXT,
   QUANT_BY_KEY,
+  USER_CHOICES,
   fitCatalog,
   rigFromDevice,
   type ContextChoice,
@@ -40,6 +42,7 @@ export default function HardwarePage() {
   const [context, setContext] = useState<ContextChoice>(DEFAULT_CONTEXT);
   const [kvQuant, setKvQuant] = useState<KvQuantKey>("fp16");
   const [floor, setFloor] = useState<QuantKey>(DEFAULT_FLOOR);
+  const [users, setUsers] = useState<number>(DEFAULT_USERS);
   const [hydrated, setHydrated] = useState(false);
 
   // The rig rides in the query next to ?m=, so a link to "what runs on a 4090"
@@ -77,6 +80,9 @@ export default function HardwarePage() {
     const q = params.get("q");
     if (q && QUANT_BY_KEY.has(q as QuantKey)) setFloor(q as QuantKey);
 
+    const n = Number(params.get("users"));
+    if (USER_CHOICES.includes(n as (typeof USER_CHOICES)[number])) setUsers(n);
+
     setHydrated(true);
   }, []);
 
@@ -88,6 +94,7 @@ export default function HardwarePage() {
     params.set("ctx", String(context));
     params.set("kv", kvQuant);
     params.set("q", floor);
+    params.set("users", String(users));
     for (const key of ["mem", "bw", "n", "u"]) params.delete(key);
     if (deviceId === CUSTOM_ID) {
       params.set("mem", String(custom.memoryGB));
@@ -112,7 +119,7 @@ export default function HardwarePage() {
       "",
       `${window.location.pathname}${query ? `?${query}` : ""}${window.location.hash}`
     );
-  }, [hydrated, deviceId, custom, context, kvQuant, floor, ids]);
+  }, [hydrated, deviceId, custom, context, kvQuant, floor, users, ids]);
 
   const rig: Rig = useMemo(() => {
     if (deviceId === CUSTOM_ID) {
@@ -129,8 +136,8 @@ export default function HardwarePage() {
   }, [deviceId, custom]);
 
   const fits = useMemo(
-    () => fitCatalog(MODELS_WITH_ARCH, rig, context, kvQuant, floor),
-    [rig, context, kvQuant, floor]
+    () => fitCatalog(MODELS_WITH_ARCH, rig, context, kvQuant, floor, users),
+    [rig, context, kvQuant, floor, users]
   );
 
   const onCustom = useCallback((next: CustomRig) => setCustom(next), []);
@@ -148,12 +155,14 @@ export default function HardwarePage() {
         context={context}
         kvQuant={kvQuant}
         floor={floor}
+        users={users}
         rig={rig}
         onDevice={setDeviceId}
         onCustom={onCustom}
         onContext={setContext}
         onKvQuant={setKvQuant}
         onFloor={setFloor}
+        onUsers={setUsers}
       />
 
       <HardwareFit
@@ -161,6 +170,7 @@ export default function HardwarePage() {
         rig={rig}
         floor={floor}
         context={context}
+        users={users}
         selected={ids}
         onToggle={toggle}
       />

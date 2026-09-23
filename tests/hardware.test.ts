@@ -3,6 +3,7 @@ import { MODELS_WITH_ARCH } from "@/lib/arch";
 import {
   CONTEXT_CHOICES,
   CONTEXT_LABELS,
+  DEFAULT_DEVICE_ID,
   MAX_CONTEXT,
   QUANTS,
   effectiveContext,
@@ -135,5 +136,45 @@ describe("quant ladder", () => {
     for (let i = 1; i < QUANTS.length; i++) {
       expect(QUANTS[i].bytesPerParam).toBeLessThan(QUANTS[i - 1].bytesPerParam);
     }
+  });
+});
+
+describe("concurrent users", () => {
+  const dense = byId("llama-3-3-70b");
+  const moe = sizable.find((m) => m.arch?.activeParams && m.arch.activeParams * 4 < m.params!)!;
+
+  it("defaults to the DGX Spark", () => {
+    expect(DEVICE_BY_ID.has(DEFAULT_DEVICE_ID)).toBe(true);
+    expect(DEFAULT_DEVICE_ID).toBe("dgx-spark");
+  });
+
+  it("shares the weights and multiplies the cache", () => {
+    const one = fit(dense, BIG, 32768, "fp16", "q4", 1).best!;
+    const four = fit(dense, BIG, 32768, "fp16", "q4", 4).best!;
+    expect(four.weights).toBe(one.weights);
+    expect(four.kv).toBeCloseTo(one.kv * 4);
+  });
+
+  it("slows each user down but raises the total", () => {
+    const one = fit(dense, BIG, 32768, "fp16", "q4", 1).throughput!;
+    const eight = fit(dense, BIG, 32768, "fp16", "q4", 8).throughput!;
+    expect(eight.high).toBeLessThan(one.high);
+    expect(eight.high * 8).toBeGreaterThan(one.high);
+  });
+
+  it("charges a mixture-of-experts for more experts as users are added", () => {
+    const one = fit(moe, BIG, 4096, "fp16", "q4", 1).throughput!;
+    const two = fit(moe, BIG, 4096, "fp16", "q4", 2).throughput!;
+    // Twice the expert reads, plus a second cache: at least ~half the speed per user.
+    expect(two.high).toBeLessThan(one.high * 0.55);
+  });
+
+  it("can push a model that fits for one user out of memory", () => {
+    const flips = sizable.filter(
+      (m) =>
+        fit(m, RIG, 32768, "fp16", "q4", 1).best &&
+        !fit(m, RIG, 32768, "fp16", "q4", 32).best
+    );
+    expect(flips.length).toBeGreaterThan(0);
   });
 });

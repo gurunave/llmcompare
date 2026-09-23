@@ -1,9 +1,19 @@
 "use client";
 
 import Link from "next/link";
-import { useState, type CSSProperties } from "react";
+import { useMemo, useState, type CSSProperties } from "react";
 import { ChartCard } from "@/components/ChartCard";
 import { providerColor } from "@/lib/accent";
+import {
+  DEFAULT_FIT_FILTERS,
+  FIT_SORTS,
+  SPEED_OPTIONS,
+  filterFits,
+  isFitFiltered,
+  sortFits,
+  type FitFilters,
+  type FitSortKey,
+} from "@/lib/fitTable";
 import { formatParams } from "@/lib/format";
 import {
   MAX_CONTEXT,
@@ -28,13 +38,20 @@ interface Props {
   rig: Rig;
   floor: QuantKey;
   context: ContextChoice;
+  users: number;
   selected: string[];
   onToggle: (id: string) => void;
 }
 
-export function HardwareFit({ fits, rig, floor, context, selected, onToggle }: Props) {
+export function HardwareFit({ fits, rig, floor, context, users, selected, onToggle }: Props) {
   const [showOversize, setShowOversize] = useState(false);
   const [showHosted, setShowHosted] = useState(false);
+  const [sortKey, setSortKey] = useState<FitSortKey>("capability");
+  const [filters, setFilters] = useState<FitFilters>(DEFAULT_FIT_FILTERS);
+
+  function set<K extends keyof FitFilters>(key: K, value: FitFilters[K]) {
+    setFilters((prev) => ({ ...prev, [key]: value }));
+  }
 
   const sizable = fits.filter((f) => f.verdict !== "unsizable");
   const fitting = sizable.filter((f) => f.best);
@@ -46,9 +63,10 @@ export function HardwareFit({ fits, rig, floor, context, selected, onToggle }: P
   // who asked for 1M and sees a 32K model fitting comfortably is owed the
   // reason, which is that it was never sized at 1M.
   const askedFor =
-    context === MAX_CONTEXT
+    (context === MAX_CONTEXT
       ? "each model's own maximum context"
-      : `${context.toLocaleString()} tokens of context`;
+      : `${context.toLocaleString()} tokens of context`) +
+    (users > 1 ? ` for each of ${users} people at once` : "");
   const capped = sizable.filter((f) => f.capped).length;
 
   // Models that miss by a little are the useful ones to name: they are what a
@@ -58,6 +76,17 @@ export function HardwareFit({ fits, rig, floor, context, selected, onToggle }: P
     .filter(({ need }) => need <= usableBytes(rig) * 2)
     .sort((a, b) => a.need - b.need)
     .slice(0, 3);
+
+  const providers = useMemo(
+    () => Array.from(new Set(fits.map((f) => f.model.provider))).sort(),
+    [fits]
+  );
+  const table = useMemo(() => {
+    const view = (group: Fit[]) => sortFits(filterFits(group, filters), sortKey);
+    return { fitting: view(fitting), oversize: view(oversize), hosted: view(hosted) };
+  }, [fitting, oversize, hosted, filters, sortKey]);
+  const filtered = isFitFiltered(filters);
+  const speedLabel = users > 1 ? "tok/s per user" : "tokens/sec";
 
   return (
     <div className="space-y-4">
@@ -87,7 +116,7 @@ export function HardwareFit({ fits, rig, floor, context, selected, onToggle }: P
               </Link>{" "}
               at {top.best?.quant.label} — {formatGiB(top.best?.total ?? 0)} of{" "}
               {formatGiB(usableBytes(rig))}
-              {top.throughput && `, an estimated ${formatTokPerSec(top.throughput)} tokens/sec`}.
+              {top.throughput && `, an estimated ${formatTokPerSec(top.throughput)} ${speedLabel}`}.
               {top.verdict === "tight" &&
                 " That is tight enough that anything else wanting memory will push it out — the next row down will have more room."}
             </p>
@@ -116,9 +145,93 @@ export function HardwareFit({ fits, rig, floor, context, selected, onToggle }: P
 
       <ChartCard
         title="What runs, and how"
-        subtitle="Each row shows the highest-precision quantization that fits, then the whole ladder. Speed is a single-stream decode estimate, not a measurement."
+        subtitle={`Each row shows the highest-precision quantization that fits, then the whole ladder. Speed is ${
+          users > 1 ? `what each of ${users} simultaneous users sees` : "a single-stream decode estimate"
+        }, not a measurement.`}
         note="A cell marks whether that quantization fits in memory alongside the KV cache — it says nothing about whether the quality holds up. Hover any cell for the numbers behind it."
       >
+        <div className="mb-4 space-y-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <input
+              type="search"
+              value={filters.query}
+              onChange={(e) => set("query", e.target.value)}
+              placeholder="Name, provider or tag…"
+              aria-label="Search models"
+              className="field sm:max-w-[15rem]"
+            />
+            <select
+              value={filters.provider}
+              onChange={(e) => set("provider", e.target.value)}
+              aria-label="Filter by provider"
+              className="field sm:w-auto"
+            >
+              <option value="all">All providers</option>
+              {providers.map((p) => (
+                <option key={p} value={p}>
+                  {p}
+                </option>
+              ))}
+            </select>
+            <select
+              value={filters.minSpeed}
+              onChange={(e) => set("minSpeed", Number(e.target.value))}
+              aria-label={`Minimum ${speedLabel}`}
+              className="field sm:w-auto"
+            >
+              {SPEED_OPTIONS.map((o) => (
+                <option key={o.value} value={o.value}>
+                  {o.value && users > 1 ? `${o.label} per user` : o.label}
+                </option>
+              ))}
+            </select>
+            <label className="flex items-center gap-2 text-sm text-ink-secondary sm:ml-auto">
+              Sort
+              <select
+                value={sortKey}
+                onChange={(e) => setSortKey(e.target.value as FitSortKey)}
+                aria-label="Sort models"
+                className="field w-auto"
+              >
+                {FIT_SORTS.map((o) => (
+                  <option key={o.key} value={o.key}>
+                    {o.label}
+                  </option>
+                ))}
+              </select>
+            </label>
+          </div>
+          <div className="flex flex-wrap items-center gap-1.5">
+            <FilterChip
+              active={filters.comfortableOnly}
+              onClick={() => set("comfortableOnly", !filters.comfortableOnly)}
+            >
+              Fits with room to spare
+            </FilterChip>
+            <FilterChip active={filters.reasoning} onClick={() => set("reasoning", !filters.reasoning)}>
+              Reasoning
+            </FilterChip>
+            <FilterChip active={filters.multimodal} onClick={() => set("multimodal", !filters.multimodal)}>
+              Sees images
+            </FilterChip>
+            {filtered && (
+              <>
+                <span className="ml-1 text-xs text-ink-muted">
+                  Showing <span className="num">{table.fitting.length}</span> of{" "}
+                  <span className="num">{fitting.length}</span> that fit
+                </span>
+                <button
+                  type="button"
+                  onClick={() => setFilters(DEFAULT_FIT_FILTERS)}
+                  className="link ml-1 text-xs font-medium"
+                >
+                  Clear filters
+                </button>
+              </>
+            )}
+          </div>
+        </div>
+
         <div className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
           <table className="data-table w-full min-w-[880px] border-collapse text-[15px]">
             <thead>
@@ -135,8 +248,12 @@ export function HardwareFit({ fits, rig, floor, context, selected, onToggle }: P
                 <th scope="col" className="whitespace-nowrap px-3 py-2 text-right text-sm font-medium text-ink-muted">
                   Footprint
                 </th>
-                <th scope="col" className="whitespace-nowrap px-3 py-2 text-right text-sm font-medium text-ink-muted">
-                  Est. tok/s
+                <th
+                  scope="col"
+                  className="whitespace-nowrap px-3 py-2 text-right text-sm font-medium text-ink-muted"
+                  title={users > 1 ? "Decode speed each user sees; hover a row for the total" : undefined}
+                >
+                  {users > 1 ? "Est. tok/s / user" : "Est. tok/s"}
                 </th>
                 {QUANTS.map((q) => (
                   <th
@@ -154,7 +271,16 @@ export function HardwareFit({ fits, rig, floor, context, selected, onToggle }: P
               </tr>
             </thead>
             <tbody>
-              {fitting.map((f) => (
+              {table.fitting.length === 0 && (
+                <tr className="border-b border-hairline">
+                  <td colSpan={5 + QUANTS.length} className="py-6 text-center text-sm text-ink-muted">
+                    {fitting.length === 0
+                      ? "Nothing fits at these settings."
+                      : "No model that fits matches these filters."}
+                  </td>
+                </tr>
+              )}
+              {table.fitting.map((f) => (
                 <FitRow
                   key={f.model.id}
                   fit={f}
@@ -164,7 +290,7 @@ export function HardwareFit({ fits, rig, floor, context, selected, onToggle }: P
                 />
               ))}
 
-              {oversize.length > 0 && (
+              {table.oversize.length > 0 && (
                 <tr className="border-b border-hairline">
                   <td colSpan={5 + QUANTS.length} className="py-2">
                     <button
@@ -173,14 +299,14 @@ export function HardwareFit({ fits, rig, floor, context, selected, onToggle }: P
                       aria-expanded={showOversize}
                       className="sticky left-0 text-sm font-medium text-accent-text hover:underline"
                     >
-                      {showOversize ? "▾" : "▸"} {oversize.length} model
-                      {oversize.length === 1 ? "" : "s"} too big for this configuration
+                      {showOversize ? "▾" : "▸"} {table.oversize.length} model
+                      {table.oversize.length === 1 ? "" : "s"} too big for this configuration
                     </button>
                   </td>
                 </tr>
               )}
               {showOversize &&
-                oversize.map((f) => (
+                table.oversize.map((f) => (
                   <FitRow
                     key={f.model.id}
                     fit={f}
@@ -190,7 +316,7 @@ export function HardwareFit({ fits, rig, floor, context, selected, onToggle }: P
                   />
                 ))}
 
-              {hosted.length > 0 && (
+              {table.hosted.length > 0 && (
                 <tr className="border-b border-hairline">
                   <td colSpan={5 + QUANTS.length} className="py-2">
                     <button
@@ -199,14 +325,14 @@ export function HardwareFit({ fits, rig, floor, context, selected, onToggle }: P
                       aria-expanded={showHosted}
                       className="sticky left-0 text-sm font-medium text-accent-text hover:underline"
                     >
-                      {showHosted ? "▾" : "▸"} {hosted.length} hosted model
-                      {hosted.length === 1 ? "" : "s"} with no published weights
+                      {showHosted ? "▾" : "▸"} {table.hosted.length} hosted model
+                      {table.hosted.length === 1 ? "" : "s"} with no published weights
                     </button>
                   </td>
                 </tr>
               )}
               {showHosted &&
-                hosted.map((f) => (
+                table.hosted.map((f) => (
                   <FitRow
                     key={f.model.id}
                     fit={f}
@@ -219,9 +345,9 @@ export function HardwareFit({ fits, rig, floor, context, selected, onToggle }: P
           </table>
         </div>
 
-        {hosted.length > 0 && (
+        {table.hosted.length > 0 && (
           <p className="mt-3 text-xs text-ink-muted">
-            Those {hosted.length} are not too big — they are undownloadable. No provider publishes
+            Those {table.hosted.length} are not too big — they are undownloadable. No provider publishes
             their weights or parameter counts, so there is nothing to size.{" "}
             <Link href={withSelection("/recommend", selected)} className="link">
               Comparing hosted APIs instead?
@@ -318,7 +444,17 @@ function FitRow({
         )}
       </td>
 
-      <td className="num whitespace-nowrap px-3 py-2 text-right text-ink-secondary">
+      <td
+        className="num whitespace-nowrap px-3 py-2 text-right text-ink-secondary"
+        title={
+          fit.throughput && fit.users > 1
+            ? `${formatTokPerSec({
+                low: fit.throughput.low * fit.users,
+                high: fit.throughput.high * fit.users,
+              })} tok/s in total across ${fit.users} users`
+            : undefined
+        }
+      >
         {fit.throughput ? formatTokPerSec(fit.throughput) : "—"}
       </td>
 
@@ -354,5 +490,26 @@ function LadderCell({ step, label }: { step: Footprint; label: string }) {
         {label}: {VERDICT_LABEL[step.verdict]}, {formatGiB(step.total)}
       </span>
     </span>
+  );
+}
+
+function FilterChip({
+  active,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-pressed={active}
+      className={`chip ${active ? "chip-active" : "hover:border-[var(--border-strong)]"}`}
+    >
+      {children}
+    </button>
   );
 }
