@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-09-22",
+    "lastReviewed": "2026-09-24",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -5664,6 +5664,112 @@
         "agentic-coding"
       ],
       "url": "https://platform.openai.com/docs/models"
+    },
+    {
+      "id": "mimo-v2-6-pro",
+      "name": "MiMo-V2.6-Pro",
+      "provider": "Xiaomi",
+      "released": "2026-09",
+      "license": "open",
+      "params": 1020,
+      "localTier": "cluster",
+      "context": 1048576,
+      "maxOutput": 128000,
+      "modalities": [
+        "text",
+        "image",
+        "video",
+        "audio"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.435,
+        "output": 0.87
+      },
+      "cutoff": "2026-06",
+      "speed": 130,
+      "scores": {
+        "terminalBench2": 89.9
+      },
+      "tags": [
+        "open-weights",
+        "frontier",
+        "agentic-coding",
+        "reasoning",
+        "multimodal",
+        "long-context",
+        "self-host"
+      ],
+      "url": "https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Pro-RL"
+    },
+    {
+      "id": "mimo-v2-6-flash",
+      "name": "MiMo-V2.6-Flash",
+      "provider": "Xiaomi",
+      "released": "2026-09",
+      "license": "open",
+      "params": 310,
+      "localTier": "cluster",
+      "context": 1048576,
+      "maxOutput": 128000,
+      "modalities": [
+        "text",
+        "image",
+        "video",
+        "audio"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.14,
+        "output": 0.28
+      },
+      "cutoff": "2026-06",
+      "speed": 350,
+      "scores": {
+        "terminalBench2": 87.6
+      },
+      "tags": [
+        "open-weights",
+        "agentic-coding",
+        "reasoning",
+        "multimodal",
+        "long-context",
+        "cheap",
+        "self-host"
+      ],
+      "url": "https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Flash-RL"
+    },
+    {
+      "id": "qwen3-8-omni-flash",
+      "name": "Qwen3.8-Omni-Flash",
+      "provider": "Alibaba",
+      "released": "2026-09",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 1048576,
+      "maxOutput": 131072,
+      "modalities": [
+        "text",
+        "image",
+        "audio",
+        "video"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.15,
+        "output": 0.47
+      },
+      "cutoff": "2026-06",
+      "speed": 80,
+      "scores": {},
+      "tags": [
+        "multimodal",
+        "agentic-coding",
+        "long-context",
+        "reasoning"
+      ],
+      "url": "https://qwen.ai/blog?id=qwen3.8-omni-flash"
     }
   ]
 }
