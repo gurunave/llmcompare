@@ -1,7 +1,7 @@
 # LLM Compare
 
 A visual side-by-side comparison of large language models — capability, price,
-speed and context, for 160 models across 32 providers — 101 of them open-weights,
+speed and context, for 162 models across 33 providers — 102 of them open-weights,
 from cluster-scale MoEs down to models that fit on a laptop.
 
 Everything is driven by one bundled file — `data/models.json` — so there are no API
@@ -310,6 +310,39 @@ pass, so every number above traces through secondary aggregator summaries.
 Cross-check all of the above against Xiaomi's primary sources on the next
 review, and reconsider adding UltraSpeed and the distill once their specs
 firm up.
+
+`qwen3-8-omni-flash` (Alibaba, added 2026-09-27, released 2026-09-18) is a
+hosted-only omni-modal model built on the `qwen3-8-flash-next` architecture,
+adding native audio-video understanding; unlike that sibling it ships with
+no open weights, so `license` is `proprietary` and `params`/`localTier` are
+left unset rather than guessed. `gpqa` (91.0), `swebenchPro` (63.3) and
+`livecodebench` (92.6) are recorded because they turned up identically
+across two independent searches; other reported figures used evals this
+catalog doesn't track. `context` (1M) and `maxOutput` (131072) are confirmed
+from vendor-facing pricing/spec pages; `cutoff` (2026-06) and `speed` (83,
+the midpoint of a reported 81-85 tok/s text-throughput range) are carried
+over or estimated from the `qwen3-8-flash-next` sibling pending a primary
+source. `alibabacloud.com`, `openrouter.ai` and `technode.com` were all
+blocked by the egress proxy this pass. Cross-check all of the above against
+Alibaba's own model card on the next review.
+
+`ternary-bonsai-2-27b` (PrismML, added 2026-09-27, released 2026-09-18,
+first entry in this catalog from this provider) is an Apache-2.0 ternary
+quantization of `qwen3-8-27b` down to a 5.9GB footprint, reported to retain
+98.2% of that base model's aggregate score. `context` (262144), `maxOutput`
+(65536), `cutoff` (2026-05) and `speed` (70) are all carried over unchanged
+from that same base model as placeholders rather than measured directly for
+this checkpoint - the one throughput figure found (143 tok/s) was measured
+locally on an RTX 5090 and isn't comparable to this catalog's hosted-API
+speed figures. `scores` is intentionally empty: the benchmark numbers
+circulating for this release mix quantization-ablation comparisons (e.g. a
+GPQA Diamond figure reported specifically for "standard 2-bit quantization")
+with single-source, uncorroborated pass rates on evals this catalog does
+track (LiveCodeBench, a SWE-bench Verified figure given only as a relative
+"~24% drop"), so nothing cleanly maps onto a tracked benchmark with
+confidence. `docs.prismml.com`, `openrouter.ai` and `morningstar.com` were
+all blocked by the egress proxy this pass. Cross-check all of the above
+against PrismML's own model card on the next review.
 
 ## Design notes
 

@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-09-25",
+    "lastReviewed": "2026-09-27",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -5732,6 +5732,72 @@
         "workhorse"
       ],
       "url": "https://huggingface.co/XiaomiMiMo/MiMo-V2.6-Flash-RL"
+    },
+    {
+      "id": "qwen3-8-omni-flash",
+      "name": "Qwen3.8-Omni-Flash",
+      "provider": "Alibaba",
+      "released": "2026-09",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 1048576,
+      "maxOutput": 131072,
+      "modalities": [
+        "text",
+        "image",
+        "audio",
+        "video"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.15,
+        "output": 0.47
+      },
+      "cutoff": "2026-06",
+      "speed": 83,
+      "scores": {
+        "gpqa": 91.0,
+        "swebenchPro": 63.3,
+        "livecodebench": 92.6
+      },
+      "tags": [
+        "multimodal",
+        "agentic-coding",
+        "long-context",
+        "reasoning"
+      ],
+      "url": "https://qwen.ai/blog?id=qwen3.8-omni-flash"
+    },
+    {
+      "id": "ternary-bonsai-2-27b",
+      "name": "Ternary Bonsai 2 27B",
+      "provider": "PrismML",
+      "released": "2026-09",
+      "license": "open",
+      "params": 27.78,
+      "localTier": "laptop",
+      "context": 262144,
+      "maxOutput": 65536,
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.075,
+        "output": 0.5
+      },
+      "cutoff": "2026-05",
+      "speed": 70,
+      "scores": {},
+      "tags": [
+        "open-weights",
+        "laptop",
+        "efficient",
+        "self-host"
+      ],
+      "url": "https://prismml.com/news/bonsai-2-27b"
     }
   ]
 }
