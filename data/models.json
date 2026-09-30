@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-09-29",
+    "lastReviewed": "2026-09-30",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -5791,6 +5791,101 @@
         "long-context"
       ],
       "url": "https://huggingface.co/Qwen/Qwen3.8-2.4T-A95B"
+    },
+    {
+      "id": "gpt-6-1-sol",
+      "name": "GPT-6.1 Sol",
+      "provider": "OpenAI",
+      "released": "2026-09",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 1100000,
+      "maxOutput": 128000,
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 2,
+        "output": 10
+      },
+      "cutoff": "2026-04",
+      "speed": 20,
+      "scores": {
+        "osworld": 71.4
+      },
+      "tags": [
+        "frontier",
+        "agentic-coding",
+        "reasoning",
+        "computer-use"
+      ],
+      "url": "https://platform.openai.com/docs/models"
+    },
+    {
+      "id": "holo4-27b",
+      "name": "Holo4-27B",
+      "provider": "H Company",
+      "released": "2026-09",
+      "license": "open",
+      "localTier": "workstation",
+      "context": 256000,
+      "maxOutput": 32768,
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "reasoning": true,
+      "cutoff": "2026-05",
+      "params": 27,
+      "pricing": {
+        "input": 0.4,
+        "output": 3
+      },
+      "speed": 70,
+      "scores": {
+        "osworld": 85.2
+      },
+      "tags": [
+        "open-weights",
+        "computer-use",
+        "agentic",
+        "self-host",
+        "non-commercial"
+      ],
+      "url": "https://huggingface.co/Hcompany/Holo4-27B"
+    },
+    {
+      "id": "holo4-35b-a3b",
+      "name": "Holo4-35B-A3B",
+      "provider": "H Company",
+      "released": "2026-09",
+      "license": "open",
+      "localTier": "workstation",
+      "context": 256000,
+      "maxOutput": 32768,
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "reasoning": true,
+      "cutoff": "2026-05",
+      "params": 35,
+      "pricing": {
+        "input": 0.3,
+        "output": 2
+      },
+      "speed": 150,
+      "scores": {},
+      "tags": [
+        "open-weights",
+        "computer-use",
+        "agentic",
+        "self-host"
+      ],
+      "url": "https://huggingface.co/Hcompany/Holo4-35B-A3B"
     }
   ]
 }
