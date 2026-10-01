@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-09-30",
+    "lastReviewed": "2026-10-01",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -5886,6 +5886,73 @@
         "self-host"
       ],
       "url": "https://huggingface.co/Hcompany/Holo4-35B-A3B"
+    },
+    {
+      "id": "gemini-4-argon",
+      "name": "Gemini 4 Argon",
+      "provider": "Google",
+      "released": "2026-09",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 2000000,
+      "maxOutput": 1000000,
+      "modalities": [
+        "text",
+        "image",
+        "video",
+        "audio"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 2,
+        "output": 10
+      },
+      "cutoff": "2026-06",
+      "speed": 60,
+      "scores": {},
+      "tags": [
+        "frontier",
+        "agentic-coding",
+        "long-context",
+        "reasoning",
+        "cybersecurity"
+      ],
+      "url": "https://ai.google.dev/gemini-api/docs/models"
+    },
+    {
+      "id": "qwen3-8-omni-flash",
+      "name": "Qwen3.8-Omni-Flash",
+      "provider": "Alibaba",
+      "released": "2026-09",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 1000000,
+      "maxOutput": 131072,
+      "modalities": [
+        "text",
+        "image",
+        "video",
+        "audio"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.15,
+        "output": 0.47
+      },
+      "cutoff": "2026-06",
+      "speed": 120,
+      "scores": {},
+      "tags": [
+        "multimodal",
+        "omni",
+        "audio",
+        "agentic",
+        "long-context",
+        "cheap"
+      ],
+      "url": "https://openrouter.ai/qwen/qwen3.8-omni-flash"
     }
   ]
 }
