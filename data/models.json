@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-10-01",
+    "lastReviewed": "2026-10-03",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -5953,6 +5953,35 @@
         "cheap"
       ],
       "url": "https://openrouter.ai/qwen/qwen3.8-omni-flash"
+    },
+    {
+      "id": "ling-3-1-flash",
+      "name": "Ling 3.1 Flash",
+      "provider": "Ant Group",
+      "released": "2026-09",
+      "license": "proprietary",
+      "params": 560,
+      "localTier": null,
+      "context": 262144,
+      "maxOutput": 32768,
+      "modalities": [
+        "text"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.07,
+        "output": 0.22
+      },
+      "cutoff": "2026-06",
+      "speed": 300,
+      "scores": {},
+      "tags": [
+        "reasoning",
+        "agentic",
+        "long-context",
+        "cheap"
+      ],
+      "url": "https://openrouter.ai/inclusionai/ling-3.1-flash"
     }
   ]
 }
