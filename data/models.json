@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-10-04",
+    "lastReviewed": "2026-10-06",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -5982,6 +5982,64 @@
         "moe"
       ],
       "url": "https://x.com/AntLingAGI/status/2105335205741596911"
+    },
+    {
+      "id": "mistral-large-4",
+      "name": "Mistral Large 4",
+      "provider": "Mistral",
+      "released": "2026-10",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 1000000,
+      "maxOutput": 32000,
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 1.36,
+        "output": 4.18
+      },
+      "cutoff": "2026-06",
+      "speed": 90,
+      "scores": {},
+      "tags": [
+        "multimodal",
+        "long-context",
+        "moe",
+        "european"
+      ],
+      "url": "https://www.marktechpost.com/2026/10/06/mistral-ai-releases-mistral-large-4-le-chonk-a-1-05t-parameter-open-weight-multimodal-moe/"
+    },
+    {
+      "id": "reflection-beam",
+      "name": "Beam",
+      "provider": "Reflection AI",
+      "released": "2026-10",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 256000,
+      "maxOutput": 32000,
+      "modalities": [
+        "text"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.5,
+        "output": 2.0
+      },
+      "cutoff": "2026-06",
+      "speed": 110,
+      "scores": {},
+      "tags": [
+        "reasoning",
+        "agentic-coding",
+        "moe"
+      ],
+      "url": "https://techcrunch.com/2026/10/05/reflection-debuts-beam-a-open-weight-ai-model-to-rival-chinese-models-at-lower-compute-cost/"
     }
   ]
 }
