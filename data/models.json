@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-10-04",
+    "lastReviewed": "2026-10-07",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -5982,6 +5982,64 @@
         "moe"
       ],
       "url": "https://x.com/AntLingAGI/status/2105335205741596911"
+    },
+    {
+      "id": "claude-haiku-5-5",
+      "name": "Claude Haiku 5.5",
+      "provider": "Anthropic",
+      "released": "2026-10",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 1000000,
+      "maxOutput": 128000,
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.1,
+        "output": 0.5
+      },
+      "cutoff": "2026-06",
+      "speed": 200,
+      "scores": {},
+      "tags": [
+        "fast",
+        "cheap",
+        "long-context"
+      ],
+      "url": "https://www.anthropic.com/claude-haiku-5-5"
+    },
+    {
+      "id": "mistral-large-4",
+      "name": "Mistral Large 4",
+      "provider": "Mistral",
+      "released": "2026-10",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 524288,
+      "maxOutput": 32768,
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 1.36,
+        "output": 4.18
+      },
+      "cutoff": "2026-06",
+      "speed": 100,
+      "scores": {},
+      "tags": [
+        "european",
+        "agentic-coding",
+        "moe"
+      ],
+      "url": "https://mistral.ai/models"
     }
   ]
 }
