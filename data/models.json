@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-11-04",
+    "lastReviewed": "2026-11-05",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -6098,6 +6098,35 @@
         "computer-use"
       ],
       "url": "https://www.tencent.com/tencent-launches-hy4-joining-the-ranks-of-the-worlds-leading-open-source-ai-models/"
+    },
+    {
+      "id": "kimi-k3-1-pro",
+      "name": "Kimi K3.1 Pro",
+      "provider": "Moonshot",
+      "released": "2026-10",
+      "license": "open",
+      "params": 2800,
+      "localTier": "cluster",
+      "context": 1048576,
+      "maxOutput": 65536,
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 2,
+        "output": 10
+      },
+      "cutoff": "2026-04",
+      "speed": 45,
+      "scores": {},
+      "tags": [
+        "open-weights",
+        "agentic-coding",
+        "reasoning"
+      ],
+      "url": "https://platform.moonshot.ai/"
     }
   ]
 }
