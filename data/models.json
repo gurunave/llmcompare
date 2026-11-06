@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-11-05",
+    "lastReviewed": "2026-11-06",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -1157,6 +1157,37 @@
         "open-weights",
         "multimodal",
         "frontier"
+      ],
+      "url": "https://thinkingmachines.ai/model-card/inkling/"
+    },
+    {
+      "id": "inkling-small",
+      "name": "Inkling Small",
+      "provider": "Thinking Machines",
+      "released": "2026-07",
+      "license": "open",
+      "params": 276,
+      "localTier": "cluster",
+      "context": 262144,
+      "maxOutput": 32768,
+      "modalities": [
+        "text",
+        "image",
+        "audio"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.45,
+        "output": 1.2
+      },
+      "cutoff": "2026-05",
+      "speed": 120,
+      "scores": {},
+      "tags": [
+        "open-weights",
+        "multimodal",
+        "reasoning",
+        "cheap"
       ],
       "url": "https://thinkingmachines.ai/model-card/inkling/"
     },
