@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-11-07",
+    "lastReviewed": "2026-11-08",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -6217,6 +6217,34 @@
         "long-context"
       ],
       "url": "https://mbzuai.ac.ae/"
+    },
+    {
+      "id": "ernie-5-5-flash-base",
+      "name": "ERNIE 5.5 Flash Base",
+      "provider": "Baidu",
+      "released": "2026-11",
+      "license": "open",
+      "params": 280,
+      "localTier": "cluster",
+      "context": 1048576,
+      "maxOutput": 65536,
+      "modalities": [
+        "text"
+      ],
+      "reasoning": false,
+      "pricing": {
+        "input": 0,
+        "output": 0
+      },
+      "cutoff": "2026-06",
+      "speed": 80,
+      "scores": {},
+      "tags": [
+        "open-weights",
+        "base-model",
+        "long-context"
+      ],
+      "url": "https://huggingface.co/baidu"
     }
   ]
 }
