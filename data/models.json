@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-11-08",
+    "lastReviewed": "2026-11-09",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -6245,6 +6245,66 @@
         "long-context"
       ],
       "url": "https://huggingface.co/baidu"
+    },
+    {
+      "id": "inkling-2-small",
+      "name": "Inkling 2 Small",
+      "provider": "Thinking Machines",
+      "released": "2026-11",
+      "license": "proprietary",
+      "params": 594,
+      "localTier": null,
+      "context": 1048576,
+      "maxOutput": 65536,
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.3,
+        "output": 1.0
+      },
+      "cutoff": "2026-08",
+      "speed": 110,
+      "scores": {},
+      "tags": [
+        "multimodal",
+        "reasoning",
+        "cheap",
+        "long-context"
+      ],
+      "url": "https://thinkingmachines.ai/"
+    },
+    {
+      "id": "gpt-6-cyber",
+      "name": "GPT-6 Cyber",
+      "provider": "OpenAI",
+      "released": "2026-11",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 1050000,
+      "maxOutput": 128000,
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 20,
+        "output": 100
+      },
+      "cutoff": "2026-04",
+      "speed": 50,
+      "scores": {},
+      "tags": [
+        "restricted-access",
+        "agentic-coding",
+        "reasoning",
+        "frontier"
+      ],
+      "url": "https://developers.openai.com/api/docs/models/gpt-6-cyber"
     }
   ]
 }
