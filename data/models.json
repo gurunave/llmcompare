@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-11-09",
+    "lastReviewed": "2026-11-10",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -6305,6 +6305,100 @@
         "frontier"
       ],
       "url": "https://developers.openai.com/api/docs/models/gpt-6-cyber"
+    },
+    {
+      "id": "claude-fable-5-2",
+      "name": "Claude Fable 5.2",
+      "provider": "Anthropic",
+      "released": "2026-11",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 1000000,
+      "maxOutput": 128000,
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 8,
+        "output": 40
+      },
+      "cutoff": "2026-06",
+      "speed": 63,
+      "scores": {},
+      "tags": [
+        "frontier",
+        "agentic-coding",
+        "long-horizon",
+        "flagship"
+      ],
+      "url": "https://platform.claude.com/docs/en/models/fable-5-2/overview"
+    },
+    {
+      "id": "claude-mythos-5-2",
+      "name": "Claude Mythos 5.2",
+      "provider": "Anthropic",
+      "released": "2026-11",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 1000000,
+      "maxOutput": 128000,
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 8,
+        "output": 40
+      },
+      "cutoff": "2026-06",
+      "speed": 63,
+      "scores": {},
+      "tags": [
+        "frontier",
+        "agentic-coding",
+        "long-horizon",
+        "restricted-access"
+      ],
+      "url": "https://platform.claude.com/docs/en/models/mythos-5-2/overview"
+    },
+    {
+      "id": "muse-ember-1-0",
+      "name": "Muse Ember 1.0",
+      "provider": "Meta",
+      "released": "2026-11",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 1048576,
+      "maxOutput": 524288,
+      "modalities": [
+        "text",
+        "image",
+        "audio",
+        "video"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.1,
+        "output": 0.5
+      },
+      "cutoff": "2026-06",
+      "speed": 440,
+      "scores": {
+        "aaIndex": 36
+      },
+      "tags": [
+        "fast",
+        "cheap",
+        "multimodal",
+        "long-context"
+      ],
+      "url": "https://research.meta.ai/blog/muse-ember"
     }
   ]
 }
