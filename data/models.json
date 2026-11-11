@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-11-10",
+    "lastReviewed": "2026-11-11",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -6399,6 +6399,39 @@
         "long-context"
       ],
       "url": "https://research.meta.ai/blog/muse-ember"
+    },
+    {
+      "id": "gemini-4-carbon",
+      "name": "Gemini 4 Carbon",
+      "provider": "Google",
+      "released": "2026-11",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 1048576,
+      "maxOutput": 1048576,
+      "modalities": [
+        "text",
+        "image",
+        "video",
+        "audio"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 2,
+        "output": 10
+      },
+      "cutoff": "2026-06",
+      "speed": 77,
+      "scores": {},
+      "tags": [
+        "frontier",
+        "agentic-coding",
+        "long-context",
+        "reasoning",
+        "cybersecurity"
+      ],
+      "url": "https://ai.google.dev/gemini-api/docs/models"
     }
   ]
 }
