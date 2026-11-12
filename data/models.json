@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-11-11",
+    "lastReviewed": "2026-11-12",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -6432,6 +6432,70 @@
         "cybersecurity"
       ],
       "url": "https://ai.google.dev/gemini-api/docs/models"
+    },
+    {
+      "id": "muse-wonder",
+      "name": "Muse Wonder",
+      "provider": "Meta",
+      "released": "2026-10",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 1048576,
+      "maxOutput": 131072,
+      "modalities": [
+        "text",
+        "image",
+        "video",
+        "audio"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 4,
+        "output": 20
+      },
+      "cutoff": "2026-05",
+      "speed": 135,
+      "scores": {},
+      "tags": [
+        "frontier",
+        "agentic-coding",
+        "multimodal",
+        "long-context"
+      ],
+      "url": "https://techcrunch.com/2026/10/12/meta-releases-its-first-frontier-model-muse-wonder"
+    },
+    {
+      "id": "minimax-m3-1-flash",
+      "name": "MiniMax M3.1 Flash",
+      "provider": "MiniMax",
+      "released": "2026-10",
+      "license": "open",
+      "params": 428,
+      "localTier": "cluster",
+      "context": 1048576,
+      "maxOutput": 131072,
+      "modalities": [
+        "text",
+        "image",
+        "video"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.15,
+        "output": 0.6
+      },
+      "cutoff": "2026-06",
+      "speed": 121,
+      "scores": {},
+      "tags": [
+        "open-weights",
+        "agentic-coding",
+        "cheap",
+        "multimodal",
+        "long-context"
+      ],
+      "url": "https://huggingface.co/MiniMaxAI/MiniMax-M3.1-Flash"
     }
   ]
 }

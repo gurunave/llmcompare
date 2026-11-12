@@ -838,5 +838,17 @@
     "slidingWindow": null,
     "globalEvery": 4,
     "source": "estimated"
+  },
+  "minimax-m3-1-flash": {
+    "layers": 60,
+    "kvLayers": 60,
+    "kvHeads": 8,
+    "headDim": 128,
+    "attn": "gqa",
+    "kvLatentDim": null,
+    "activeParams": 23,
+    "slidingWindow": null,
+    "globalEvery": null,
+    "source": "estimated"
   }
 }
