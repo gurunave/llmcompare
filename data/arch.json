@@ -850,5 +850,17 @@
     "slidingWindow": null,
     "globalEvery": null,
     "source": "estimated"
+  },
+  "muse-spark-open": {
+    "layers": 62,
+    "kvLayers": 62,
+    "kvHeads": 16,
+    "headDim": 64,
+    "attn": "gqa",
+    "kvLatentDim": null,
+    "activeParams": 42,
+    "slidingWindow": null,
+    "globalEvery": null,
+    "source": "config"
   }
 }

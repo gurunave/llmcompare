@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-11-12",
+    "lastReviewed": "2026-11-13",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -6496,6 +6496,70 @@
         "long-context"
       ],
       "url": "https://huggingface.co/MiniMaxAI/MiniMax-M3.1-Flash"
+    },
+    {
+      "id": "gemini-4-hydrogen",
+      "name": "Gemini 4 Hydrogen",
+      "provider": "Google",
+      "released": "2026-11",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 1048576,
+      "maxOutput": 65536,
+      "modalities": [
+        "text",
+        "image",
+        "audio",
+        "video"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 1.5,
+        "output": 7.5
+      },
+      "cutoff": "2026-03",
+      "speed": 300,
+      "scores": {},
+      "tags": [
+        "fast",
+        "agentic-coding",
+        "multimodal",
+        "long-context"
+      ],
+      "url": "https://blog.google/innovation-and-ai/models-and-research/gemini-models/introducing-gemini-4-hydrogen/"
+    },
+    {
+      "id": "muse-spark-open",
+      "name": "Muse Spark Open",
+      "provider": "Meta",
+      "released": "2026-10",
+      "license": "open",
+      "params": 816,
+      "localTier": "cluster",
+      "context": 1048576,
+      "maxOutput": 65536,
+      "modalities": [
+        "text",
+        "image",
+        "video",
+        "audio"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 1.25,
+        "output": 4.25
+      },
+      "cutoff": "2026-05",
+      "speed": 43,
+      "scores": {},
+      "tags": [
+        "open-weights",
+        "frontier",
+        "multimodal",
+        "long-context"
+      ],
+      "url": "https://huggingface.co/meta-models/Muse-Spark-Open-816B-A42B"
     }
   ]
 }
