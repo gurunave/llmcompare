@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-11-16",
+    "lastReviewed": "2026-11-17",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -6593,6 +6593,71 @@
         "moe"
       ],
       "url": "https://qwen.ai/blog?id=qwen4-max"
+    },
+    {
+      "id": "ling-3-2-flash",
+      "name": "Ling 3.2 Flash",
+      "provider": "Ant Group",
+      "released": "2026-11",
+      "license": "proprietary",
+      "params": 560,
+      "localTier": null,
+      "context": 1000000,
+      "maxOutput": 32768,
+      "modalities": [
+        "text",
+        "image",
+        "video"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.3,
+        "output": 0.9
+      },
+      "cutoff": "2026-06",
+      "speed": 180,
+      "scores": {},
+      "tags": [
+        "reasoning",
+        "multimodal",
+        "agentic-coding",
+        "long-context",
+        "moe",
+        "cheap"
+      ],
+      "url": "https://www.aibase.com/news/32130"
+    },
+    {
+      "id": "hy4-flash",
+      "name": "Hy4 Flash",
+      "provider": "Tencent",
+      "released": "2026-11",
+      "license": "proprietary",
+      "params": 224,
+      "localTier": null,
+      "context": 1048576,
+      "maxOutput": 65536,
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.07,
+        "output": 0.28
+      },
+      "cutoff": "2026-04",
+      "speed": 150,
+      "scores": {},
+      "tags": [
+        "cheap",
+        "fast",
+        "high-volume",
+        "long-context",
+        "multimodal",
+        "moe"
+      ],
+      "url": "https://finance.yahoo.com/technology/ai/articles/tencent-launches-hy4-flash-power-083000450.html"
     }
   ]
 }
