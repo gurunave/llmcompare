@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-11-17",
+    "lastReviewed": "2026-11-18",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -6658,6 +6658,66 @@
         "moe"
       ],
       "url": "https://finance.yahoo.com/technology/ai/articles/tencent-launches-hy4-flash-power-083000450.html"
+    },
+    {
+      "id": "gpt-6-2-astra",
+      "name": "GPT-6.2 Astra",
+      "provider": "OpenAI",
+      "released": "2026-11",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 1050000,
+      "maxOutput": 128000,
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 8,
+        "output": 40
+      },
+      "cutoff": "2026-06",
+      "speed": 55,
+      "scores": {
+        "gpqa": 97.0
+      },
+      "tags": [
+        "frontier",
+        "agentic-coding",
+        "reasoning"
+      ],
+      "url": "https://openai.com/index/introducing-gpt-6-2-astra-sol/"
+    },
+    {
+      "id": "gpt-6-2-sol",
+      "name": "GPT-6.2 Sol",
+      "provider": "OpenAI",
+      "released": "2026-11",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 1050000,
+      "maxOutput": 128000,
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 2,
+        "output": 10
+      },
+      "cutoff": "2026-06",
+      "speed": 85,
+      "scores": {},
+      "tags": [
+        "frontier",
+        "agentic-coding",
+        "reasoning"
+      ],
+      "url": "https://openai.com/index/introducing-gpt-6-2-astra-sol/"
     }
   ]
 }
