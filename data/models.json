@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-11-18",
+    "lastReviewed": "2026-11-19",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -6718,6 +6718,165 @@
         "reasoning"
       ],
       "url": "https://openai.com/index/introducing-gpt-6-2-astra-sol/"
+    },
+    {
+      "id": "beam-1-0",
+      "name": "Beam 1.0",
+      "provider": "Reflection AI",
+      "released": "2026-10",
+      "license": "open",
+      "params": 501,
+      "localTier": "cluster",
+      "context": 1000000,
+      "maxOutput": 65536,
+      "modalities": [
+        "text"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.25,
+        "output": 1
+      },
+      "cutoff": "2026-06",
+      "speed": 120,
+      "scores": {
+        "swebench": 81.6,
+        "terminalBench2": 80.1,
+        "gpqa": 90.6
+      },
+      "tags": [
+        "open-weights",
+        "agentic-coding",
+        "moe",
+        "long-context",
+        "self-host"
+      ],
+      "url": "https://huggingface.co/reflection/Beam-1.0-501B-A23B"
+    },
+    {
+      "id": "lfm3-1-7b",
+      "name": "LFM3-1.7B",
+      "provider": "Liquid AI",
+      "released": "2026-10",
+      "license": "open",
+      "params": 1.7,
+      "localTier": "laptop",
+      "context": 262144,
+      "maxOutput": 16384,
+      "modalities": [
+        "text"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.08,
+        "output": 0.2
+      },
+      "cutoff": "2026-06",
+      "speed": 250,
+      "scores": {
+        "gpqa": 63.4
+      },
+      "tags": [
+        "open-weights",
+        "edge",
+        "on-device",
+        "small",
+        "efficient"
+      ],
+      "url": "https://huggingface.co/LiquidAI/LFM3-1.7B"
+    },
+    {
+      "id": "mai-code-2",
+      "name": "MAI Code 2",
+      "provider": "Microsoft",
+      "released": "2026-11",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 1050000,
+      "maxOutput": 128000,
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.5,
+        "output": 2.5
+      },
+      "cutoff": "2026-06",
+      "speed": 90,
+      "scores": {},
+      "tags": [
+        "agentic-coding",
+        "coding",
+        "cheap",
+        "long-context"
+      ],
+      "url": "https://docs.github.com/en/copilot/reference/copilot-billing/models-and-pricing"
+    },
+    {
+      "id": "gemini-4-neon",
+      "name": "Gemini 4 Neon",
+      "provider": "Google",
+      "released": "2026-11",
+      "license": "proprietary",
+      "params": null,
+      "localTier": null,
+      "context": 1048576,
+      "maxOutput": 65536,
+      "modalities": [
+        "text",
+        "image",
+        "video",
+        "audio"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 3,
+        "output": 15
+      },
+      "cutoff": "2026-03",
+      "speed": 101,
+      "scores": {},
+      "tags": [
+        "frontier",
+        "agentic-coding",
+        "long-context",
+        "reasoning"
+      ],
+      "url": "https://deepmind.google/models/model-cards/gemini-4-neon/"
+    },
+    {
+      "id": "olala-mini-7a1b",
+      "name": "Olala mini 7A1B",
+      "provider": "OVHcloud",
+      "released": "2026-11",
+      "license": "open",
+      "params": 6.8,
+      "localTier": "laptop",
+      "context": 32768,
+      "maxOutput": 16384,
+      "modalities": [
+        "text"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0,
+        "output": 0
+      },
+      "cutoff": "2026-03",
+      "speed": 200,
+      "scores": {},
+      "tags": [
+        "open-weights",
+        "european",
+        "moe",
+        "small",
+        "on-device",
+        "self-host"
+      ],
+      "url": "https://huggingface.co/OVHaiLLM/Olala-v1.0-mini-7A1B"
     }
   ]
 }
