@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-11-21",
+    "lastReviewed": "2026-11-22",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -6106,9 +6106,9 @@
       "name": "Hy4",
       "provider": "Tencent",
       "released": "2026-11",
-      "license": "proprietary",
-      "params": null,
-      "localTier": null,
+      "license": "open",
+      "params": 770,
+      "localTier": "cluster",
       "context": 1048576,
       "maxOutput": 65536,
       "modalities": [
@@ -6124,11 +6124,14 @@
       "speed": 90,
       "scores": {},
       "tags": [
+        "open-weights",
         "agentic-coding",
         "long-context",
-        "computer-use"
+        "computer-use",
+        "moe",
+        "self-host"
       ],
-      "url": "https://www.tencent.com/tencent-launches-hy4-joining-the-ranks-of-the-worlds-leading-open-source-ai-models/"
+      "url": "https://huggingface.co/tencent/Hy4"
     },
     {
       "id": "kimi-k3-1-pro",
@@ -6632,9 +6635,9 @@
       "name": "Hy4 Flash",
       "provider": "Tencent",
       "released": "2026-11",
-      "license": "proprietary",
+      "license": "open",
       "params": 224,
-      "localTier": null,
+      "localTier": "cluster",
       "context": 1048576,
       "maxOutput": 65536,
       "modalities": [
@@ -6650,14 +6653,16 @@
       "speed": 150,
       "scores": {},
       "tags": [
+        "open-weights",
         "cheap",
         "fast",
         "high-volume",
         "long-context",
         "multimodal",
-        "moe"
+        "moe",
+        "self-host"
       ],
-      "url": "https://finance.yahoo.com/technology/ai/articles/tencent-launches-hy4-flash-power-083000450.html"
+      "url": "https://huggingface.co/tencent/Hy4-flash"
     },
     {
       "id": "gpt-6-2-astra",
