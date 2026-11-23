@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-11-22",
+    "lastReviewed": "2026-11-23",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -6949,6 +6949,36 @@
         "self-host"
       ],
       "url": "https://huggingface.co/blog/inkling2mini"
+    },
+    {
+      "id": "lingsante-3-1-flash",
+      "name": "LingSante 3.1 Flash",
+      "provider": "Ant Group",
+      "released": "2026-11",
+      "license": "open",
+      "params": 560,
+      "localTier": "cluster",
+      "context": 1000000,
+      "maxOutput": 32768,
+      "modalities": [
+        "text"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0,
+        "output": 0
+      },
+      "cutoff": "2026-06",
+      "speed": 150,
+      "scores": {},
+      "tags": [
+        "open-weights",
+        "reasoning",
+        "long-context",
+        "moe",
+        "self-host"
+      ],
+      "url": "https://huggingface.co/inclusionAI/LingSante-3.1-flash"
     }
   ]
 }
