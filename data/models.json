@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-11-23",
+    "lastReviewed": "2026-11-24",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -6979,6 +6979,113 @@
         "self-host"
       ],
       "url": "https://huggingface.co/inclusionAI/LingSante-3.1-flash"
+    },
+    {
+      "id": "kolibri-1",
+      "name": "Kolibri 1",
+      "provider": "Aleph Alpha",
+      "released": "2026-10",
+      "license": "open",
+      "params": 78,
+      "localTier": "server",
+      "context": 262144,
+      "maxOutput": 32768,
+      "modalities": [
+        "text"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0.13,
+        "output": 0.51
+      },
+      "cutoff": "2026-03",
+      "speed": 180,
+      "scores": {
+        "gpqa": 84.3,
+        "swebench": 64.0,
+        "terminalBench2": 25.8
+      },
+      "tags": [
+        "open-weights",
+        "reasoning",
+        "european",
+        "multilingual",
+        "moe",
+        "efficient",
+        "self-host",
+        "cheap"
+      ],
+      "url": "https://huggingface.co/Aleph-Alpha/Kolibri-1"
+    },
+    {
+      "id": "kolibri-1-1",
+      "name": "Kolibri 1.1",
+      "provider": "Aleph Alpha",
+      "released": "2026-11",
+      "license": "open",
+      "params": 75,
+      "localTier": "server",
+      "context": 1048576,
+      "maxOutput": 32768,
+      "modalities": [
+        "text"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0,
+        "output": 0
+      },
+      "cutoff": "2026-03",
+      "speed": 170,
+      "scores": {
+        "swebench": 70.4,
+        "terminalBench2": 35.6
+      },
+      "tags": [
+        "open-weights",
+        "reasoning",
+        "european",
+        "multilingual",
+        "moe",
+        "efficient",
+        "long-context",
+        "self-host"
+      ],
+      "url": "https://huggingface.co/Aleph-Alpha/Kolibri-1.1"
+    },
+    {
+      "id": "ling-3-2-air",
+      "name": "Ling 3.2 Air",
+      "provider": "Ant Group",
+      "released": "2026-11",
+      "license": "open",
+      "params": 124,
+      "localTier": "server",
+      "context": 262144,
+      "maxOutput": 32768,
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "reasoning": false,
+      "pricing": {
+        "input": 0,
+        "output": 0
+      },
+      "cutoff": "2026-06",
+      "speed": 300,
+      "scores": {
+        "aaIndex": 23
+      },
+      "tags": [
+        "open-weights",
+        "multimodal",
+        "long-context",
+        "moe",
+        "efficient",
+        "self-host"
+      ],
+      "url": "https://huggingface.co/inclusionAI/Ling-3.2-air"
     }
   ]
 }
