@@ -1,6 +1,6 @@
 {
   "meta": {
-    "lastReviewed": "2026-11-24",
+    "lastReviewed": "2026-11-26",
     "priceUnit": "USD per 1M tokens",
     "disclaimer": "Figures are approximate and community-reported. Pricing and benchmark scores change constantly - verify against the provider's own documentation before making a purchasing decision. An absent score means 'not published or not comparably measured', not zero, and benchmark coverage is far thinner on the newer evaluations than on the retired ones.",
     "benchmarks": [
@@ -6048,9 +6048,9 @@
       "name": "Mistral Large 4",
       "provider": "Mistral",
       "released": "2026-10",
-      "license": "proprietary",
-      "params": null,
-      "localTier": null,
+      "license": "open",
+      "params": 1050,
+      "localTier": "cluster",
       "context": 524288,
       "maxOutput": 32768,
       "modalities": [
@@ -6066,11 +6066,14 @@
       "speed": 100,
       "scores": {},
       "tags": [
+        "open-weights",
         "european",
         "agentic-coding",
-        "moe"
+        "moe",
+        "multimodal",
+        "self-host"
       ],
-      "url": "https://mistral.ai/models"
+      "url": "https://huggingface.co/mistralai/Mistral-Large-4-1T-A52B"
     },
     {
       "id": "gpt-6-1-terra",
@@ -7086,6 +7089,76 @@
         "self-host"
       ],
       "url": "https://huggingface.co/inclusionAI/Ling-3.2-air"
+    },
+    {
+      "id": "step-5-preview",
+      "name": "Step 5 Preview",
+      "provider": "StepFun",
+      "released": "2026-09",
+      "license": "open",
+      "params": 600,
+      "localTier": "cluster",
+      "context": 1000000,
+      "maxOutput": 64000,
+      "modalities": [
+        "text",
+        "image"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 1.0,
+        "output": 2.7
+      },
+      "cutoff": "2026-04",
+      "speed": 80,
+      "scores": {},
+      "tags": [
+        "open-weights",
+        "agentic-coding",
+        "long-horizon",
+        "long-context",
+        "multimodal",
+        "moe",
+        "self-host"
+      ],
+      "url": "https://huggingface.co/stepfun-ai"
+    },
+    {
+      "id": "maxwell-v1-flash",
+      "name": "Maxwell-V1-Flash",
+      "provider": "Maxwell",
+      "released": "2026-11",
+      "license": "open",
+      "params": 35,
+      "localTier": "workstation",
+      "context": 262144,
+      "maxOutput": 32768,
+      "modalities": [
+        "text"
+      ],
+      "reasoning": true,
+      "pricing": {
+        "input": 0,
+        "output": 0
+      },
+      "cutoff": "2026-05",
+      "speed": 150,
+      "scores": {
+        "gpqa": 86.5,
+        "swebench": 65.4,
+        "hle": 24.8,
+        "aime": 95.0,
+        "mmluPro": 85.5
+      },
+      "tags": [
+        "open-weights",
+        "reasoning",
+        "moe",
+        "efficient",
+        "long-context",
+        "self-host"
+      ],
+      "url": "https://huggingface.co/maxwell-model/Maxwell-V1-Flash"
     }
   ]
 }
